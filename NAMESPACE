@@ -1,0 +1,3 @@
+import(XRPython)
+
+exportPattern("^[[:alpha:]]+")

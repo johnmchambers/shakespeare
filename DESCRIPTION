@@ -1,0 +1,12 @@
+Package: shakespeare
+Type: Package
+Title: Tools for XML-based Analysis of Shakespeare's Plays
+Version: 1.0
+Date: 2013-11-16
+Author: John Chambers
+Maintainer: John Chambers <jmc@stat.stanford.edu>
+Description: Python-based tools in R to parse and process the XML
+  versions of Shakespeare's plays, using files created by Jon Bosak.
+License: BSD
+NeedsCompilation: no
+Packaged: 2015-09-11 19:54:14 UTC; jmc
