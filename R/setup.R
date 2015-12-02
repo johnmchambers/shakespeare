@@ -1,10 +1,4 @@
 
-.myImport <- function(ns) {
-    ev <- XRPython::RPython()
-    ev$AddToPath() # by default, the "python" directory
-    ev$Import("thePlay")
-}
-
 .setupPlaysTable <- function(ns) {
     ptable <- new.env(parent = emptyenv(), size = 80L)
     tbl <- read.csv(system.file("plays", "titleTable.csv",
@@ -15,6 +9,5 @@
     assign(".playsTable", ptable, envir = ns)
 }
 
-
-setLoadActions(.myImport, .setupPlaysTable)
+setLoadActions(.setupPlaysTable)
 
