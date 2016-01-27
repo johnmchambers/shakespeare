@@ -1,3 +1,11 @@
+.myLoadAction <- function(ns) {
+    ev <- XRPython::RPython()
+    assign("parseXML",
+           PythonFunction("parse", "xml.etree.ElementTree"),
+           envir = ns)
+    ev$AddToPath() # by default, the "python" directory
+    ev$Import("thePlay")
+}
 
 .setupPlaysTable <- function(ns) {
     ptable <- new.env(parent = emptyenv(), size = 80L)
@@ -9,5 +17,5 @@
     assign(".playsTable", ptable, envir = ns)
 }
 
-setLoadActions(.setupPlaysTable)
+setLoadActions(.myLoadAction, .setupPlaysTable)
 

@@ -1,0 +1,6 @@
+library(XRPython)
+con <- file("R/proxyClasses.R", "w")
+dumpPythonClass(con, "Act", "thePlay")
+dumpPythonClass(con, "Scene", "thePlay")
+dumpPythonClass(con, "Speech", "thePlay")
+close(con)
