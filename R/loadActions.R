@@ -1,10 +1,7 @@
 .myLoadAction <- function(ns) {
-    ev <- XRPython::RPython()
     assign("parseXML",
            PythonFunction("parse", "xml.etree.ElementTree"),
            envir = ns)
-    ev$AddToPath() # by default, the "python" directory
-    ev$Import("thePlay")
 }
 
 .setupPlaysTable <- function(ns) {
@@ -16,6 +13,11 @@
     assign("titles", tbl[,2], envir = ptable)
     assign(".playsTable", ptable, envir = ns)
 }
+
+## XRPython will create load actions for the path, imports
+pythonAddToPath() # by default, the "python" directory
+pythonImport("thePlay")
+
 
 setLoadActions(.myLoadAction, .setupPlaysTable)
 
