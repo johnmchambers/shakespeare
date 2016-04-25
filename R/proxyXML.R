@@ -10,6 +10,6 @@ parseXML <- new("PythonFunction", .Data = function (..., .ev = XRPython::RPython
             nPyArgs)
     .ev$Import("xml.etree.ElementTree", "parse")
     .ev$Call("parse", ..., .get = .get)
-}, pyDocs = character(0), pyArgs = c("source", "parser ="), name = "parse", 
+}, serverDoc = character(0), serverArgs = c("source", "parser ="), name = "parse", 
     module = "xml.etree.ElementTree", evaluatorClass = structure("PythonInterface", package = "XRPython"))
 
