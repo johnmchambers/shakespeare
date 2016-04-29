@@ -1,3 +1,7 @@
+#' Python Class for an Act
+#' 
+Act_Python <- setRefClass("Act_Python", fields = character())
+
 Act_Python <- XR::setProxyClass("Act", module = "thePlay",
     evaluatorClass = "PythonInterface", language = "Python", proxyObjectClass = "PythonObject",
     methods = list(),
@@ -47,6 +51,10 @@ list(ServerClass = "Act", ServerModule = "thePlay", language = "Python",
     "title"), proxyMethods = c("initialize", "ServerClassInfo"
     ), proxyContains = character(0), proxyObjectClass = "PythonObject"))
 
+
+#' Python Class for a Scene
+#' 
+Scene_Python <- setRefClass("Scene_Python", fields = character())
 
 Scene_Python <- XR::setProxyClass("Scene", module = "thePlay",
     evaluatorClass = "PythonInterface", language = "Python", proxyObjectClass = "PythonObject",
@@ -107,6 +115,10 @@ list(ServerClass = "Scene", ServerModule = "thePlay", language = "Python",
     "data", "title"), proxyMethods = c("initialize", "ServerClassInfo"
     ), proxyContains = character(0), proxyObjectClass = "PythonObject"))
 
+
+#' Python Class for a Speech
+#' 
+Speech_Python <- setRefClass("Speech_Python", fields = character())
 
 Speech_Python <- XR::setProxyClass("Speech", module = "thePlay",
     evaluatorClass = "PythonInterface", language = "Python", proxyObjectClass = "PythonObject",

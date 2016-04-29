@@ -21,7 +21,7 @@ def getSpeechList(what, who = None):
     else:
         return sps
 
-def toEtree(what):
+def getPlay(what):
     ''' Parse the file name, or if it's not a string, assume it's
 a previously parsed tree.  (Should of course check that).
     '''
