@@ -2,7 +2,7 @@
 % Please edit documentation in R/proxyFunctions.R
 \name{getActs}
 \alias{getActs}
-\title{List (in Python) of the Acts of a Play}
+\title{Python List of all Acts of a Play}
 \usage{
 getActs(..., .ev = XRPython::RPython(), .get = NA)
 }
