@@ -124,6 +124,38 @@ getSpeeches <- new("PythonFunction"
     , serverArgs = "play"
 )
 
+#' Python List of the Persons Listed for the Play
+#' 
+#' [Python Documentation]
+#' Returns a list of character strings describing the personae in the play.  In the style of
+#' the XML coding, each string is the name of the person as it will appear in speeches given
+#' by that character, followed by a description.  <NOT YET>:For personae listed in a group rather than
+#' separately, this function inserts the group description, in square brackets.
+#' @section Proxy Function:
+#' getPersonae(play) [Python]
+getPersonae <- function(..., .ev = XR::getInterface(), .get = TRUE)
+    NULL
+
+getPersonae <- new("PythonFunction"
+    , .Data = function (..., .ev = XRPython::RPython(), .get = TRUE) 
+{
+    nPyArgs <- nargs() - (!missing(.ev))
+    if (nPyArgs < 1) 
+        stop("Python function getPersonae() requires at least 1 argument; got ", 
+            nPyArgs)
+    if (nPyArgs > 1) 
+        stop("Python function getPersonae() only allows 1 argument; got ", 
+            nPyArgs)
+    .ev$Import("thePlay", "getPersonae")
+    .ev$Call("getPersonae", ..., .get = .get)
+}
+    , name = "getPersonae"
+    , module = "thePlay"
+    , evaluatorClass = structure("PythonInterface", package = "XRPython")
+    , serverDoc = "Returns a list of character strings describing the personae in the play.  In the style of\nthe XML coding, each string is the name of the person as it will appear in speeches given\nby that character, followed by a description.  <NOT YET>:For personae listed in a group rather than\nseparately, this function inserts the group description, in square brackets."
+    , serverArgs = "play"
+)
+
 #' Python Function to Parse XML File
 #' 
 #' @section Proxy Function:

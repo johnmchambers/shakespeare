@@ -1,25 +1,6 @@
 import xml.etree.ElementTree as Etree
 import RPython
-
-### OLD: replace with getSpeeches, once that takes a "who" argument
-def getSpeechList(what, who = None):
-    ''' Returns a list of the Element objects for all the speeches in the given play
-    for speaker "who", for all the speeches if "who" is None (the default).
-    '''
-    doc = toEtree(what)
-    
-    sps =  doc.findall('.//SPEECH')
-    if who:
-        value = []
-        for speech in sps:
-            speaker = speech.find('SPEAKER')
-        
-            if speaker.text == who:
-                value.append(speech)
-                
-        return value
-    else:
-        return sps
+from copy import deepcopy
 
 def getPlay(what):
     ''' Parse the file name, or if it's not a string, assume it's
@@ -89,7 +70,7 @@ class Speech(object):
                 linetext.append(line.text)
             self.lines = linetext
     def getText(self):
-        return RPython.vector_R(self.lines, "character")
+        return RPython.vectorR(self.lines, "character")
 
 def getSpeeches(play):
     ''' Return a list of the speeches in the XML object "play".  Each element of the list is
@@ -106,4 +87,17 @@ an object of class "Speech" with fields "title", "act", "scene" and "data"
             obj = Speech(speech, sceneAct, sceneTitle)
             value.append(obj)
     return value
-        
+
+def getPersonae(play):
+    ''' Returns a list of character strings describing the personae in the play.  In the style of
+    the XML coding, each string is the name of the person as it will appear in speeches given
+    by that character, followed by a description.  <NOT YET>:For personae listed in a group rather than
+    separately, this function inserts the group description, in square brackets.
+    '''
+    value = []
+    item = play.find('.//PERSONAE') # assume only one
+    items = item.findall('.//PERSONA')
+    for p in items:
+        value.append(p.text)
+    return value
+

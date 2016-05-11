@@ -15,6 +15,9 @@ XRPython::PythonFunction("getScenes", "thePlay", save = con,
 XRPython::PythonFunction("getSpeeches", "thePlay", save = con,
                          docText = "Python List of all Speeches of a Play")
 
+XRPython::PythonFunction("getPersonae", "thePlay", save = con, .get = TRUE,
+                         docText = "Python List of the Persons Listed for the Play")
+
 XRPython::PythonFunction("parse", "xml.etree.ElementTree", save = con, objName = "parseXML",
                          docText = "Python Function to Parse XML File")
 
