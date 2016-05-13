@@ -22,5 +22,8 @@ The text of the XML version of the plays (a contribution from Jon Bosak, availab
 are included with this package.  In an R session, the first call to \code{getPlay()} matching a particular play will parse the file (in
 Python) and return the proxy to the corresponding Python object.  The proxy is also saved in a table so that multiple calls for the same
 play will only parse once.
+
+This function uses a proxy for the Python function of the same name (which exists in the package as well, under the
+name \code{getPlay_Python}.
 }
 

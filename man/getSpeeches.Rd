@@ -2,7 +2,7 @@
 % Please edit documentation in R/proxyFunctions.R
 \name{getSpeeches}
 \alias{getSpeeches}
-\title{Python List of all Speeches of a Play}
+\title{Python List of all Speeches of a Play (or Act or Scene)}
 \usage{
 getSpeeches(..., .ev = XRPython::RPython(), .get = NA)
 }
@@ -10,7 +10,8 @@ getSpeeches(..., .ev = XRPython::RPython(), .get = NA)
 [Python Documentation]
 Return a list of the speeches in the XML object "play".  Each element of the list is
 an object of class "Speech" with fields "title", "act", "scene" and "data"
-(the list of lines of text in the speech).
+(the list of lines of text in the speech).  The argument can alternatively be an Act  or Scene
+object to obtain a list of speeches from just that act or scene.
 }
 \section{Proxy Function}{
 

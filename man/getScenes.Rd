@@ -10,7 +10,8 @@ getScenes(..., .ev = XRPython::RPython(), .get = NA)
 [Python Documentation]
 Return a list of the scenes in the XML object "play".  Each element of the list is
 an object of class "Scene" with fields "title", "act" and "data"
-(the XML element for the scene).
+(the XML element for the scene).  The argument can alternatively be an Act object to obtain a list
+of scenes from just that act.
 }
 \section{Proxy Function}{
 

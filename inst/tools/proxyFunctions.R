@@ -13,10 +13,13 @@ XRPython::PythonFunction("getScenes", "thePlay", save = con,
                          docText = "Python List of all Scenes of a Play")
 
 XRPython::PythonFunction("getSpeeches", "thePlay", save = con,
-                         docText = "Python List of all Speeches of a Play")
+                         docText = "Python List of all Speeches of a Play (or Act or Scene)")
+
+XRPython::PythonFunction("speakers", "thePlay", save = con, .get = TRUE,
+                         docText = "Python List of the Persons Listed for the Play")
 
 XRPython::PythonFunction("getPersonae", "thePlay", save = con, .get = TRUE,
-                         docText = "Python List of the Persons Listed for the Play")
+                         docText = "Python Dictionary of the Speakers in a List of Speeches")
 
 XRPython::PythonFunction("parse", "xml.etree.ElementTree", save = con, objName = "parseXML",
                          docText = "Python Function to Parse XML File")

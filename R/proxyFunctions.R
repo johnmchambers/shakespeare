@@ -6,6 +6,7 @@
 #'     
 #' @section Proxy Function:
 #' getPlay(what) [Python]
+#' @export
 getPlay_Python <- function(..., .ev = XR::getInterface(), .get = NA)
     NULL
 
@@ -37,6 +38,7 @@ getPlay_Python <- new("PythonFunction"
 #'     
 #' @section Proxy Function:
 #' getActs(play) [Python]
+#' @export
 getActs <- function(..., .ev = XR::getInterface(), .get = NA)
     NULL
 
@@ -65,10 +67,11 @@ getActs <- new("PythonFunction"
 #' [Python Documentation]
 #' Return a list of the scenes in the XML object "play".  Each element of the list is
 #' an object of class "Scene" with fields "title", "act" and "data"
-#' (the XML element for the scene).
-#'     
+#' (the XML element for the scene).  The argument can alternatively be an Act object to obtain a list
+#' of scenes from just that act.
 #' @section Proxy Function:
 #' getScenes(play) [Python]
+#' @export
 getScenes <- function(..., .ev = XR::getInterface(), .get = NA)
     NULL
 
@@ -88,19 +91,20 @@ getScenes <- new("PythonFunction"
     , name = "getScenes"
     , module = "thePlay"
     , evaluatorClass = structure("PythonInterface", package = "XRPython")
-    , serverDoc = "Return a list of the scenes in the XML object \"play\".  Each element of the list is\nan object of class \"Scene\" with fields \"title\", \"act\" and \"data\"\n(the XML element for the scene).\n    "
+    , serverDoc = "Return a list of the scenes in the XML object \"play\".  Each element of the list is\nan object of class \"Scene\" with fields \"title\", \"act\" and \"data\"\n(the XML element for the scene).  The argument can alternatively be an Act object to obtain a list\nof scenes from just that act."
     , serverArgs = "play"
 )
 
-#' Python List of all Speeches of a Play
+#' Python List of all Speeches of a Play (or Act or Scene)
 #' 
 #' [Python Documentation]
 #' Return a list of the speeches in the XML object "play".  Each element of the list is
 #' an object of class "Speech" with fields "title", "act", "scene" and "data"
-#' (the list of lines of text in the speech).
-#'     
+#' (the list of lines of text in the speech).  The argument can alternatively be an Act  or Scene
+#' object to obtain a list of speeches from just that act or scene.
 #' @section Proxy Function:
 #' getSpeeches(play) [Python]
+#' @export
 getSpeeches <- function(..., .ev = XR::getInterface(), .get = NA)
     NULL
 
@@ -120,11 +124,44 @@ getSpeeches <- new("PythonFunction"
     , name = "getSpeeches"
     , module = "thePlay"
     , evaluatorClass = structure("PythonInterface", package = "XRPython")
-    , serverDoc = "Return a list of the speeches in the XML object \"play\".  Each element of the list is\nan object of class \"Speech\" with fields \"title\", \"act\", \"scene\" and \"data\"\n(the list of lines of text in the speech).\n    "
+    , serverDoc = "Return a list of the speeches in the XML object \"play\".  Each element of the list is\nan object of class \"Speech\" with fields \"title\", \"act\", \"scene\" and \"data\"\n(the list of lines of text in the speech).  The argument can alternatively be an Act  or Scene\nobject to obtain a list of speeches from just that act or scene."
     , serverArgs = "play"
 )
 
 #' Python List of the Persons Listed for the Play
+#' 
+#' [Python Documentation]
+#' A dictionary whose keys are all the names of speakers with speeches in the list.  The entry will be
+#' the total character count of the speeches if argument count is True, else just True.
+#' The list of speeches can come from the "speeches" field of a Play object or as the result of calling
+#' getSpeeches() for a whole play, an act or a scene.
+#' @section Proxy Function:
+#' speakers(speeches, count =) [Python]
+#' @export
+speakers <- function(..., .ev = XR::getInterface(), .get = TRUE)
+    NULL
+
+speakers <- new("PythonFunction"
+    , .Data = function (..., .ev = XRPython::RPython(), .get = TRUE) 
+{
+    nPyArgs <- nargs() - (!missing(.ev))
+    if (nPyArgs < 1) 
+        stop("Python function speakers() requires at least 1 argument; got ", 
+            nPyArgs)
+    if (nPyArgs > 2) 
+        stop("Python function speakers() only allows 2 arguments; got ", 
+            nPyArgs)
+    .ev$Import("thePlay", "speakers")
+    .ev$Call("speakers", ..., .get = .get)
+}
+    , name = "speakers"
+    , module = "thePlay"
+    , evaluatorClass = structure("PythonInterface", package = "XRPython")
+    , serverDoc = "A dictionary whose keys are all the names of speakers with speeches in the list.  The entry will be\nthe total character count of the speeches if argument count is True, else just True.\nThe list of speeches can come from the \"speeches\" field of a Play object or as the result of calling\ngetSpeeches() for a whole play, an act or a scene."
+    , serverArgs = c("speeches", "count =")
+)
+
+#' Python Dictionary of the Speakers in a List of Speeches
 #' 
 #' [Python Documentation]
 #' Returns a list of character strings describing the personae in the play.  In the style of
@@ -133,6 +170,7 @@ getSpeeches <- new("PythonFunction"
 #' separately, this function inserts the group description, in square brackets.
 #' @section Proxy Function:
 #' getPersonae(play) [Python]
+#' @export
 getPersonae <- function(..., .ev = XR::getInterface(), .get = TRUE)
     NULL
 
@@ -160,6 +198,7 @@ getPersonae <- new("PythonFunction"
 #' 
 #' @section Proxy Function:
 #' parse(source, parser =) [Python]
+#' @export
 parseXML <- function(..., .ev = XR::getInterface(), .get = NA)
     NULL
 

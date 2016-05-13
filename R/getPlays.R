@@ -12,8 +12,9 @@ rm(tbl)
 
 #' Titles of Shakespeare's Plays and Corresponding Keys
 #'
-#' This function returns, as  data frame, the titles of Shakespeare's plays as stored in XML files and the corresponding keys used to identify
+#' This function returns, as a data frame, the titles of Shakespeare's plays as stored in XML files and the corresponding keys used to identify
 #' the individual plays.  Either the key or a unique string matching a title can be given as the name to \code{\link{getPlay}()}.
+#' @export
 playTitles <- function() {
     data.frame(Title = .playsTable$titles, Key = .playsTable$keys)
 }
@@ -28,9 +29,13 @@ playTitles <- function() {
 #' are included with this package.  In an R session, the first call to \code{getPlay()} matching a particular play will parse the file (in
 #' Python) and return the proxy to the corresponding Python object.  The proxy is also saved in a table so that multiple calls for the same
 #' play will only parse once.
+#'
+#' This function uses a proxy for the Python function of the same name (which exists in the package as well, under the
+#' name \code{getPlay_Python}.
 #' @param name a character string identifying the play.  Ideally this is the key under which the play is stored, but it can also be any
 #' string that uniquely matches one of the play titles.  To see keys and titles, call \code{\link{playTitles}()}.
 #' @param ask  if more than  one play matches the name, should the user be asked to choose.  Default \code{TRUE} iff the session is interactive.  No resolution of multiple matches generates an error.
+#' @export
 getPlay <- function(name, ask = interactive()) {
     keys <- .playsTable$keys
     titles <- .playsTable$titles

@@ -41,11 +41,15 @@ class Scene(object):
 
 def getScenes(play):
     ''' Return a list of the scenes in the XML object "play".  Each element of the list is
-an object of class "Scene" with fields "title", "act" and "data"
-(the XML element for the scene).
+    an object of class "Scene" with fields "title", "act" and "data"
+    (the XML element for the scene).  The argument can alternatively be an Act object to obtain a list
+    of scenes from just that act.
     '''
     value = []
-    acts = getActs(play)
+    if type(play) is Act:
+        acts = [ play ]
+    else:
+        acts = getActs(play)
     for act in acts:
         scenes = act.data.findall('.//SCENE')
         actTitle = act.title
@@ -74,11 +78,15 @@ class Speech(object):
 
 def getSpeeches(play):
     ''' Return a list of the speeches in the XML object "play".  Each element of the list is
-an object of class "Speech" with fields "title", "act", "scene" and "data"
-(the list of lines of text in the speech).
+    an object of class "Speech" with fields "title", "act", "scene" and "data"
+    (the list of lines of text in the speech).  The argument can alternatively be an Act  or Scene
+    object to obtain a list of speeches from just that act or scene.
     '''
     value = []
-    scenes = getScenes(play)
+    if type(play) is Scene:
+        scenes = [ play ]
+    else:
+        scenes = getScenes(play)
     for scene in scenes:
         speeches = scene.data.findall('.//SPEECH')
         sceneAct = scene.act
@@ -101,3 +109,26 @@ def getPersonae(play):
         value.append(p.text)
     return value
 
+def speakers(speeches, count = True):
+    '''A dictionary whose keys are all the names of speakers with speeches in the list.  The entry will be
+    the total character count of the speeches if argument count is True, else just True.
+    The list of speeches can come from the "speeches" field of a Play object or as the result of calling
+    getSpeeches() for a whole play, an act or a scene.
+    '''
+    value = { }
+    for speech in speeches:
+        who = speech.speaker
+        new = False
+        if not who in value.keys():
+            if count:
+                value[who] = 0
+            else:
+                value[who] = True
+            new = True
+        if count:
+            thisCount = 0
+            for line in speech.lines:
+                if type(line) is str: #can be None, apparently
+                    thisCount += len(line)
+            value[who] += thisCount
+    return value

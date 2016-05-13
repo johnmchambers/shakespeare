@@ -7,7 +7,7 @@
 playTitles()
 }
 \description{
-This function returns, as  data frame, the titles of Shakespeare's plays as stored in XML files and the corresponding keys used to identify
+This function returns, as a data frame, the titles of Shakespeare's plays as stored in XML files and the corresponding keys used to identify
 the individual plays.  Either the key or a unique string matching a title can be given as the name to \code{\link{getPlay}()}.
 }
 

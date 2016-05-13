@@ -16,5 +16,8 @@
 #' scenes and speakers.
 #'
 #' @template reference
-#' @name Shakespeare
+#' @docType package
+#' @name shakespeare
+#' @import methods
+#' @import XRPython
 NULL
