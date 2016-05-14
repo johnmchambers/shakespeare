@@ -1,6 +1,7 @@
 import xml.etree.ElementTree as Etree
 import RPython
 from copy import deepcopy
+import nltk
 
 def getPlay(what):
     ''' Parse the file name, or if it's not a string, assume it's
@@ -75,6 +76,12 @@ class Speech(object):
             self.lines = linetext
     def getText(self):
         return RPython.vectorR(self.lines, "character")
+    def tokenize(self):
+        text = ""
+        for line in self.lines:
+            text = text + " " + line
+        return nltk.word_tokenize(text, "english")
+            
 
 def getSpeeches(play):
     ''' Return a list of the speeches in the XML object "play".  Each element of the list is
@@ -109,26 +116,52 @@ def getPersonae(play):
         value.append(p.text)
     return value
 
-def speakers(speeches, count = True):
-    '''A dictionary whose keys are all the names of speakers with speeches in the list.  The entry will be
-    the total character count of the speeches if argument count is True, else just True.
-    The list of speeches can come from the "speeches" field of a Play object or as the result of calling
-    getSpeeches() for a whole play, an act or a scene.
+## some counter functions
+def char_counter(table, speech):
+    who = speech.speaker
+    this_count = 0
+    for line in speech.lines:
+        if type(line) is str: #can be None, apparently
+            this_count += len(line)
+    if who in table.keys():
+        table[who] = this_count
+    else:
+        table[who] += this_count
+    return True
+
+def token_counter(table, speech):
+    who = speech.speaker
+    if not who in table.keys():
+        table[who] = [ ]
+    table[who] = table[who] + speech.tokenize() + [ "/>" ]
+    return True
+
+def tokens(speeches):
+    return speakers(speeches,  token_counter)
+
+def exists_counter(table, speech):
+    who = speech.speaker
+    table[who] = True
+    return True
+
+
+def speakers(speeches, counter = exists_counter):
+    '''A dictionary whose keys are all the names of speakers with speeches in the list.
+    The counter argument will usually be a function of two arguments.  For each speech
+    matching a particular speaker, the function will be called with the first argument
+    being the dictionary and the second argument the current speech object.
+    Counter functions are expected to accumulate something relevant in the dictionary entries
+    whose keys are the speaker fields of the speeches.  The default counter function
+    just sets the element of the dictionary to True.
+    
+    The speeches argument can be from the "speeches" field of a Play object or the result
+    of any other computation.
+    The argument could also be an Act, Scene or Play:  any object for which getSpeeches()
+    returns a list of speeches.
     '''
+    if not type(speeches) is type([ ]): #?? the Python for is(speeches, "list") ??
+        speeches = getSpeeches(speeches)
     value = { }
     for speech in speeches:
-        who = speech.speaker
-        new = False
-        if not who in value.keys():
-            if count:
-                value[who] = 0
-            else:
-                value[who] = True
-            new = True
-        if count:
-            thisCount = 0
-            for line in speech.lines:
-                if type(line) is str: #can be None, apparently
-                    thisCount += len(line)
-            value[who] += thisCount
+        counter(value, speech)
     return value
