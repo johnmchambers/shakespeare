@@ -9,12 +9,11 @@
 The plays are parsed from the set of XML files into Python \code{"ElementTree"} objects.
 An R object from class \code{"Play"} has a proxy to the parsed play plus fields for the
 names of the personae and a proxy to a Python list of all the speeches.
+This class extends the proxy class for \code{"ElementTree"}.
 }
 \section{Fields}{
 
 \describe{
-\item{\code{xml}}{Proxy for the parsed XML for the play.}
-
 \item{\code{personae}}{Character vector of the descriptions of the personae in the play.  Note that this
 comes from the play itself.  The names of speakers usually match one of the personae in the \code{grep()}
 sense, but not always.}

@@ -1,0 +1,46 @@
+
+./ProxyClasses.R,247
+AAct_Python4,42
+AAct_Python5,145
+SScene_Python58,1767
+SScene_Python59,1881
+SSpeech_Python122,3808
+SSpeech_Python123,3936
+EElementTree_Python207,6964
+EElementTree_Python208,7054
+EElement_Python292,11865
+EElement_Python293,11992
+
+./getPlays.R,99
+..playsTable5,139
+ttbl6,195
+akeys9,379
+atitles10,445
+pplayTitles18,845
+ggetPlay39,2320
+
+./proxyClassesExtended.R,15
+PPlay20,1201
+
+./proxyFunctions.R,406
+ggetPlay_Python10,271
+ggetPlay_Python13,350
+ggetActs42,1430
+ggetActs45,1502
+ggetScenes75,2746
+ggetScenes78,2820
+ggetSpeeches108,4248
+ggetSpeeches111,4324
+sspeakers140,5640
+sspeakers143,5715
+ttokens_Python176,7079
+ttokens_Python179,7157
+bbySpeaker_Python212,8734
+bbySpeaker_Python215,8815
+ggetPersonae245,10388
+ggetPersonae248,10466
+pparseXML273,11604
+pparseXML276,11677
+
+./shakespeare.R,16
+ttokens12,591

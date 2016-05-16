@@ -47,7 +47,7 @@ def getScenes(play):
     of scenes from just that act.
     '''
     value = []
-    if type(play) is Act:
+    if isinstance(play, Act):
         acts = [ play ]
     else:
         acts = getActs(play)
@@ -79,8 +79,10 @@ class Speech(object):
     def tokenize(self):
         text = ""
         for line in self.lines:
-            text = text + " " + line
-        return nltk.word_tokenize(text, "english")
+            if isinstance(line, str):
+                text = text + "$" + line
+        text = text[1:len(text)] # remove 1st "$"
+        return nltk.word_tokenize(text)
             
 
 def getSpeeches(play):
@@ -90,7 +92,7 @@ def getSpeeches(play):
     object to obtain a list of speeches from just that act or scene.
     '''
     value = []
-    if type(play) is Scene:
+    if isinstance(play, Scene):
         scenes = [ play ]
     else:
         scenes = getScenes(play)
@@ -121,13 +123,32 @@ def char_counter(table, speech):
     who = speech.speaker
     this_count = 0
     for line in speech.lines:
-        if type(line) is str: #can be None, apparently
+        if isinstance(line, str): #can be None, apparently
             this_count += len(line)
     if who in table.keys():
         table[who] = this_count
     else:
         table[who] += this_count
     return True
+
+def speaker_counter(table, speech):
+    who = speech.speaker
+    if not who in table.keys():
+        table[who] = [ ]
+    table[who].append(speech.tokenize())
+    return True
+
+def speechTokens(speeches):
+    '''A dictionary whose keys are the names of all speakers with speeches in the list.
+    The corresponding element is a list of all the speeches spoken by that speaker, with
+    each speech converted into a list of its tokens.
+    
+    The argument can be from the "speeches" field of a Play object or the result
+    of any other computation.
+    The argument could also be an Act, Scene or Play:  any object for which getSpeeches()
+    returns a list of speeches.
+    '''
+    return speakersTable(speeches, speaker_counter)
 
 def token_counter(table, speech):
     who = speech.speaker
@@ -137,15 +158,30 @@ def token_counter(table, speech):
     return True
 
 def tokens(speeches):
-    return speakers(speeches,  token_counter)
+    '''A dictionary whose keys are all the names of speakers with speeches in the list.
+    The corresponding element is a list of all the tokens spoken by each speaker.
+    
+    The argument can be from the "speeches" field of a Play object or the result
+    of any other computation.
+    The argument could also be an Act, Scene or Play:  any object for which getSpeeches()
+    returns a list of speeches.
+    '''
+    return speakersTable(speeches,  token_counter)
 
 def exists_counter(table, speech):
     who = speech.speaker
     table[who] = True
     return True
 
+def speakers(speeches):
+    '''A list of all the speakers found in the list. The argument
+    can be a list of speeches or an object (Play, Act, Scene) for which
+    getSpeeches() returns such a list.
+    '''
+    return speakersTable(speeches, exists_counter).keys()
 
-def speakers(speeches, counter = exists_counter):
+
+def speakersTable(speeches, counter):
     '''A dictionary whose keys are all the names of speakers with speeches in the list.
     The counter argument will usually be a function of two arguments.  For each speech
     matching a particular speaker, the function will be called with the first argument
@@ -159,7 +195,7 @@ def speakers(speeches, counter = exists_counter):
     The argument could also be an Act, Scene or Play:  any object for which getSpeeches()
     returns a list of speeches.
     '''
-    if not type(speeches) is type([ ]): #?? the Python for is(speeches, "list") ??
+    if not isinstance(speeches, list):
         speeches = getSpeeches(speeches)
     value = { }
     for speech in speeches:

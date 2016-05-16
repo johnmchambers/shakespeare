@@ -8,13 +8,12 @@ speakers(..., .ev = XRPython::RPython(), .get = TRUE)
 }
 \description{
 [Python Documentation]
-A dictionary whose keys are all the names of speakers with speeches in the list.  The entry will be
-the total character count of the speeches if argument count is True, else just True.
-The list of speeches can come from the "speeches" field of a Play object or as the result of calling
-getSpeeches() for a whole play, an act or a scene.
+A list of all the speakers found in the list. The argument
+can be a list of speeches or an object (Play, Act, Scene) for which
+getSpeeches() returns such a list.
 }
 \section{Proxy Function}{
 
-speakers(speeches, count =) [Python]
+speakers(speeches) [Python]
 }
 

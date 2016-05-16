@@ -18,6 +18,12 @@ XRPython::PythonFunction("getSpeeches", "thePlay", save = con,
 XRPython::PythonFunction("speakers", "thePlay", save = con, .get = TRUE,
                          docText = "Python List of the Persons Listed for the Play")
 
+XRPython::PythonFunction("tokens", "thePlay", save = con, objName = "tokens_Python",
+                         docText = "Speeches Tokenized in a Python Dictionary by Speaker")
+
+XRPython::PythonFunction("speechTokens", "thePlay", save = con, objName = "speechTokens_Python",
+                         docText = "A Python Dictionary of all Speeches by Speaker")
+
 XRPython::PythonFunction("getPersonae", "thePlay", save = con, .get = TRUE,
                          docText = "Python Dictionary of the Speakers in a List of Speeches")
 

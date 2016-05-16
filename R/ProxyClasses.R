@@ -1,5 +1,6 @@
 #' Python Class for an Act
 #' 
+#' @export
 Act_Python <- setRefClass("Act_Python", contains = c("ProxyClassObject"), fields = c("data", "title"))
 Act_Python <- XR::setProxyClass("Act", module = "thePlay",
     evaluatorClass = "PythonInterface", language = "Python", proxyObjectClass = "PythonObject",
@@ -53,6 +54,7 @@ list(ServerClass = "Act", ServerModule = "thePlay", language = "Python",
 
 #' Python Class for a Scene
 #' 
+#' @export
 Scene_Python <- setRefClass("Scene_Python", contains = c("ProxyClassObject"), fields = c("act", "data", "title"))
 Scene_Python <- XR::setProxyClass("Scene", module = "thePlay",
     evaluatorClass = "PythonInterface", language = "Python", proxyObjectClass = "PythonObject",
@@ -116,6 +118,7 @@ list(ServerClass = "Scene", ServerModule = "thePlay", language = "Python",
 
 #' Python Class for a Speech
 #' 
+#' @export
 Speech_Python <- setRefClass("Speech_Python", contains = c("ProxyClassObject"), fields = c("act", "lines", "scene", "speaker"))
 Speech_Python <- XR::setProxyClass("Speech", module = "thePlay",
     evaluatorClass = "PythonInterface", language = "Python", proxyObjectClass = "PythonObject",
@@ -184,17 +187,23 @@ ServerClassInfo = function ()
 list(ServerClass = "Speech", ServerModule = "thePlay", language = "Python", 
     evaluatorClass = "PythonInterface", proxyFields = c("act", 
     "lines", "scene", "speaker"), proxyMethods = c("initialize", 
-    "ServerClassInfo", "getText"), proxyContains = character(0), 
+    "ServerClassInfo", "getText", "tokenize"), proxyContains = character(0), 
     proxyObjectClass = "PythonObject"),
 
 getText = structure(function (..., .ev = XRPython::RPython(), .get = NA) 
 {
     .ev$MethodCall(.proxyObject, "getText", ..., .get = .get)
-}, name = "getText", module = "", evaluatorClass = structure("PythonInterface", package = "XRPython"), serverDoc = character(0), serverArgs = character(0), class = structure("PythonFunction", package = "XRPython")))
+}, name = "getText", module = "", evaluatorClass = structure("PythonInterface", package = "XRPython"), serverDoc = character(0), serverArgs = character(0), class = structure("PythonFunction", package = "XRPython")),
+
+tokenize = structure(function (..., .ev = XRPython::RPython(), .get = NA) 
+{
+    .ev$MethodCall(.proxyObject, "tokenize", ..., .get = .get)
+}, name = "tokenize", module = "", evaluatorClass = structure("PythonInterface", package = "XRPython"), serverDoc = character(0), serverArgs = character(0), class = structure("PythonFunction", package = "XRPython")))
 
 
 #' Proxy for Python Class ElementTree in Module xml.etree.ElementTree
 #' 
+#' @export
 ElementTree_Python <- setRefClass("ElementTree_Python", contains = c("ProxyClassObject"))
 ElementTree_Python <- XR::setProxyClass("ElementTree", module = "xml.etree.ElementTree",
     evaluatorClass = "PythonInterface", language = "Python", proxyObjectClass = "PythonObject",
@@ -279,6 +288,7 @@ write_c14n = structure(function (..., .ev = XRPython::RPython(), .get = NA)
 
 #' Proxy for Python Class Element in Module xml.etree.ElementTree
 #' 
+#' @export
 Element_Python <- setRefClass("Element_Python", contains = c("ProxyClassObject"), fields = c("attrib", "tag", "tail", "text"))
 Element_Python <- XR::setProxyClass("Element", module = "xml.etree.ElementTree",
     evaluatorClass = "PythonInterface", language = "Python", proxyObjectClass = "PythonObject",

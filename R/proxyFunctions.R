@@ -13,7 +13,7 @@ getPlay_Python <- function(..., .ev = XR::getInterface(), .get = NA)
 getPlay_Python <- new("PythonFunction"
     , .Data = function (..., .ev = XRPython::RPython(), .get = NA) 
 {
-    nPyArgs <- nargs() - (!missing(.ev))
+    nPyArgs <- length(substitute(c(...))) - 1
     if (nPyArgs < 1) 
         stop("Python function getPlay() requires at least 1 argument; got ", 
             nPyArgs)
@@ -45,7 +45,7 @@ getActs <- function(..., .ev = XR::getInterface(), .get = NA)
 getActs <- new("PythonFunction"
     , .Data = function (..., .ev = XRPython::RPython(), .get = NA) 
 {
-    nPyArgs <- nargs() - (!missing(.ev))
+    nPyArgs <- length(substitute(c(...))) - 1
     if (nPyArgs < 1) 
         stop("Python function getActs() requires at least 1 argument; got ", 
             nPyArgs)
@@ -78,7 +78,7 @@ getScenes <- function(..., .ev = XR::getInterface(), .get = NA)
 getScenes <- new("PythonFunction"
     , .Data = function (..., .ev = XRPython::RPython(), .get = NA) 
 {
-    nPyArgs <- nargs() - (!missing(.ev))
+    nPyArgs <- length(substitute(c(...))) - 1
     if (nPyArgs < 1) 
         stop("Python function getScenes() requires at least 1 argument; got ", 
             nPyArgs)
@@ -111,7 +111,7 @@ getSpeeches <- function(..., .ev = XR::getInterface(), .get = NA)
 getSpeeches <- new("PythonFunction"
     , .Data = function (..., .ev = XRPython::RPython(), .get = NA) 
 {
-    nPyArgs <- nargs() - (!missing(.ev))
+    nPyArgs <- length(substitute(c(...))) - 1
     if (nPyArgs < 1) 
         stop("Python function getSpeeches() requires at least 1 argument; got ", 
             nPyArgs)
@@ -131,12 +131,11 @@ getSpeeches <- new("PythonFunction"
 #' Python List of the Persons Listed for the Play
 #' 
 #' [Python Documentation]
-#' A dictionary whose keys are all the names of speakers with speeches in the list.  The entry will be
-#' the total character count of the speeches if argument count is True, else just True.
-#' The list of speeches can come from the "speeches" field of a Play object or as the result of calling
-#' getSpeeches() for a whole play, an act or a scene.
+#' A list of all the speakers found in the list. The argument
+#' can be a list of speeches or an object (Play, Act, Scene) for which
+#' getSpeeches() returns such a list.
 #' @section Proxy Function:
-#' speakers(speeches, count =) [Python]
+#' speakers(speeches) [Python]
 #' @export
 speakers <- function(..., .ev = XR::getInterface(), .get = TRUE)
     NULL
@@ -144,12 +143,12 @@ speakers <- function(..., .ev = XR::getInterface(), .get = TRUE)
 speakers <- new("PythonFunction"
     , .Data = function (..., .ev = XRPython::RPython(), .get = TRUE) 
 {
-    nPyArgs <- nargs() - (!missing(.ev))
+    nPyArgs <- length(substitute(c(...))) - 1
     if (nPyArgs < 1) 
         stop("Python function speakers() requires at least 1 argument; got ", 
             nPyArgs)
-    if (nPyArgs > 2) 
-        stop("Python function speakers() only allows 2 arguments; got ", 
+    if (nPyArgs > 1) 
+        stop("Python function speakers() only allows 1 argument; got ", 
             nPyArgs)
     .ev$Import("thePlay", "speakers")
     .ev$Call("speakers", ..., .get = .get)
@@ -157,8 +156,80 @@ speakers <- new("PythonFunction"
     , name = "speakers"
     , module = "thePlay"
     , evaluatorClass = structure("PythonInterface", package = "XRPython")
-    , serverDoc = "A dictionary whose keys are all the names of speakers with speeches in the list.  The entry will be\nthe total character count of the speeches if argument count is True, else just True.\nThe list of speeches can come from the \"speeches\" field of a Play object or as the result of calling\ngetSpeeches() for a whole play, an act or a scene."
-    , serverArgs = c("speeches", "count =")
+    , serverDoc = "A list of all the speakers found in the list. The argument\ncan be a list of speeches or an object (Play, Act, Scene) for which\ngetSpeeches() returns such a list."
+    , serverArgs = "speeches"
+)
+
+#' Speeches Tokenized in a Python Dictionary by Speaker
+#' 
+#' [Python Documentation]
+#' A dictionary whose keys are all the names of speakers with speeches in the list.
+#' The corresponding element is a list of all the tokens spoken by each speaker.
+#' 
+#' The argument can be from the "speeches" field of a Play object or the result
+#' of any other computation.
+#' The argument could also be an Act, Scene or Play:  any object for which getSpeeches()
+#' returns a list of speeches.
+#' @section Proxy Function:
+#' tokens(speeches) [Python]
+#' @export
+tokens_Python <- function(..., .ev = XR::getInterface(), .get = NA)
+    NULL
+
+tokens_Python <- new("PythonFunction"
+    , .Data = function (..., .ev = XRPython::RPython(), .get = NA) 
+{
+    nPyArgs <- length(substitute(c(...))) - 1
+    if (nPyArgs < 1) 
+        stop("Python function tokens() requires at least 1 argument; got ", 
+            nPyArgs)
+    if (nPyArgs > 1) 
+        stop("Python function tokens() only allows 1 argument; got ", 
+            nPyArgs)
+    .ev$Import("thePlay", "tokens")
+    .ev$Call("tokens", ..., .get = .get)
+}
+    , name = "tokens"
+    , module = "thePlay"
+    , evaluatorClass = structure("PythonInterface", package = "XRPython")
+    , serverDoc = "A dictionary whose keys are all the names of speakers with speeches in the list.\nThe corresponding element is a list of all the tokens spoken by each speaker.\n\nThe argument can be from the \"speeches\" field of a Play object or the result\nof any other computation.\nThe argument could also be an Act, Scene or Play:  any object for which getSpeeches()\nreturns a list of speeches."
+    , serverArgs = "speeches"
+)
+
+#' A Python Dictionary of all Speeches by Speaker
+#' 
+#' [Python Documentation]
+#' A dictionary whose keys are all the names of speakers with speeches in the list.
+#' The corresponding element is a list of all the speeches spoken by that speaker.
+#' 
+#' The argument can be from the "speeches" field of a Play object or the result
+#' of any other computation.
+#' The argument could also be an Act, Scene or Play:  any object for which getSpeeches()
+#' returns a list of speeches.
+#' @section Proxy Function:
+#' speechTokens(speeches) [Python]
+#' @export
+speechTokens_Python <- function(..., .ev = XR::getInterface(), .get = NA)
+    NULL
+
+speechTokens_Python <- new("PythonFunction"
+    , .Data = function (..., .ev = XRPython::RPython(), .get = NA) 
+{
+    nPyArgs <- length(substitute(c(...))) - 1
+    if (nPyArgs < 1) 
+        stop("Python function speechTokens() requires at least 1 argument; got ", 
+            nPyArgs)
+    if (nPyArgs > 1) 
+        stop("Python function speechTokens() only allows 1 argument; got ", 
+            nPyArgs)
+    .ev$Import("thePlay", "speechTokens")
+    .ev$Call("speechTokens", ..., .get = .get)
+}
+    , name = "speechTokens"
+    , module = "thePlay"
+    , evaluatorClass = structure("PythonInterface", package = "XRPython")
+    , serverDoc = "A dictionary whose keys are all the names of speakers with speeches in the list.\nThe corresponding element is a list of all the speeches spoken by that speaker.\n\nThe argument can be from the \"speeches\" field of a Play object or the result\nof any other computation.\nThe argument could also be an Act, Scene or Play:  any object for which getSpeeches()\nreturns a list of speeches."
+    , serverArgs = "speeches"
 )
 
 #' Python Dictionary of the Speakers in a List of Speeches
@@ -177,7 +248,7 @@ getPersonae <- function(..., .ev = XR::getInterface(), .get = TRUE)
 getPersonae <- new("PythonFunction"
     , .Data = function (..., .ev = XRPython::RPython(), .get = TRUE) 
 {
-    nPyArgs <- nargs() - (!missing(.ev))
+    nPyArgs <- length(substitute(c(...))) - 1
     if (nPyArgs < 1) 
         stop("Python function getPersonae() requires at least 1 argument; got ", 
             nPyArgs)
@@ -205,7 +276,7 @@ parseXML <- function(..., .ev = XR::getInterface(), .get = NA)
 parseXML <- new("PythonFunction"
     , .Data = function (..., .ev = XRPython::RPython(), .get = NA) 
 {
-    nPyArgs <- nargs() - (!missing(.ev))
+    nPyArgs <- length(substitute(c(...))) - 1
     if (nPyArgs < 1) 
         stop("Python function parse() requires at least 1 argument; got ", 
             nPyArgs)
