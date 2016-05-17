@@ -199,8 +199,9 @@ tokens_Python <- new("PythonFunction"
 #' A Python Dictionary of all Speeches by Speaker
 #' 
 #' [Python Documentation]
-#' A dictionary whose keys are all the names of speakers with speeches in the list.
-#' The corresponding element is a list of all the speeches spoken by that speaker.
+#' A dictionary whose keys are the names of all speakers with speeches in the list.
+#' The corresponding element is a list of all the speeches spoken by that speaker, with
+#' each speech converted into a list of its tokens.
 #' 
 #' The argument can be from the "speeches" field of a Play object or the result
 #' of any other computation.
@@ -228,7 +229,7 @@ speechTokens_Python <- new("PythonFunction"
     , name = "speechTokens"
     , module = "thePlay"
     , evaluatorClass = structure("PythonInterface", package = "XRPython")
-    , serverDoc = "A dictionary whose keys are all the names of speakers with speeches in the list.\nThe corresponding element is a list of all the speeches spoken by that speaker.\n\nThe argument can be from the \"speeches\" field of a Play object or the result\nof any other computation.\nThe argument could also be an Act, Scene or Play:  any object for which getSpeeches()\nreturns a list of speeches."
+    , serverDoc = "A dictionary whose keys are the names of all speakers with speeches in the list.\nThe corresponding element is a list of all the speeches spoken by that speaker, with\neach speech converted into a list of its tokens.\n\nThe argument can be from the \"speeches\" field of a Play object or the result\nof any other computation.\nThe argument could also be an Act, Scene or Play:  any object for which getSpeeches()\nreturns a list of speeches."
     , serverArgs = "speeches"
 )
 
