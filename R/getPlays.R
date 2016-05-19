@@ -69,7 +69,7 @@ getPlay <- function(name, ask = interactive()) {
         else {
             file <- system.file("plays", paste0(key, ".xml"),
                                 package = .packageName, mustWork = TRUE)
-            value <- Play(getPlay_Python(file))
+            value <- getPlay_Python(file)
             assign(key, value, envir = .playsTable)
             value
         }

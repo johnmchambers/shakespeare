@@ -27,9 +27,9 @@ Play <- setRefClass("Play",
 
 
 Play$methods(
-    initialize = function( ...) {
+    initialize = function(name, ...) {
         if(nargs()) {
-            callSuper(...)
+            callSuper(getPlay(name), ...)
             personae <<- unlist(getPersonae(.self))
             title <<- findtext("TITLE")
             speeches <<- getSpeeches(.self)
