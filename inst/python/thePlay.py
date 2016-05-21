@@ -201,3 +201,30 @@ def speakersTable(speeches, counter):
     for speech in speeches:
         counter(value, speech)
     return value
+
+## the stopwords data from nltk
+
+from nltk.corpus import stopwords
+stopwords = nltk.corpus.stopwords.words('english')
+
+## add some older stopwords
+
+stopwords = stopwords + [ 'thee', 'thou', 'ye', 'thy', 'thine' ]
+punctuation = [ '.', ',', '$', '!', ';', ':', "'" ]
+
+from collections import Counter
+
+def wordsUsed(tokens, includeCommon = False, includePunctuation = False):
+    ''' Given a list of tokens, returns a list of the distinct words included.
+    Words are converted to lower case for comparison.
+    Common words are excluded by default, being defined as the stopwords set from
+    NLTK supplemented with a few common words in Elizabethan English.
+    Punctuation is also excluded by default.  Optional second & third arguments in
+    the call can override if supplied as True.
+    '''
+    words = Counter()
+    for tk in tokens:
+        w = tk.lower()
+        if (not w in words) and ( includeCommon or not w in stopwords) and (includePunctuation or not w in punctuation) :
+            words.update([ w ])
+    return [ w for w in words ]

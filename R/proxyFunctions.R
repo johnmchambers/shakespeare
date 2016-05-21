@@ -294,3 +294,38 @@ parseXML <- new("PythonFunction"
     , serverArgs = c("source", "parser =")
 )
 
+#' Python List of the Distinct Words in a List of Tokens
+#' 
+#' [Python Documentation]
+#' Given a list of tokens, returns a list of the distinct words included.
+#' Words are converted to lower case for comparison.
+#' Common words are excluded by default, being defined as the stopwords set from
+#' NLTK supplemented with a few common words in Elizabethan English.
+#' Punctuation is also excluded by default.  Optional second & third arguments in
+#' the call can override if supplied as True.
+#' @section Proxy Function:
+#' wordsUsed(tokens, includeCommon =, includePunctuation =) [Python]
+#' @export
+wordsUsed_Python <- function(..., .ev = XR::getInterface(), .get = NA)
+    NULL
+
+wordsUsed_Python <- new("PythonFunction"
+    , .Data = function (..., .ev = XRPython::RPython(), .get = NA) 
+{
+    nPyArgs <- length(substitute(c(...))) - 1
+    if (nPyArgs < 1) 
+        stop("Python function wordsUsed() requires at least 1 argument; got ", 
+            nPyArgs)
+    if (nPyArgs > 3) 
+        stop("Python function wordsUsed() only allows 3 arguments; got ", 
+            nPyArgs)
+    .ev$Import("thePlay", "wordsUsed")
+    .ev$Call("wordsUsed", ..., .get = .get)
+}
+    , name = "wordsUsed"
+    , module = "thePlay"
+    , evaluatorClass = structure("PythonInterface", package = "XRPython")
+    , serverDoc = "Given a list of tokens, returns a list of the distinct words included.\nWords are converted to lower case for comparison.\nCommon words are excluded by default, being defined as the stopwords set from\nNLTK supplemented with a few common words in Elizabethan English.\nPunctuation is also excluded by default.  Optional second & third arguments in\nthe call can override if supplied as True."
+    , serverArgs = c("tokens", "includeCommon =", "includePunctuation =")
+)
+

@@ -1,7 +1,10 @@
 ## this setup script writes the file proxyFunctions.R in the R/ subdirectory of the package
 ## It should be run as XR::packageSetup("proxyFunctions.R")
 
-con <- file("R/proxyFunctions.R","w")
+tmp <- tempfile(fileext=".R")
+con <- file(tmp, "w")
+
+message(gettextf("Creating proxy functions on temp file %s",dQuote(tmp)))
 
 XRPython::PythonFunction("getPlay", "thePlay", save = con, objName = "getPlay_Python",
                          docText = "Python Function to Parse XML File for Play")
@@ -30,4 +33,11 @@ XRPython::PythonFunction("getPersonae", "thePlay", save = con, .get = TRUE,
 XRPython::PythonFunction("parse", "xml.etree.ElementTree", save = con, objName = "parseXML",
                          docText = "Python Function to Parse XML File")
 
+XRPython::PythonFunction("wordsUsed", "thePlay", save = con, objName = "wordsUsed_Python",
+                         docText = "Python List of the Distinct Words in a List of Tokens")
+
 close(con)
+
+message("Copying temp file to shakespeare/R/proxyFunctions.R")
+
+system(gettextf("cp %s ./R/proxyFunctions.R", tmp))
