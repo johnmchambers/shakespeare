@@ -2,7 +2,7 @@
 % Please edit documentation in R/shakespeare.R
 \name{tokens}
 \alias{tokens}
-\title{Named List of Speeches Tokenized and Split According to Speaker}
+\title{Contents of Speeches Tokenized and Split According to Speaker}
 \usage{
 tokens(speeches)
 }
@@ -14,7 +14,8 @@ returns such a list.  Possiblities include a Play, Act or Scene object.}
 \description{
 The Python NLTK software is used to produce tokenized versions of all
 the speeches supplied in the argument.
-The resulting dictionary is returned to R, its elements unlisted and
+The resulting dictionary is returned to R as a named list.
+The list corresponding to a particular speaker is unlisted and
 the token \code{"$"} used as a line separator is replaced with new line
 characters.
 }

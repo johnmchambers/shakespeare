@@ -1,9 +1,9 @@
 #' Python Function to Parse XML File for Play
-#' 
+#'
 #' [Python Documentation]
 #' Parse the file name, or if it's not a string, assume it's
 #' a previously parsed tree.  (Should of course check that).
-#'     
+#'
 #' @section Proxy Function:
 #' getPlay(what) [Python]
 #' @export
@@ -11,14 +11,14 @@ getPlay_Python <- function(..., .ev = XR::getInterface(), .get = NA)
     NULL
 
 getPlay_Python <- new("PythonFunction"
-    , .Data = function (..., .ev = XRPython::RPython(), .get = NA) 
+    , .Data = function (..., .ev = XRPython::RPython(), .get = NA)
 {
     nPyArgs <- length(substitute(c(...))) - 1
-    if (nPyArgs < 1) 
-        stop("Python function getPlay() requires at least 1 argument; got ", 
+    if (nPyArgs < 1)
+        stop("Python function getPlay() requires at least 1 argument; got ",
             nPyArgs)
-    if (nPyArgs > 1) 
-        stop("Python function getPlay() only allows 1 argument; got ", 
+    if (nPyArgs > 1)
+        stop("Python function getPlay() only allows 1 argument; got ",
             nPyArgs)
     .ev$Import("thePlay", "getPlay")
     .ev$Call("getPlay", ..., .get = .get)
@@ -31,11 +31,11 @@ getPlay_Python <- new("PythonFunction"
 )
 
 #' Python List of all Acts of a Play
-#' 
+#'
 #' [Python Documentation]
 #' Return a list of the acts in the XML object "play".  Each element of the list is
 #' an object of class "Act" with fields "title" and "data" (the XML element for the act).
-#'     
+#'
 #' @section Proxy Function:
 #' getActs(play) [Python]
 #' @export
@@ -43,14 +43,14 @@ getActs <- function(..., .ev = XR::getInterface(), .get = NA)
     NULL
 
 getActs <- new("PythonFunction"
-    , .Data = function (..., .ev = XRPython::RPython(), .get = NA) 
+    , .Data = function (..., .ev = XRPython::RPython(), .get = NA)
 {
     nPyArgs <- length(substitute(c(...))) - 1
-    if (nPyArgs < 1) 
-        stop("Python function getActs() requires at least 1 argument; got ", 
+    if (nPyArgs < 1)
+        stop("Python function getActs() requires at least 1 argument; got ",
             nPyArgs)
-    if (nPyArgs > 1) 
-        stop("Python function getActs() only allows 1 argument; got ", 
+    if (nPyArgs > 1)
+        stop("Python function getActs() only allows 1 argument; got ",
             nPyArgs)
     .ev$Import("thePlay", "getActs")
     .ev$Call("getActs", ..., .get = .get)
@@ -63,7 +63,7 @@ getActs <- new("PythonFunction"
 )
 
 #' Python List of all Scenes of a Play
-#' 
+#'
 #' [Python Documentation]
 #' Return a list of the scenes in the XML object "play".  Each element of the list is
 #' an object of class "Scene" with fields "title", "act" and "data"
@@ -76,14 +76,14 @@ getScenes <- function(..., .ev = XR::getInterface(), .get = NA)
     NULL
 
 getScenes <- new("PythonFunction"
-    , .Data = function (..., .ev = XRPython::RPython(), .get = NA) 
+    , .Data = function (..., .ev = XRPython::RPython(), .get = NA)
 {
     nPyArgs <- length(substitute(c(...))) - 1
-    if (nPyArgs < 1) 
-        stop("Python function getScenes() requires at least 1 argument; got ", 
+    if (nPyArgs < 1)
+        stop("Python function getScenes() requires at least 1 argument; got ",
             nPyArgs)
-    if (nPyArgs > 1) 
-        stop("Python function getScenes() only allows 1 argument; got ", 
+    if (nPyArgs > 1)
+        stop("Python function getScenes() only allows 1 argument; got ",
             nPyArgs)
     .ev$Import("thePlay", "getScenes")
     .ev$Call("getScenes", ..., .get = .get)
@@ -96,7 +96,7 @@ getScenes <- new("PythonFunction"
 )
 
 #' Python List of all Speeches of a Play (or Act or Scene)
-#' 
+#'
 #' [Python Documentation]
 #' Return a list of the speeches in the XML object "play".  Each element of the list is
 #' an object of class "Speech" with fields "title", "act", "scene" and "data"
@@ -109,14 +109,14 @@ getSpeeches <- function(..., .ev = XR::getInterface(), .get = NA)
     NULL
 
 getSpeeches <- new("PythonFunction"
-    , .Data = function (..., .ev = XRPython::RPython(), .get = NA) 
+    , .Data = function (..., .ev = XRPython::RPython(), .get = NA)
 {
     nPyArgs <- length(substitute(c(...))) - 1
-    if (nPyArgs < 1) 
-        stop("Python function getSpeeches() requires at least 1 argument; got ", 
+    if (nPyArgs < 1)
+        stop("Python function getSpeeches() requires at least 1 argument; got ",
             nPyArgs)
-    if (nPyArgs > 1) 
-        stop("Python function getSpeeches() only allows 1 argument; got ", 
+    if (nPyArgs > 1)
+        stop("Python function getSpeeches() only allows 1 argument; got ",
             nPyArgs)
     .ev$Import("thePlay", "getSpeeches")
     .ev$Call("getSpeeches", ..., .get = .get)
@@ -129,7 +129,7 @@ getSpeeches <- new("PythonFunction"
 )
 
 #' Python List of the Persons Listed for the Play
-#' 
+#'
 #' [Python Documentation]
 #' A list of all the speakers found in the list. The argument
 #' can be a list of speeches or an object (Play, Act, Scene) for which
@@ -141,14 +141,14 @@ speakers <- function(..., .ev = XR::getInterface(), .get = TRUE)
     NULL
 
 speakers <- new("PythonFunction"
-    , .Data = function (..., .ev = XRPython::RPython(), .get = TRUE) 
+    , .Data = function (..., .ev = XRPython::RPython(), .get = TRUE)
 {
     nPyArgs <- length(substitute(c(...))) - 1
-    if (nPyArgs < 1) 
-        stop("Python function speakers() requires at least 1 argument; got ", 
+    if (nPyArgs < 1)
+        stop("Python function speakers() requires at least 1 argument; got ",
             nPyArgs)
-    if (nPyArgs > 1) 
-        stop("Python function speakers() only allows 1 argument; got ", 
+    if (nPyArgs > 1)
+        stop("Python function speakers() only allows 1 argument; got ",
             nPyArgs)
     .ev$Import("thePlay", "speakers")
     .ev$Call("speakers", ..., .get = .get)
@@ -161,11 +161,11 @@ speakers <- new("PythonFunction"
 )
 
 #' Speeches Tokenized in a Python Dictionary by Speaker
-#' 
+#'
 #' [Python Documentation]
 #' A dictionary whose keys are all the names of speakers with speeches in the list.
 #' The corresponding element is a list of all the tokens spoken by each speaker.
-#' 
+#'
 #' The argument can be from the "speeches" field of a Play object or the result
 #' of any other computation.
 #' The argument could also be an Act, Scene or Play:  any object for which getSpeeches()
@@ -177,14 +177,14 @@ tokens_Python <- function(..., .ev = XR::getInterface(), .get = NA)
     NULL
 
 tokens_Python <- new("PythonFunction"
-    , .Data = function (..., .ev = XRPython::RPython(), .get = NA) 
+    , .Data = function (..., .ev = XRPython::RPython(), .get = NA)
 {
     nPyArgs <- length(substitute(c(...))) - 1
-    if (nPyArgs < 1) 
-        stop("Python function tokens() requires at least 1 argument; got ", 
+    if (nPyArgs < 1)
+        stop("Python function tokens() requires at least 1 argument; got ",
             nPyArgs)
-    if (nPyArgs > 1) 
-        stop("Python function tokens() only allows 1 argument; got ", 
+    if (nPyArgs > 1)
+        stop("Python function tokens() only allows 1 argument; got ",
             nPyArgs)
     .ev$Import("thePlay", "tokens")
     .ev$Call("tokens", ..., .get = .get)
@@ -197,12 +197,12 @@ tokens_Python <- new("PythonFunction"
 )
 
 #' A Python Dictionary of all Speeches by Speaker
-#' 
+#'
 #' [Python Documentation]
 #' A dictionary whose keys are the names of all speakers with speeches in the list.
 #' The corresponding element is a list of all the speeches spoken by that speaker, with
 #' each speech converted into a list of its tokens.
-#' 
+#'
 #' The argument can be from the "speeches" field of a Play object or the result
 #' of any other computation.
 #' The argument could also be an Act, Scene or Play:  any object for which getSpeeches()
@@ -214,14 +214,14 @@ speechTokens_Python <- function(..., .ev = XR::getInterface(), .get = NA)
     NULL
 
 speechTokens_Python <- new("PythonFunction"
-    , .Data = function (..., .ev = XRPython::RPython(), .get = NA) 
+    , .Data = function (..., .ev = XRPython::RPython(), .get = NA)
 {
     nPyArgs <- length(substitute(c(...))) - 1
-    if (nPyArgs < 1) 
-        stop("Python function speechTokens() requires at least 1 argument; got ", 
+    if (nPyArgs < 1)
+        stop("Python function speechTokens() requires at least 1 argument; got ",
             nPyArgs)
-    if (nPyArgs > 1) 
-        stop("Python function speechTokens() only allows 1 argument; got ", 
+    if (nPyArgs > 1)
+        stop("Python function speechTokens() only allows 1 argument; got ",
             nPyArgs)
     .ev$Import("thePlay", "speechTokens")
     .ev$Call("speechTokens", ..., .get = .get)
@@ -234,7 +234,7 @@ speechTokens_Python <- new("PythonFunction"
 )
 
 #' Python Dictionary of the Speakers in a List of Speeches
-#' 
+#'
 #' [Python Documentation]
 #' Returns a list of character strings describing the personae in the play.  In the style of
 #' the XML coding, each string is the name of the person as it will appear in speeches given
@@ -247,14 +247,14 @@ getPersonae <- function(..., .ev = XR::getInterface(), .get = TRUE)
     NULL
 
 getPersonae <- new("PythonFunction"
-    , .Data = function (..., .ev = XRPython::RPython(), .get = TRUE) 
+    , .Data = function (..., .ev = XRPython::RPython(), .get = TRUE)
 {
     nPyArgs <- length(substitute(c(...))) - 1
-    if (nPyArgs < 1) 
-        stop("Python function getPersonae() requires at least 1 argument; got ", 
+    if (nPyArgs < 1)
+        stop("Python function getPersonae() requires at least 1 argument; got ",
             nPyArgs)
-    if (nPyArgs > 1) 
-        stop("Python function getPersonae() only allows 1 argument; got ", 
+    if (nPyArgs > 1)
+        stop("Python function getPersonae() only allows 1 argument; got ",
             nPyArgs)
     .ev$Import("thePlay", "getPersonae")
     .ev$Call("getPersonae", ..., .get = .get)
@@ -267,7 +267,7 @@ getPersonae <- new("PythonFunction"
 )
 
 #' Python Function to Parse XML File
-#' 
+#'
 #' @section Proxy Function:
 #' parse(source, parser =) [Python]
 #' @export
@@ -275,14 +275,14 @@ parseXML <- function(..., .ev = XR::getInterface(), .get = NA)
     NULL
 
 parseXML <- new("PythonFunction"
-    , .Data = function (..., .ev = XRPython::RPython(), .get = NA) 
+    , .Data = function (..., .ev = XRPython::RPython(), .get = NA)
 {
     nPyArgs <- length(substitute(c(...))) - 1
-    if (nPyArgs < 1) 
-        stop("Python function parse() requires at least 1 argument; got ", 
+    if (nPyArgs < 1)
+        stop("Python function parse() requires at least 1 argument; got ",
             nPyArgs)
-    if (nPyArgs > 2) 
-        stop("Python function parse() only allows 2 arguments; got ", 
+    if (nPyArgs > 2)
+        stop("Python function parse() only allows 2 arguments; got ",
             nPyArgs)
     .ev$Import("xml.etree.ElementTree", "parse")
     .ev$Call("parse", ..., .get = .get)
@@ -295,7 +295,7 @@ parseXML <- new("PythonFunction"
 )
 
 #' Python List of the Distinct Words in a List of Tokens
-#' 
+#'
 #' [Python Documentation]
 #' Given a list of tokens, returns a list of the distinct words included.
 #' Words are converted to lower case for comparison.
@@ -306,18 +306,18 @@ parseXML <- new("PythonFunction"
 #' @section Proxy Function:
 #' wordsUsed(tokens, includeCommon =, includePunctuation =) [Python]
 #' @export
-wordsUsed_Python <- function(..., .ev = XR::getInterface(), .get = NA)
+wordsUsed <- function(..., .ev = XR::getInterface(), .get = NA)
     NULL
 
-wordsUsed_Python <- new("PythonFunction"
-    , .Data = function (..., .ev = XRPython::RPython(), .get = NA) 
+wordsUsed <- new("PythonFunction"
+    , .Data = function (..., .ev = XRPython::RPython(), .get = NA)
 {
     nPyArgs <- length(substitute(c(...))) - 1
-    if (nPyArgs < 1) 
-        stop("Python function wordsUsed() requires at least 1 argument; got ", 
+    if (nPyArgs < 1)
+        stop("Python function wordsUsed() requires at least 1 argument; got ",
             nPyArgs)
-    if (nPyArgs > 3) 
-        stop("Python function wordsUsed() only allows 3 arguments; got ", 
+    if (nPyArgs > 3)
+        stop("Python function wordsUsed() only allows 3 arguments; got ",
             nPyArgs)
     .ev$Import("thePlay", "wordsUsed")
     .ev$Call("wordsUsed", ..., .get = .get)

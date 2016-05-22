@@ -33,7 +33,7 @@ XRPython::PythonFunction("getPersonae", "thePlay", save = con, .get = TRUE,
 XRPython::PythonFunction("parse", "xml.etree.ElementTree", save = con, objName = "parseXML",
                          docText = "Python Function to Parse XML File")
 
-XRPython::PythonFunction("wordsUsed", "thePlay", save = con, objName = "wordsUsed_Python",
+XRPython::PythonFunction("wordsUsed", "thePlay", save = con,
                          docText = "Python List of the Distinct Words in a List of Tokens")
 
 close(con)

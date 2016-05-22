@@ -210,9 +210,10 @@ stopwords = nltk.corpus.stopwords.words('english')
 ## add some older stopwords
 
 stopwords = stopwords + [ 'thee', 'thou', 'ye', 'thy', 'thine' ]
-punctuation = [ '.', ',', '$', '!', ';', ':', "'" ]
+punctuation = [ '.', ',', '$', '!', ';', ':', "'", "--", "/>", "?" ]
 
 from collections import Counter
+import re
 
 def wordsUsed(tokens, includeCommon = False, includePunctuation = False):
     ''' Given a list of tokens, returns a list of the distinct words included.
@@ -221,10 +222,26 @@ def wordsUsed(tokens, includeCommon = False, includePunctuation = False):
     NLTK supplemented with a few common words in Elizabethan English.
     Punctuation is also excluded by default.  Optional second & third arguments in
     the call can override if supplied as True.
+
+    The function can also be called with a dictionary whose elements are token lists,
+    as returned by the tokens() function. In this case, it calls iself recursively to in
+    effect apply the function to each element, returning a corresponding dictionary.
     '''
+    if isinstance(tokens, dict):
+        value = { }
+        speakers = tokens.keys()
+        for who in speakers:
+            value[who] = wordsUsed(tokens[who])
+        return value
     words = Counter()
     for tk in tokens:
         w = tk.lower()
-        if (not w in words) and ( includeCommon or not w in stopwords) and (includePunctuation or not w in punctuation) :
-            words.update([ w ])
+        w = re.sub("[.]$", "", w) # some tokens have a trailing dot
+        if w in words:
+            continue
+        if w in stopwords and not includeCommon:
+            continue
+        if w in punctuation and not includePunctuation:
+            continue
+        words.update([ w ])
     return [ w for w in words ]

@@ -19,6 +19,7 @@ exportClasses(Element_Python)
 exportClasses(Play)
 exportClasses(Scene_Python)
 exportClasses(Speech_Python)
+export(wordsUsed)
 import(XRPython)
 import(methods)
 
