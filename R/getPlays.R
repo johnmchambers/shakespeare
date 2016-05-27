@@ -36,7 +36,7 @@ playTitles <- function() {
 #' string that uniquely matches one of the play titles.  To see keys and titles, call \code{\link{playTitles}()}.
 #' @param ask  if more than  one play matches the name, should the user be asked to choose.  Default \code{TRUE} iff the session is interactive.  No resolution of multiple matches generates an error.
 #' @export
-getPlay <- function(name, ask = interactive()) {
+findPlay <- function(name, ask = interactive()) {
     keys <- .playsTable$keys
     titles <- .playsTable$titles
     which <- match(name, keys, 0L)
@@ -62,20 +62,21 @@ getPlay <- function(name, ask = interactive()) {
             which <- inTitle
     }
     if(which) {
-    ## For  those plays identified, return the saved object or parse
+    ## If the play has not been parsed, do it now and save
         key <- keys[which]
-        if(exists(key, envir = .playsTable))
-            get(key, envir = .playsTable)
-        else {
+        if(!exists(key, envir = .playsTable)) {
             file <- system.file("plays", paste0(key, ".xml"),
                                 package = .packageName, mustWork = TRUE)
             value <- getPlay_Python(file)
             assign(key, value, envir = .playsTable)
-            value
         }
+        key
     }
     else
         stop(gettextf("No match of %s to the names or the play titles", dQuote(name)))
     ## TODO: should try to parse a file name if no match to table.
 
  }
+
+getPlay <- function(key)
+    get(key, envir = .playsTable)
