@@ -26,7 +26,7 @@ length(hamletOnly)/length(hamletsWords)
 talkers <- sort(sapply(allWords, length), decreasing = TRUE)[1:10]
 talkers
 
-# now make the computation into a function
+## now make the computation into a function
 
 wordShare <- function(speeches, people = bigTalkers(allWords)) {
   allTokens <- tokens(speeches)

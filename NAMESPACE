@@ -3,6 +3,7 @@
 export(getActs)
 export(getPersonae)
 export(getPlay)
+export(findPlay)
 export(getPlay_Python)
 export(getScenes)
 export(getSpeeches)
@@ -20,6 +21,10 @@ exportClasses(Play)
 exportClasses(Scene_Python)
 exportClasses(Speech_Python)
 export(wordsUsed)
+export(playWords)
+export(otherWords)
+export(playLength)
+
 import(XRPython)
 import(methods)
 

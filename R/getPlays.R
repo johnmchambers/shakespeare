@@ -2,6 +2,12 @@
 pythonAddToPath() # by default, the "python" directory
 pythonImport("thePlay")
 
+## an environment to store various information about the plays, typically
+## named lists with per-play information under the key for that play.
+## The functions to return the requested information are self-initializing
+## partly to allow parameters to be set for the Python functions returning
+## the data needed (e.g., control over the definition of "word")
+## Also contains "keys" and "titles", initialized below
 .playsTable <- new.env(parent = emptyenv(), size = 80L)
 tbl <- read.csv(system.file("plays", "titleTable.csv",
                             package = "shakespeare", mustWork = TRUE),

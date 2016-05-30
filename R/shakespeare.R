@@ -48,3 +48,59 @@ speechTokens <- function(speeches, .get = NA) {
     else
         table
 }
+
+
+allKeys <- function()
+    .playsTable$keys
+
+playWords <- function(play) {
+    wordTable <- .playsTable$wordTable
+    if(is.null(wordTable)) { # initialize
+        wordTable <- list()
+        for(key in allKeys()) {
+            allTokens <- tokens(Play(key)$speeches)
+            wordTable[[key]] <- unlist(wordsUsed(allTokens, .get=TRUE), use.names = FALSE)
+        }
+        .playsTable$wordTable <- wordTable
+    }
+    if(missing(play))
+        wordTable
+    else
+        wordTable[[findPlay(play)]]
+}
+
+otherWords <- function(play) {
+    otherTable <- .playsTable$otherWords
+    if(is.null(otherTable)) { # initialize
+        allWords <- playWords()
+        keys <- allKeys()
+        otherTable <- list()
+        for(i in seq_along(keys)) {
+            otherTable[[i]] <- unique(unlist(allWords[-i], use.names = FALSE))
+        }
+        names(otherTable) <- keys
+        .playsTable$otherWords <- otherTable
+    }
+    if(missing(play))
+        otherTable
+    else
+        otherTable[[findPlay(play)]]
+}
+
+playLength <- function(play) {
+    lengths <- .playsTable$playLength
+    if(is.null(lengths)) {
+        keys <- allKeys()
+        lengths <- integer(length(keys))
+        for(i in seq_along(keys)) {
+            allTokens <- tokens(Play(keys[[i]])$speeches, .get=TRUE)
+            lengths[[i]] <- length(unlist(allTokens, use.names = FALSE))
+        }
+        names(lengths) <- keys
+        .playsTable$playLength <- lengths
+    }
+    if(missing(play))
+        lengths
+    else
+        lengths[[findPlay(play)]]
+}
