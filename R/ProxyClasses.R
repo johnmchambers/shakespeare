@@ -217,13 +217,18 @@ ServerClassInfo = function ()
 list(ServerClass = "Speech", ServerModule = "thePlay", language = "Python", 
     evaluatorClass = "PythonInterface", proxyFields = c("act", 
     "lines", "playTitle", "scene", "speaker"), proxyMethods = c("initialize", 
-    "ServerClassInfo", "getText", "tokenize"), proxyContains = character(0), 
+    "ServerClassInfo", "getText", "hasText", "tokenize"), proxyContains = character(0), 
     proxyObjectClass = "PythonObject"),
 
 getText = structure(function (..., .ev = XRPython::RPython(), .get = NA) 
 {
     .ev$MethodCall(.proxyObject, "getText", ..., .get = .get)
 }, name = "getText", module = "", evaluatorClass = structure("PythonInterface", package = "XRPython"), serverDoc = character(0), serverArgs = character(0), class = structure("PythonFunction", package = "XRPython")),
+
+hasText = structure(function (..., .ev = XRPython::RPython(), .get = NA) 
+{
+    .ev$MethodCall(.proxyObject, "hasText", ..., .get = .get)
+}, name = "hasText", module = "", evaluatorClass = structure("PythonInterface", package = "XRPython"), serverDoc = character(0), serverArgs = character(0), class = structure("PythonFunction", package = "XRPython")),
 
 tokenize = structure(function (..., .ev = XRPython::RPython(), .get = NA) 
 {

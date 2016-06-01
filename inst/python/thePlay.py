@@ -90,6 +90,13 @@ class Speech(object):
                 text = text + "$" + line
         text = text[1:len(text)] # remove 1st "$"
         return nltk.word_tokenize(text)
+    def hasText(self, text, startat = 0):
+        value = []
+        for i in range(0, len(self.lines)):
+            if text in self.lines[i]:
+                value.append(i)
+        return value
+            
             
 
 def getSpeeches(play):

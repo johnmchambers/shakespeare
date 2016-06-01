@@ -1,0 +1,11 @@
+require(shakespeare)
+tp <- Play("tempest")
+tp$speeches
+last <- tp$speeches$el(639)
+ev <- XRPython::RPython()
+printSpeech(last)
+last$hasText("free")
+last$hasText("deliver")
+last$hasText("Promise")
+sps <- vector("list", tp$speeches$.proxyObject@size)
+sizes <- sapply(sps, function(x)x$lines$.proxyObject@size)
