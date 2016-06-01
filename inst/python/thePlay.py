@@ -13,12 +13,13 @@ a previously parsed tree.  (Should of course check that).
         return what
 
 class Act(object):
-    def __init__(self, obj = None):
+    def __init__(self, obj = None, playTitle = None):
         if obj is None:
             self.title = '<Unspecified>'
         else:
             self.title = obj.findtext('TITLE')
         self.data = obj
+        self.playTitle = playTitle
 
 def getActs(play):
     ''' Return a list of the acts in the XML object "play".  Each element of the list is
@@ -26,18 +27,22 @@ an object of class "Act" with fields "title" and "data" (the XML element for the
     '''
     value = [ ]
     acts = play.findall('.//ACT')
+    title = play.findtext('TITLE')
     for el in acts:
-        act = Act(el)
+        act = Act(el, title)
         value.append(act)
     return value
 
 class Scene(object):
-    def __init__(self, act = '<Unspecified>', obj = None):
-        self.act = act
+    def __init__(self, actTitle = '<Unspecified>', playTitle = '<Unspecified>', obj = None):
         if obj is None:
             self.title = '<Unspecified>'
+            self.actTitle = '<Unspecified>'
+            self.playTitle = '<Unspecified>'
         else:
             self.title = obj.findtext('TITLE')
+            self.actTitle = actTitle
+            self.playTitle = playTitle
         self.data = obj
 
 def getScenes(play):
@@ -54,15 +59,17 @@ def getScenes(play):
     for act in acts:
         scenes = act.data.findall('.//SCENE')
         actTitle = act.title
+        playTitle = act.playTitle
         for scene in scenes:
-            obj = Scene(actTitle, scene)
+            obj = Scene(actTitle, playTitle, scene)
             value.append(obj)
     return value
 
 class Speech(object):
-    def __init__(self, obj = None, act = '<Unspecified>', scene = '<Unspecified>'):
+    def __init__(self, obj = None, act = '<Unspecified>', scene = '<Unspecified>', playTitle = '<Unspecified>'):
         self.act = act
         self.scene = scene
+        self.playTitle = playTitle
         ## to be a well-behaved class, we always set the 4 fields
         if obj is None:
             self.speaker = '<Unspecified>'
@@ -98,10 +105,11 @@ def getSpeeches(play):
         scenes = getScenes(play)
     for scene in scenes:
         speeches = scene.data.findall('.//SPEECH')
-        sceneAct = scene.act
+        sceneAct = scene.actTitle
         sceneTitle = scene.title
+        playTitle = scene.playTitle
         for speech in speeches:
-            obj = Speech(speech, sceneAct, sceneTitle)
+            obj = Speech(speech, sceneAct, sceneTitle, playTitle)
             value.append(obj)
     return value
 

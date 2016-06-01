@@ -1,7 +1,7 @@
 #' Python Class for an Act
 #' 
 #' @export
-Act_Python <- setRefClass("Act_Python", contains = c("ProxyClassObject"), fields = c("data", "title"))
+Act_Python <- setRefClass("Act_Python", contains = c("ProxyClassObject"), fields = c("data", "playTitle", "title"))
 Act_Python <- XR::setProxyClass("Act", module = "thePlay",
     evaluatorClass = "PythonInterface", language = "Python", proxyObjectClass = "PythonObject",
     methods = list(),
@@ -13,6 +13,16 @@ Act_Python <- XR::setProxyClass("Act", module = "thePlay",
               .ev$Eval("%s.data", proxy)
           else {
               .ev$Command("%s.data = %s", proxy, value)
+              invisible(value)
+          }
+      },
+      playTitle = function (value) 
+      {
+          proxy <- get(".proxyObject", envir = .self)
+          if (missing(value)) 
+              .ev$Eval("%s.playTitle", proxy)
+          else {
+              .ev$Command("%s.playTitle = %s", proxy, value)
               invisible(value)
           }
       },
@@ -48,25 +58,25 @@ initialize = function (..., evaluator, .serverObject)
 ServerClassInfo = function () 
 list(ServerClass = "Act", ServerModule = "thePlay", language = "Python", 
     evaluatorClass = "PythonInterface", proxyFields = c("data", 
-    "title"), proxyMethods = c("initialize", "ServerClassInfo"
+    "playTitle", "title"), proxyMethods = c("initialize", "ServerClassInfo"
     ), proxyContains = character(0), proxyObjectClass = "PythonObject"))
 
 
 #' Python Class for a Scene
 #' 
 #' @export
-Scene_Python <- setRefClass("Scene_Python", contains = c("ProxyClassObject"), fields = c("act", "data", "title"))
+Scene_Python <- setRefClass("Scene_Python", contains = c("ProxyClassObject"), fields = c("actTitle", "data", "playTitle", "title"))
 Scene_Python <- XR::setProxyClass("Scene", module = "thePlay",
     evaluatorClass = "PythonInterface", language = "Python", proxyObjectClass = "PythonObject",
     methods = list(),
     fields = list(
-      act = function (value) 
+      actTitle = function (value) 
       {
           proxy <- get(".proxyObject", envir = .self)
           if (missing(value)) 
-              .ev$Eval("%s.act", proxy)
+              .ev$Eval("%s.actTitle", proxy)
           else {
-              .ev$Command("%s.act = %s", proxy, value)
+              .ev$Command("%s.actTitle = %s", proxy, value)
               invisible(value)
           }
       },
@@ -77,6 +87,16 @@ Scene_Python <- XR::setProxyClass("Scene", module = "thePlay",
               .ev$Eval("%s.data", proxy)
           else {
               .ev$Command("%s.data = %s", proxy, value)
+              invisible(value)
+          }
+      },
+      playTitle = function (value) 
+      {
+          proxy <- get(".proxyObject", envir = .self)
+          if (missing(value)) 
+              .ev$Eval("%s.playTitle", proxy)
+          else {
+              .ev$Command("%s.playTitle = %s", proxy, value)
               invisible(value)
           }
       },
@@ -111,15 +131,15 @@ initialize = function (..., evaluator, .serverObject)
 
 ServerClassInfo = function () 
 list(ServerClass = "Scene", ServerModule = "thePlay", language = "Python", 
-    evaluatorClass = "PythonInterface", proxyFields = c("act", 
-    "data", "title"), proxyMethods = c("initialize", "ServerClassInfo"
-    ), proxyContains = character(0), proxyObjectClass = "PythonObject"))
+    evaluatorClass = "PythonInterface", proxyFields = c("actTitle", 
+    "data", "playTitle", "title"), proxyMethods = c("initialize", 
+    "ServerClassInfo"), proxyContains = character(0), proxyObjectClass = "PythonObject"))
 
 
 #' Python Class for a Speech
 #' 
 #' @export
-Speech_Python <- setRefClass("Speech_Python", contains = c("ProxyClassObject"), fields = c("act", "lines", "scene", "speaker"))
+Speech_Python <- setRefClass("Speech_Python", contains = c("ProxyClassObject"), fields = c("act", "lines", "playTitle", "scene", "speaker"))
 Speech_Python <- XR::setProxyClass("Speech", module = "thePlay",
     evaluatorClass = "PythonInterface", language = "Python", proxyObjectClass = "PythonObject",
     methods = list(),
@@ -141,6 +161,16 @@ Speech_Python <- XR::setProxyClass("Speech", module = "thePlay",
               .ev$Eval("%s.lines", proxy)
           else {
               .ev$Command("%s.lines = %s", proxy, value)
+              invisible(value)
+          }
+      },
+      playTitle = function (value) 
+      {
+          proxy <- get(".proxyObject", envir = .self)
+          if (missing(value)) 
+              .ev$Eval("%s.playTitle", proxy)
+          else {
+              .ev$Command("%s.playTitle = %s", proxy, value)
               invisible(value)
           }
       },
@@ -186,7 +216,7 @@ initialize = function (..., evaluator, .serverObject)
 ServerClassInfo = function () 
 list(ServerClass = "Speech", ServerModule = "thePlay", language = "Python", 
     evaluatorClass = "PythonInterface", proxyFields = c("act", 
-    "lines", "scene", "speaker"), proxyMethods = c("initialize", 
+    "lines", "playTitle", "scene", "speaker"), proxyMethods = c("initialize", 
     "ServerClassInfo", "getText", "tokenize"), proxyContains = character(0), 
     proxyObjectClass = "PythonObject"),
 

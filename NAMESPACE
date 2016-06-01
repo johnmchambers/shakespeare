@@ -24,6 +24,7 @@ export(wordsUsed)
 export(playWords)
 export(otherWords)
 export(playLength)
+export(printSpeech)
 
 import(XRPython)
 import(methods)

@@ -40,4 +40,32 @@ Play$methods(
     }
     )
 
+.abbrevScene <- function(scene) {
+    if(grepl("^SCENE ", scene))
+        gsub("[.].*","", scene)
+    else
+        substr(scene, 1, 10)
+}
+
+printSpeech <- function(speech, showPlay = TRUE, showAct = TRUE, showScene= TRUE, abbrevScene = TRUE) {
+    ## either called with a proxy object or a previously converted (and maybe modified) speech
+    if(is(speech, "Speech_Python"))
+        speech <- pythonGet(speech)
+    fields <- speech@fields
+    header <- if(showPlay) fields$play else ""
+    if(showAct) {
+        if(nzchar(header))
+            header <- paste0(header,",")
+        header <- paste(header, fields$act)
+    }
+    if(showScene) {
+        if(nzchar(header))
+            header <- paste0(header,",")
+        header <- paste(header, if(abbrevScene) .abbrevScene(fields$scene) else fields$scene)
+    }
+    if(nzchar(header)) cat(header, "\n")
+    cat(fields$speaker, ":\n")
+    writeLines(paste("   ",fields$lines))
+    invisible(speech)
+}
 

@@ -84,5 +84,7 @@ findPlay <- function(name, ask = interactive()) {
 
  }
 
-getPlay <- function(key)
+getPlay <- function(name) {
+    key <- findPlay(name)
     get(key, envir = .playsTable)
+}
