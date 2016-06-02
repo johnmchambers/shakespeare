@@ -4,7 +4,7 @@
 \alias{wordsUsed}
 \title{Python List of the Distinct Words in a List of Tokens}
 \usage{
-wordsUsed(..., .ev = XR::getInterface(), .get = NA)
+wordsUsed(..., .ev = XRPython::RPython(), .get = NA)
 }
 \description{
 [Python Documentation]
@@ -14,6 +14,11 @@ Common words are excluded by default, being defined as the stopwords set from
 NLTK supplemented with a few common words in Elizabethan English.
 Punctuation is also excluded by default.  Optional second & third arguments in
 the call can override if supplied as True.
+}
+\details{
+The function can also be called with a dictionary whose elements are token lists,
+as returned by the tokens() function. In this case, it calls iself recursively to in
+effect apply the function to each element, returning a corresponding dictionary.
 }
 \section{Proxy Function}{
 

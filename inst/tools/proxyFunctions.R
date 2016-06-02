@@ -36,6 +36,9 @@ XRPython::PythonFunction("parse", "xml.etree.ElementTree", save = con, objName =
 XRPython::PythonFunction("wordsUsed", "thePlay", save = con,
                          docText = "Python List of the Distinct Words in a List of Tokens")
 
+XRPython::PythonFunction("speechSearch", "thePlay", save = con,
+                         docText = "List of Speech Fragments with Lines Matching Specified Text")
+
 close(con)
 
 message("Copying temp file to shakespeare/R/proxyFunctions.R")

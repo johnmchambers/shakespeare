@@ -2,19 +2,21 @@
 % Please edit documentation in R/shakespeare.R
 \name{tokens}
 \alias{tokens}
-\title{Contents of Speeches Tokenized and Split According to Speaker}
+\title{Contents of Speeches Tokenized}
 \usage{
-tokens(speeches)
+tokens(speeches, .get = NA)
 }
 \arguments{
 \item{speeches}{Proxy for a Python object containing the relevant speeches.
 This may be a list of speeches or and object for which \code{getSpeeches()}
 returns such a list.  Possiblities include a Play, Act or Scene object.}
+
+\item{.get}{The standard option for converting the result to R.  Supplying as
+\code{TRUE} converts to R as a named list.}
 }
 \description{
-The Python NLTK software is used to produce tokenized versions of all
+The Python NLTK software is used to produce a list of tokens from all
 the speeches supplied in the argument.
-The resulting dictionary is returned to R as a named list.
 The list corresponding to a particular speaker is unlisted and
 the token \code{"$"} used as a line separator is replaced with new line
 characters.

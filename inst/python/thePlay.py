@@ -270,15 +270,22 @@ def wordsUsed(tokens, includeCommon = False, includePunctuation = False):
         words.update([ w ])
     return [ w for w in words ]
 
-def whoSaid(what, speeches, before = 3, after = 2, emph = False):
+def speechSearch(text, speeches, before = 3, after = 2, emph = False, filler = "  ......"):
+    ''' Given some text and a list of speeches, returns a
+    constructed list of speech fragments for any of the speeches that contains the
+    text (as determined by the hasText() method.  All lines containing the text will
+    be included plus some preceding and following lines as specified by the before=
+    and after= arguments.
+    (Argument emph= is not currently used.)
+    '''
     value = [ ]
     for i in range(len(speeches)):
         sp = speeches[i]
         if not (isinstance(sp, Speech) and isinstance(sp.lines, list)):
             continue
-        found = sp.hasText(what)
+        found = sp.hasText(text)
         if len(found) > 0:
-            value.append(speechFragment(sp, found, before, after))
+            value.append(speechFragment(sp, found, before, after, filler))
     return value
 
 def speechFragment(speech, lines, before = 3, after = 2, filler = "  ...... "):

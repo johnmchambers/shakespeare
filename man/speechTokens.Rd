@@ -4,14 +4,14 @@
 \alias{speechTokens}
 \title{Vectors of Tokens for all Speeches According to Speaker}
 \usage{
-speechTokens(speeches, .get = FALSE)
+speechTokens(speeches, .get = NA)
 }
 \description{
 Given a proxy for a play, act or scene object in Python, or for a list of
 speeches, the function returns a named list, with names being the speakers.
-The corresponding element is a list of the speeches
-made by this speaker; each list is represented by the vector of corresponging
-tokens as produced by the \code{word_tokenizer()} function in Python.
+The corresponding element is a list of
+tokens as produced by the \code{word_tokenizer()} function in Python, converting the
+speeches by this speaker into a stream of tokens.
 }
 \details{
 This function extends the proxy for a Python function of the same name
@@ -20,6 +20,6 @@ the value returned by the Python function is converted and
 the lines for each speech are unlisted into a character vector.
 }
 \seealso{
-tokens This returns the same information but in one vector for the tokens in all speeches by this speaker.
+tokens This returns the same information but in one vector for the tokens in all speeches.
 }
 

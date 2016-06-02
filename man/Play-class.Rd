@@ -24,5 +24,7 @@ sense, but not always.}
 of Python class \code{"Speech"}).  This is precomputed when the \code{"Play"} object is initialized;
 the speeches list tends to be input to many of the interesting analyses.  If you want to suppress
 precomputation, explicitly set this field to a Python list, as in the example below.}
+
+\item{\code{key}}{The character string identifying the play in the table and also the name of the original XML file.}
 }}
 
