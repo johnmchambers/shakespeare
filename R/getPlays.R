@@ -78,10 +78,14 @@ findPlay <- function(name, ask = interactive()) {
         }
         key
     }
-    else
-        stop(gettextf("No match of %s to the names or the play titles", dQuote(name)))
-    ## TODO: should try to parse a file name if no match to table.
-
+    else { # argument should be a file name
+        value <- getPlay_Python(name)
+        key <- paste0("Play.", length(.playsTable$keys)+1)
+        assign(key, value, envir = .playsTable)
+        .playsTable$keys <- c(.playsTable$keys, key)
+        .playsTable$titles <- c(.playsTable$titles, name)
+        key
+    }
  }
 
 getPlay <- function(name) {
