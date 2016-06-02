@@ -1,6 +1,6 @@
 import xml.etree.ElementTree as Etree
 import RPython
-from copy import deepcopy
+from copy import copy
 import nltk
 
 def getPlay(what):
@@ -79,7 +79,14 @@ class Speech(object):
             lines = obj.findall('.//LINE')
             linetext = []
             for line in lines:
-                linetext.append(line.text)
+                text = line.text
+                if isinstance(text, str):
+                    linetext.append(text)
+                else:
+                    for el in list(line):
+                        text = el.tail # this is how STAGEDIR elements seem to work
+                        if isinstance(text, str):
+                            linetext.append(text)
             self.lines = linetext
     def getText(self):
         return RPython.vectorR(self.lines, "character")
@@ -128,6 +135,8 @@ def getPersonae(play):
     '''
     value = []
     item = play.find('.//PERSONAE') # assume only one
+    if item is None:
+        return value
     items = item.findall('.//PERSONA')
     for p in items:
         value.append(p.text)
@@ -260,3 +269,42 @@ def wordsUsed(tokens, includeCommon = False, includePunctuation = False):
             continue
         words.update([ w ])
     return [ w for w in words ]
+
+def whoSaid(what, speeches, before = 3, after = 2, emph = False):
+    value = [ ]
+    for i in range(len(speeches)):
+        sp = speeches[i]
+        if not (isinstance(sp, Speech) and isinstance(sp.lines, list)):
+            continue
+        found = sp.hasText(what)
+        if len(found) > 0:
+            value.append(speechFragment(sp, found, before, after))
+    return value
+
+def speechFragment(speech, lines, before = 3, after = 2, filler = "  ...... "):
+    n = len(lines)
+    N = len(speech.lines)
+    if n == 0:
+        return None
+    value = copy(speech)
+    out = [ ]
+    pos = 0
+    for i in range(n):
+        this = lines[i]
+        first = this - before + 1
+        if first <= pos:
+            first = pos
+        else:
+            out.append(filler)
+        fence = this + after
+        if fence > N:
+            fence = N
+        for j in range(first, fence):
+            out.append(speech.lines[j])
+        pos = fence
+    if pos < N - 1:
+        out.append(filler)
+    value.lines = out
+    return value
+
+        
