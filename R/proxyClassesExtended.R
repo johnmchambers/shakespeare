@@ -1,6 +1,39 @@
 ## class definitions that depend on the proxies to Python classes
 ## and need to come after proxyClasses.R in collation order
 
+SpeechList <- setRefClass("SpeechList", contains = "list_Python")
+
+SpeechList$methods(
+    show = function() {
+        plays <- unlist(allFieldStrings(.self, "play"))
+    cat(gettextf("%s object of size %d; speeches from %s\n",
+                 class(.self), size(), paste(plays, collapse = ", ")))
+    },
+    print = function() {
+        'this method prints the entire list of speeches; e.g., the whole play, in contrast to the automatic show() method, which prints only a summary.'
+        n <- size()
+        if(is.na(n)) {
+            warning("SpeechList object had NA for the size slot")
+            n <- 0
+        }
+        if(n > 0) {
+            playP <- actP <- sceneP <-  ""
+            for(i in 0:(n-1)) {
+                sp <- el(i)
+                if(!is(sp, "Speech_Python")) {
+                    warning(gettextf("Element %s is not a Speech object: skipping", i+1))
+                    next
+                }
+                play <- sp$playTitle; act <- sp$act; scene <- sp$scene
+                printSpeech(sp, !identical(play, playP), !identical(act, actP),
+                            !identical(scene, sceneP), FALSE)
+                playP <- play; actP <- act; sceneP <- scene
+                cat("\n")
+            }
+        }
+    }
+    )
+
 #' A Class for the Python/XML Version of a Play
 #'
 #' The plays are parsed from the set of XML files into Python \code{"ElementTree"} objects.
@@ -22,7 +55,7 @@ Play <- setRefClass("Play",
                     contains = "ElementTree_Python",
                     fields = c(
                         personae = "character",
-                        speeches = "list_Python",
+                        speeches = "SpeechList",
                         title = "character",
                         key = "character"
                                ))
@@ -35,7 +68,7 @@ Play$methods(
             callSuper(getPlay(key), ...)
             personae <<- unlist(getPersonae(.self))
             title <<- findtext("TITLE")
-            speeches <<- getSpeeches(.self)
+            speeches <<- SpeechList(getSpeeches(.self))
         }
     }
     )

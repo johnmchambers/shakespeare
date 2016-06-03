@@ -369,3 +369,34 @@ speechSearch <- new("PythonFunction"
 )
 )
 
+#' List of the Distinct String Values for a Specified Python Field
+#' 
+#' [Python Documentation]
+#' Given a list of objects, all of which have a string-valued field specified by what,
+#' returns a list of the distinct strings found in all the elements of objects.
+#' @section Proxy Function:
+#' allFieldStrings(objects, what) [Python]
+#' @export
+allFieldStrings <- function(..., .ev = XR::getInterface(), .get = NA)
+    NULL
+
+allFieldStrings <- new("PythonFunction"
+    , .Data = function (..., .ev = XRPython::RPython(), .get = NA) 
+{
+    nPyArgs <- length(substitute(c(...))) - 1
+    if (nPyArgs < 2) 
+        stop("Python function allFieldStrings() requires at least 2 arguments; got ", 
+            nPyArgs)
+    if (nPyArgs > 2) 
+        stop("Python function allFieldStrings() only allows 2 arguments; got ", 
+            nPyArgs)
+    .ev$Import("thePlay", "allFieldStrings")
+    .ev$Call("allFieldStrings", ..., .get = .get)
+}
+    , name = "allFieldStrings"
+    , module = "thePlay"
+    , evaluatorClass = structure("PythonInterface", package = "XRPython")
+    , serverDoc = "Given a list of objects, all of which have a string-valued field specified by what,\nreturns a list of the distinct strings found in all the elements of objects."
+    , serverArgs = c("objects", "what")
+)
+

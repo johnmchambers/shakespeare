@@ -314,4 +314,21 @@ def speechFragment(speech, lines, before = 3, after = 2, filler = "  ...... "):
     value.lines = out
     return value
 
-        
+
+def allFieldStrings(objects, what):
+    ''' Given a list of objects, all of which have a string-valued field specified by what,
+    returns a list of the distinct strings found in all the elements of objects.
+    '''
+    flds = { }
+    nbad = False
+    for obj in objects:
+        thisField = getattr(obj, what)
+        if isinstance(thisField, str):
+            flds[thisField] = True
+        else:
+            nbad = True
+    if nbad:
+        raise ValueError("Some fields were not strings")
+    return flds.keys()
+
+    
