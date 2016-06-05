@@ -104,7 +104,12 @@ class Speech(object):
                 value.append(i)
         return value
             
-            
+def toR_Speech(obj):
+    obj = copy(obj)
+    obj.lines = RPython.vectorR(obj.lines, "character")
+    return RPython.toR_class(obj,  "Speech", "thePlay")
+
+RPython.toR_methods["thePlay.Speech"] = toR_Speech           
 
 def getSpeeches(play):
     ''' Return a list of the speeches in the XML object "play".  Each element of the list is
