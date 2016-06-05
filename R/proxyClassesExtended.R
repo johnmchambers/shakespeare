@@ -5,9 +5,9 @@ SpeechList <- setRefClass("SpeechList", contains = "list_Python")
 
 SpeechList$methods(
     show = function() {
-        plays <- unlist(allFieldStrings(.self, "play"))
+        plays <- unlist(allFieldStrings(.self, "playTitle", .get=TRUE))
     cat(gettextf("%s object of size %d; speeches from %s\n",
-                 class(.self), size(), paste(plays, collapse = ", ")))
+                 class(.self), size(), paste(dQuote(plays), collapse = ", ")))
     },
     print = function() {
         'this method prints the entire list of speeches; e.g., the whole play, in contrast to the automatic show() method, which prints only a summary.'
