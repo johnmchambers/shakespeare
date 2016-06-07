@@ -70,37 +70,40 @@ class Speech(object):
         self.act = act
         self.scene = scene
         self.playTitle = playTitle
-        ## to be a well-behaved class, we always set the 4 fields
+        self.lines = self.tokens = [ ]
         if obj is None:
             self.speaker = '<Unspecified>'
-            self.lines = [ ]
         else:
             self.speaker = obj.findtext('SPEAKER')
             lines = obj.findall('.//LINE')
-            linetext = []
             for line in lines:
                 text = line.text
-                if isinstance(text, str):
-                    linetext.append(text)
-                else:
+                if not isinstance(text, str):
                     for el in list(line):
-                        text = el.tail # this is how STAGEDIR elements seem to work
-                        if isinstance(text, str):
-                            linetext.append(text)
-            self.lines = linetext
+                        ## this is how STAGEDIR elements seem to work
+                        if isinstance(el.tail, str):
+                            text = el.tail
+                            break
+                if isinstance(text, str):
+                    self.lines.append(text)
+                    self.tokens.append(nltk.word_tokenize(text))
     def getText(self):
         return RPython.vectorR(self.lines, "character")
     def tokenize(self):
         text = ""
-        for line in self.lines:
+        for line in self.tokens:
             if isinstance(line, str):
                 text = text + "$" + line
         text = text[1:len(text)] # remove 1st "$"
-        return nltk.word_tokenize(text)
-    def hasText(self, text, startat = 0):
+        return text
+    def hasText(self, text, tokens = True, startat = 0):
         value = []
-        for i in range(0, len(self.lines)):
-            if text in self.lines[i]:
+        if tokens:
+            lines = self.tokens
+        else:
+            lines = self.lines
+        for i in range(0, len(lines)):
+            if text in lines[i]: # matches either a token or a substring
                 value.append(i)
         return value
             
@@ -164,7 +167,7 @@ def speaker_counter(table, speech):
     who = speech.speaker
     if not who in table.keys():
         table[who] = [ ]
-    table[who].append(speech.tokenize())
+    table[who].append(speech.tokens)
     return True
 
 def speechTokens(speeches):
@@ -183,12 +186,18 @@ def token_counter(table, speech):
     who = speech.speaker
     if not who in table.keys():
         table[who] = [ ]
-    table[who] = table[who] + speech.tokenize() + [ "/>" ]
+    these = [ ]
+    for line in speech.tokens:
+        these = these + line + "$"
+    these.pop() # remove last "$"
+    table[who] = table[who] + these + [ "/>" ]
     return True
 
 def tokens(speeches):
     '''A dictionary whose keys are all the names of speakers with speeches in the list.
     The corresponding element is a list of all the tokens spoken by each speaker.
+    Special tokens '$' and '/>' are inserted to mark the end of lines and the end of individual
+    speeches.
     
     The argument can be from the "speeches" field of a Play object or the result
     of any other computation.
@@ -203,7 +212,7 @@ def exists_counter(table, speech):
     return True
 
 def speakers(speeches):
-    '''A list of all the speakers found in the list. The argument
+    '''A list of all the speakers found in the speeches. The argument
     can be a list of speeches or an object (Play, Act, Scene) for which
     getSpeeches() returns such a list.
     '''
