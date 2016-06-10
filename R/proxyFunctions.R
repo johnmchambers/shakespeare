@@ -131,7 +131,7 @@ getSpeeches <- new("PythonFunction"
 #' Python List of the Persons Listed for the Play
 #' 
 #' [Python Documentation]
-#' A list of all the speakers found in the list. The argument
+#' A list of all the speakers found in the speeches. The argument
 #' can be a list of speeches or an object (Play, Act, Scene) for which
 #' getSpeeches() returns such a list.
 #' @section Proxy Function:
@@ -156,7 +156,7 @@ speakers <- new("PythonFunction"
     , name = "speakers"
     , module = "thePlay"
     , evaluatorClass = structure("PythonInterface", package = "XRPython")
-    , serverDoc = "A list of all the speakers found in the list. The argument\ncan be a list of speeches or an object (Play, Act, Scene) for which\ngetSpeeches() returns such a list."
+    , serverDoc = "A list of all the speakers found in the speeches. The argument\ncan be a list of speeches or an object (Play, Act, Scene) for which\ngetSpeeches() returns such a list."
     , serverArgs = "speeches"
 )
 
@@ -165,6 +165,8 @@ speakers <- new("PythonFunction"
 #' [Python Documentation]
 #' A dictionary whose keys are all the names of speakers with speeches in the list.
 #' The corresponding element is a list of all the tokens spoken by each speaker.
+#' Special tokens '$' and '/>' are inserted to mark the end of lines and the end of individual
+#' speeches.
 #' 
 #' The argument can be from the "speeches" field of a Play object or the result
 #' of any other computation.
@@ -192,7 +194,7 @@ tokens_Python <- new("PythonFunction"
     , name = "tokens"
     , module = "thePlay"
     , evaluatorClass = structure("PythonInterface", package = "XRPython")
-    , serverDoc = "A dictionary whose keys are all the names of speakers with speeches in the list.\nThe corresponding element is a list of all the tokens spoken by each speaker.\n\nThe argument can be from the \"speeches\" field of a Play object or the result\nof any other computation.\nThe argument could also be an Act, Scene or Play:  any object for which getSpeeches()\nreturns a list of speeches."
+    , serverDoc = "A dictionary whose keys are all the names of speakers with speeches in the list.\nThe corresponding element is a list of all the tokens spoken by each speaker.\nSpecial tokens '$' and '/>' are inserted to mark the end of lines and the end of individual\nspeeches.\n\nThe argument can be from the \"speeches\" field of a Play object or the result\nof any other computation.\nThe argument could also be an Act, Scene or Play:  any object for which getSpeeches()\nreturns a list of speeches."
     , serverArgs = "speeches"
 )
 
@@ -333,40 +335,73 @@ wordsUsed <- new("PythonFunction"
     , serverArgs = c("tokens", "includeCommon =", "includePunctuation =")
 )
 
-#' List of Speech Fragments with Lines Matching Specified Text
+#' List of Lines Matching Specified Text in a List of Speeches
 #' 
 #' [Python Documentation]
-#' Given some text and a list of speeches, returns a
-#' constructed list of speech fragments for any of the speeches that contains the
-#' text (as determined by the hasText() method.  All lines containing the text will
-#' be included plus some preceding and following lines as specified by the before=
-#' and after= arguments.
-#' (Argument emph= is not currently used.)
+#' Given a character string, text, and a list of speeches, returns a parallel list
+#' each element of which is the list of matching lines in the speech, as returned by the
+#' hasText() method.  The arguments token and ignoreCase are passed to that method.
+#' If token is True, the match will be against the word tokens constructed for the speech list when
+#' the corresponding play was intialized.  Otherwise the match is against the text of the lines.
+#' The default for argument ignoreCase is True if token is True else False.
 #' @section Proxy Function:
-#' speechSearch(text, speeches, before =, after =, emph =, filler =) [Python]
+#' searchSpeeches(text, speeches, token =, ignoreCase =) [Python]
 #' @export
-speechSearch <- function(..., .ev = XR::getInterface(), .get = NA)
+searchSpeeches <- function(..., .ev = XR::getInterface(), .get = NA)
     NULL
 
-speechSearch <- new("PythonFunction"
+searchSpeeches <- new("PythonFunction"
     , .Data = function (..., .ev = XRPython::RPython(), .get = NA) 
 {
     nPyArgs <- length(substitute(c(...))) - 1
     if (nPyArgs < 2) 
-        stop("Python function speechSearch() requires at least 2 arguments; got ", 
+        stop("Python function searchSpeeches() requires at least 2 arguments; got ", 
             nPyArgs)
-    if (nPyArgs > 6) 
-        stop("Python function speechSearch() only allows 6 arguments; got ", 
+    if (nPyArgs > 4) 
+        stop("Python function searchSpeeches() only allows 4 arguments; got ", 
             nPyArgs)
-    .ev$Import("thePlay", "speechSearch")
-    .ev$Call("speechSearch", ..., .get = .get)
+    .ev$Import("thePlay", "searchSpeeches")
+    .ev$Call("searchSpeeches", ..., .get = .get)
 }
-    , name = "speechSearch"
+    , name = "searchSpeeches"
     , module = "thePlay"
     , evaluatorClass = structure("PythonInterface", package = "XRPython")
-    , serverDoc = "Given some text and a list of speeches, returns a\nconstructed list of speech fragments for any of the speeches that contains the\ntext (as determined by the hasText() method.  All lines containing the text will\nbe included plus some preceding and following lines as specified by the before=\nand after= arguments.\n(Argument emph= is not currently used.)"
-    , serverArgs = c("text", "speeches", "before =", "after =", "emph =", "filler ="
+    , serverDoc = "Given a character string, text, and a list of speeches, returns a parallel list\neach element of which is the list of matching lines in the speech, as returned by the\nhasText() method.  The arguments token and ignoreCase are passed to that method.\nIf token is True, the match will be against the word tokens constructed for the speech list when\nthe corresponding play was intialized.  Otherwise the match is against the text of the lines.\nThe default for argument ignoreCase is True if token is True else False."
+    , serverArgs = c("text", "speeches", "token =", "ignoreCase =")
 )
+
+#' List of Speeches Constructed with Fragments
+#' 
+#' [Python Documentation]
+#' Given some a list of speeches and a parallel list of matches to lines within each speech, returns a
+#' constructed list of speech fragments for any of the speeches that have nonempty matches.  All matched lines will
+#' be included plus some preceding and following lines as specified by the before=
+#' and after= arguments.
+#' The list of matched lines will typically come from a call to searchSpeeches().
+#' @section Proxy Function:
+#' speechFragments(speeches, matches, before =, after =, filler =) [Python]
+#' @export
+speechFragments <- function(..., .ev = XR::getInterface(), .get = NA)
+    NULL
+
+speechFragments <- new("PythonFunction"
+    , .Data = function (..., .ev = XRPython::RPython(), .get = NA) 
+{
+    nPyArgs <- length(substitute(c(...))) - 1
+    if (nPyArgs < 2) 
+        stop("Python function speechFragments() requires at least 2 arguments; got ", 
+            nPyArgs)
+    if (nPyArgs > 5) 
+        stop("Python function speechFragments() only allows 5 arguments; got ", 
+            nPyArgs)
+    .ev$Import("thePlay", "speechFragments")
+    .ev$Call("speechFragments", ..., .get = .get)
+}
+    , name = "speechFragments"
+    , module = "thePlay"
+    , evaluatorClass = structure("PythonInterface", package = "XRPython")
+    , serverDoc = "Given some a list of speeches and a parallel list of matches to lines within each speech, returns a\nconstructed list of speech fragments for any of the speeches that have nonempty matches.  All matched lines will\nbe included plus some preceding and following lines as specified by the before=\nand after= arguments.\nThe list of matched lines will typically come from a call to searchSpeeches()."
+    , serverArgs = c("speeches", "matches", "before =", "after =", "filler =")
 )
 
 #' List of the Distinct String Values for a Specified Python Field

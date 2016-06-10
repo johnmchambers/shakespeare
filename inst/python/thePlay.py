@@ -66,11 +66,19 @@ def getScenes(play):
     return value
 
 class Speech(object):
-    def __init__(self, obj = None, act = '<Unspecified>', scene = '<Unspecified>', playTitle = '<Unspecified>'):
+    def __init__(self, obj = None, act = '<Unspecified>', scene = '<Unspecified>', playTitle = '<Unspecified>', tokenCase = False):
+        '''  A Speech object is normally initialized from within the initialization of a complete play, class Play,
+        based on parsing an XML file.  In this case and generally, argument obj will be the XML element containing the speech.
+        Text in the speech is usually in the text fields of a number of <LINE> tags, but sometimes also in the  tail field of, e.g.,
+        a <STAGEDIR> tag.
+        The text is stored as a list of strings for the individual lines.  These lines are also tokenized using nltk.word_tokenizer()
+        with the tokens stored in a list of lists, parallel to the lines.
+        '''
         self.act = act
         self.scene = scene
         self.playTitle = playTitle
-        self.lines = self.tokens = [ ]
+        self.lines = [ ]
+        self.tokens = [ ]
         if obj is None:
             self.speaker = '<Unspecified>'
         else:
@@ -86,6 +94,8 @@ class Speech(object):
                             break
                 if isinstance(text, str):
                     self.lines.append(text)
+                    if not tokenCase:
+                        text = text.lower()
                     self.tokens.append(nltk.word_tokenize(text))
     def getText(self):
         return RPython.vectorR(self.lines, "character")
@@ -96,7 +106,7 @@ class Speech(object):
                 text = text + "$" + line
         text = text[1:len(text)] # remove 1st "$"
         return text
-    def hasText(self, text, tokens = True, startat = 0):
+    def hasText(self, text, tokens = True, ignoreCase = True):
         value = []
         if tokens:
             lines = self.tokens
@@ -284,20 +294,34 @@ def wordsUsed(tokens, includeCommon = False, includePunctuation = False):
         words.update([ w ])
     return [ w for w in words ]
 
-def speechSearch(text, speeches, before = 3, after = 2, emph = False, filler = "  ......"):
-    ''' Given some text and a list of speeches, returns a
-    constructed list of speech fragments for any of the speeches that contains the
-    text (as determined by the hasText() method.  All lines containing the text will
+def searchSpeeches(text, speeches, token = True, ignoreCase = None):
+    ''' Given a character string, text, and a list of speeches, returns a parallel list
+    each element of which is the list of matching lines in the speech, as returned by the
+    hasText() method.  The arguments token and ignoreCase are passed to that method.
+    If token is True, the match will be against the word tokens constructed for the speech list when
+    the corresponding play was intialized.  Otherwise the match is against the text of the lines.
+    The default for argument ignoreCase is True if token is True else False.
+    '''
+    if ignoreCase is None:
+        ignoreCase = token
+    value = []
+    for speech in speeches:
+        value.append(speech.hasText(text, token, ignoreCase))
+    return value
+
+def speechFragments(speeches, matches, before = 3, after = 2, filler = "  ......"):
+    ''' Given some a list of speeches and a parallel list of matches to lines within each speech, returns a
+    constructed list of speech fragments for any of the speeches that have nonempty matches.  All matched lines will
     be included plus some preceding and following lines as specified by the before=
     and after= arguments.
-    (Argument emph= is not currently used.)
+    The list of matched lines will typically come from a call to searchSpeeches().
     '''
     value = [ ]
     for i in range(len(speeches)):
         sp = speeches[i]
         if not (isinstance(sp, Speech) and isinstance(sp.lines, list)):
             continue
-        found = sp.hasText(text)
+        found = matches[i]
         if len(found) > 0:
             value.append(speechFragment(sp, found, before, after, filler))
     return value
