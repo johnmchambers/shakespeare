@@ -1,8 +1,9 @@
 require(shakespeare)
 tp <- Play("tempest")
 tp$speeches
-last <- tp$speeches$el(639)
+last <- tp$speeches$el(640)
 ev <- XRPython::RPython()
+class(ev$Get(last))
 printSpeech(last)
 last$hasText("free")
 last$hasText("deliver")
