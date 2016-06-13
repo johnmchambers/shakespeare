@@ -13,8 +13,8 @@ the XML coding, each string is the name of the person as it will appear in speec
 by that character, followed by a description.  <NOT YET>:For personae listed in a group rather than
 separately, this function inserts the group description, in square brackets.
 }
-\section{Proxy Function}{
+\section{Python Functions}{
 
-getPersonae(play) [Python]
+getPersonae(play)
 }
 

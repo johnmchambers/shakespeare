@@ -98,22 +98,42 @@ class Speech(object):
                         text = text.lower()
                     self.tokens.append(nltk.word_tokenize(text))
     def getText(self):
+        ''' Returns the text of the speech, as an object that will be
+        an R character vector when converted.
+        '''
         return RPython.vectorR(self.lines, "character")
     def tokenize(self):
+        ''' Returns the set of tokens in the speech as a single
+        string, with "$" separating lines.
+        '''
         text = ""
         for line in self.tokens:
             if isinstance(line, str):
                 text = text + "$" + line
         text = text[1:len(text)] # remove 1st "$"
         return text
-    def hasText(self, text, tokens = True, ignoreCase = True):
+    def findText(self, text, tokens = True, ignoreCase = True):
+        ''' Searches in the Speech object for occurences of the specified
+        text and returns a list of the lines in which that text appears.
+        Argument `tokens' controls whether the search is in the tokens
+        field, in which case `text' must match a token exactly.  Otherwise
+        the search is in the speech text for a matching substring.
+        If `ignoreCase' is true, the text argument is converted
+        to lower case.  Tokens are always lower-cased and the speech
+        text will be converted to lower as needed.
+        '''
         value = []
+        if ignoreCase:
+            text = text.lower()
         if tokens:
             lines = self.tokens
         else:
             lines = self.lines
         for i in range(0, len(lines)):
-            if text in lines[i]: # matches either a token or a substring
+            thisLine = lines[i]
+            if not tokens and ignoreCase:
+                thisLine = thisLine.lower()
+            if text in thisLine: # matches either a token or a substring
                 value.append(i)
         return value
             
@@ -294,19 +314,19 @@ def wordsUsed(tokens, includeCommon = False, includePunctuation = False):
         words.update([ w ])
     return [ w for w in words ]
 
-def searchSpeeches(text, speeches, token = True, ignoreCase = None):
+def searchSpeeches(text, speeches, tokens = True, ignoreCase = None):
     ''' Given a character string, text, and a list of speeches, returns a parallel list
     each element of which is the list of matching lines in the speech, as returned by the
-    hasText() method.  The arguments token and ignoreCase are passed to that method.
+    findText() method.  The arguments token and ignoreCase are passed to that method.
     If token is True, the match will be against the word tokens constructed for the speech list when
     the corresponding play was intialized.  Otherwise the match is against the text of the lines.
-    The default for argument ignoreCase is True if token is True else False.
+    The default for argument ignoreCase is True if tokens is True else False.
     '''
     if ignoreCase is None:
-        ignoreCase = token
+        ignoreCase = tokens
     value = []
     for speech in speeches:
-        value.append(speech.hasText(text, token, ignoreCase))
+        value.append(speech.findText(text, tokens, ignoreCase))
     return value
 
 def speechFragments(speeches, matches, before = 3, after = 2, filler = "  ......"):

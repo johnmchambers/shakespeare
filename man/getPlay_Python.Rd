@@ -11,8 +11,8 @@ getPlay_Python(..., .ev = XRPython::RPython(), .get = NA)
 Parse the file name, or if it's not a string, assume it's
 a previously parsed tree.  (Should of course check that).
 }
-\section{Proxy Function}{
+\section{Python Functions}{
 
-getPlay(what) [Python]
+getPlay(what)
 }
 

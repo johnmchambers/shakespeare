@@ -13,8 +13,8 @@ an object of class "Speech" with fields "title", "act", "scene" and "data"
 (the list of lines of text in the speech).  The argument can alternatively be an Act  or Scene
 object to obtain a list of speeches from just that act or scene.
 }
-\section{Proxy Function}{
+\section{Python Functions}{
 
-getSpeeches(play) [Python]
+getSpeeches(play)
 }
 

@@ -20,8 +20,8 @@ The function can also be called with a dictionary whose elements are token lists
 as returned by the tokens() function. In this case, it calls iself recursively to in
 effect apply the function to each element, returning a corresponding dictionary.
 }
-\section{Proxy Function}{
+\section{Python Functions}{
 
-wordsUsed(tokens, includeCommon =, includePunctuation =) [Python]
+wordsUsed(tokens, includeCommon =, includePunctuation =)
 }
 

@@ -13,8 +13,8 @@ an object of class "Scene" with fields "title", "act" and "data"
 (the XML element for the scene).  The argument can alternatively be an Act object to obtain a list
 of scenes from just that act.
 }
-\section{Proxy Function}{
+\section{Python Functions}{
 
-getScenes(play) [Python]
+getScenes(play)
 }
 

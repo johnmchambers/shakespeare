@@ -8,12 +8,12 @@ speakers(..., .ev = XRPython::RPython(), .get = TRUE)
 }
 \description{
 [Python Documentation]
-A list of all the speakers found in the list. The argument
+A list of all the speakers found in the speeches. The argument
 can be a list of speeches or an object (Play, Act, Scene) for which
 getSpeeches() returns such a list.
 }
-\section{Proxy Function}{
+\section{Python Functions}{
 
-speakers(speeches) [Python]
+speakers(speeches)
 }
 

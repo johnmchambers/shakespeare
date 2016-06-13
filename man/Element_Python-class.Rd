@@ -8,4 +8,56 @@
 \description{
 Proxy for Python Class Element in Module xml.etree.ElementTree
 }
+\section{Methods}{
+
+\describe{
+\item{\code{append(..., .ev = XRPython::RPython(), .get = NA)}}{Python Method
+Python Arguments: element}
+
+\item{\code{clear(..., .ev = XRPython::RPython(), .get = NA)}}{Python Method}
+
+\item{\code{extend(..., .ev = XRPython::RPython(), .get = NA)}}{Python Method
+Python Arguments: elements}
+
+\item{\code{find(..., .ev = XRPython::RPython(), .get = NA)}}{Python Method
+Python Arguments: path, namespaces =}
+
+\item{\code{findall(..., .ev = XRPython::RPython(), .get = NA)}}{Python Method
+Python Arguments: path, namespaces =}
+
+\item{\code{findtext(..., .ev = XRPython::RPython(), .get = NA)}}{Python Method
+Python Arguments: path, default =, namespaces =}
+
+\item{\code{get(..., .ev = XRPython::RPython(), .get = NA)}}{Python Method
+Python Arguments: key, default =}
+
+\item{\code{getchildren(..., .ev = XRPython::RPython(), .get = NA)}}{Python Method}
+
+\item{\code{getiterator(..., .ev = XRPython::RPython(), .get = NA)}}{Python Method
+Python Arguments: tag =}
+
+\item{\code{insert(..., .ev = XRPython::RPython(), .get = NA)}}{Python Method
+Python Arguments: index, element}
+
+\item{\code{items(..., .ev = XRPython::RPython(), .get = NA)}}{Python Method}
+
+\item{\code{iter(..., .ev = XRPython::RPython(), .get = NA)}}{Python Method
+Python Arguments: tag =}
+
+\item{\code{iterfind(..., .ev = XRPython::RPython(), .get = NA)}}{Python Method
+Python Arguments: path, namespaces =}
+
+\item{\code{itertext(..., .ev = XRPython::RPython(), .get = NA)}}{Python Method}
+
+\item{\code{keys(..., .ev = XRPython::RPython(), .get = NA)}}{Python Method}
+
+\item{\code{makeelement(..., .ev = XRPython::RPython(), .get = NA)}}{Python Method
+Python Arguments: tag, attrib}
+
+\item{\code{remove(..., .ev = XRPython::RPython(), .get = NA)}}{Python Method
+Python Arguments: element}
+
+\item{\code{set(..., .ev = XRPython::RPython(), .get = NA)}}{Python Method
+Python Arguments: key, value}
+}}
 

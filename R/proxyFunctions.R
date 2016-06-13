@@ -4,8 +4,8 @@
 #' Parse the file name, or if it's not a string, assume it's
 #' a previously parsed tree.  (Should of course check that).
 #'     
-#' @section Proxy Function:
-#' getPlay(what) [Python]
+#' @section Python Functions:
+#' getPlay(what)
 #' @export
 getPlay_Python <- function(..., .ev = XR::getInterface(), .get = NA)
     NULL
@@ -36,8 +36,8 @@ getPlay_Python <- new("PythonFunction"
 #' Return a list of the acts in the XML object "play".  Each element of the list is
 #' an object of class "Act" with fields "title" and "data" (the XML element for the act).
 #'     
-#' @section Proxy Function:
-#' getActs(play) [Python]
+#' @section Python Functions:
+#' getActs(play)
 #' @export
 getActs <- function(..., .ev = XR::getInterface(), .get = NA)
     NULL
@@ -69,8 +69,8 @@ getActs <- new("PythonFunction"
 #' an object of class "Scene" with fields "title", "act" and "data"
 #' (the XML element for the scene).  The argument can alternatively be an Act object to obtain a list
 #' of scenes from just that act.
-#' @section Proxy Function:
-#' getScenes(play) [Python]
+#' @section Python Functions:
+#' getScenes(play)
 #' @export
 getScenes <- function(..., .ev = XR::getInterface(), .get = NA)
     NULL
@@ -102,8 +102,8 @@ getScenes <- new("PythonFunction"
 #' an object of class "Speech" with fields "title", "act", "scene" and "data"
 #' (the list of lines of text in the speech).  The argument can alternatively be an Act  or Scene
 #' object to obtain a list of speeches from just that act or scene.
-#' @section Proxy Function:
-#' getSpeeches(play) [Python]
+#' @section Python Functions:
+#' getSpeeches(play)
 #' @export
 getSpeeches <- function(..., .ev = XR::getInterface(), .get = NA)
     NULL
@@ -134,8 +134,8 @@ getSpeeches <- new("PythonFunction"
 #' A list of all the speakers found in the speeches. The argument
 #' can be a list of speeches or an object (Play, Act, Scene) for which
 #' getSpeeches() returns such a list.
-#' @section Proxy Function:
-#' speakers(speeches) [Python]
+#' @section Python Functions:
+#' speakers(speeches)
 #' @export
 speakers <- function(..., .ev = XR::getInterface(), .get = TRUE)
     NULL
@@ -172,8 +172,8 @@ speakers <- new("PythonFunction"
 #' of any other computation.
 #' The argument could also be an Act, Scene or Play:  any object for which getSpeeches()
 #' returns a list of speeches.
-#' @section Proxy Function:
-#' tokens(speeches) [Python]
+#' @section Python Functions:
+#' tokens(speeches)
 #' @export
 tokens_Python <- function(..., .ev = XR::getInterface(), .get = NA)
     NULL
@@ -209,8 +209,8 @@ tokens_Python <- new("PythonFunction"
 #' of any other computation.
 #' The argument could also be an Act, Scene or Play:  any object for which getSpeeches()
 #' returns a list of speeches.
-#' @section Proxy Function:
-#' speechTokens(speeches) [Python]
+#' @section Python Functions:
+#' speechTokens(speeches)
 #' @export
 speechTokens_Python <- function(..., .ev = XR::getInterface(), .get = NA)
     NULL
@@ -242,8 +242,8 @@ speechTokens_Python <- new("PythonFunction"
 #' the XML coding, each string is the name of the person as it will appear in speeches given
 #' by that character, followed by a description.  <NOT YET>:For personae listed in a group rather than
 #' separately, this function inserts the group description, in square brackets.
-#' @section Proxy Function:
-#' getPersonae(play) [Python]
+#' @section Python Functions:
+#' getPersonae(play)
 #' @export
 getPersonae <- function(..., .ev = XR::getInterface(), .get = TRUE)
     NULL
@@ -270,8 +270,8 @@ getPersonae <- new("PythonFunction"
 
 #' Python Function to Parse XML File
 #' 
-#' @section Proxy Function:
-#' parse(source, parser =) [Python]
+#' @section Python Functions:
+#' parse(source, parser =)
 #' @export
 parseXML <- function(..., .ev = XR::getInterface(), .get = NA)
     NULL
@@ -309,8 +309,8 @@ parseXML <- new("PythonFunction"
 #' The function can also be called with a dictionary whose elements are token lists,
 #' as returned by the tokens() function. In this case, it calls iself recursively to in
 #' effect apply the function to each element, returning a corresponding dictionary.
-#' @section Proxy Function:
-#' wordsUsed(tokens, includeCommon =, includePunctuation =) [Python]
+#' @section Python Functions:
+#' wordsUsed(tokens, includeCommon =, includePunctuation =)
 #' @export
 wordsUsed <- function(..., .ev = XR::getInterface(), .get = NA)
     NULL
@@ -340,12 +340,12 @@ wordsUsed <- new("PythonFunction"
 #' [Python Documentation]
 #' Given a character string, text, and a list of speeches, returns a parallel list
 #' each element of which is the list of matching lines in the speech, as returned by the
-#' hasText() method.  The arguments token and ignoreCase are passed to that method.
+#' findText() method.  The arguments token and ignoreCase are passed to that method.
 #' If token is True, the match will be against the word tokens constructed for the speech list when
 #' the corresponding play was intialized.  Otherwise the match is against the text of the lines.
-#' The default for argument ignoreCase is True if token is True else False.
-#' @section Proxy Function:
-#' searchSpeeches(text, speeches, token =, ignoreCase =) [Python]
+#' The default for argument ignoreCase is True if tokens is True else False.
+#' @section Python Functions:
+#' searchSpeeches(text, speeches, tokens =, ignoreCase =)
 #' @export
 searchSpeeches <- function(..., .ev = XR::getInterface(), .get = NA)
     NULL
@@ -366,8 +366,8 @@ searchSpeeches <- new("PythonFunction"
     , name = "searchSpeeches"
     , module = "thePlay"
     , evaluatorClass = structure("PythonInterface", package = "XRPython")
-    , serverDoc = "Given a character string, text, and a list of speeches, returns a parallel list\neach element of which is the list of matching lines in the speech, as returned by the\nhasText() method.  The arguments token and ignoreCase are passed to that method.\nIf token is True, the match will be against the word tokens constructed for the speech list when\nthe corresponding play was intialized.  Otherwise the match is against the text of the lines.\nThe default for argument ignoreCase is True if token is True else False."
-    , serverArgs = c("text", "speeches", "token =", "ignoreCase =")
+    , serverDoc = "Given a character string, text, and a list of speeches, returns a parallel list\neach element of which is the list of matching lines in the speech, as returned by the\nfindText() method.  The arguments token and ignoreCase are passed to that method.\nIf token is True, the match will be against the word tokens constructed for the speech list when\nthe corresponding play was intialized.  Otherwise the match is against the text of the lines.\nThe default for argument ignoreCase is True if tokens is True else False."
+    , serverArgs = c("text", "speeches", "tokens =", "ignoreCase =")
 )
 
 #' List of Speeches Constructed with Fragments
@@ -378,8 +378,8 @@ searchSpeeches <- new("PythonFunction"
 #' be included plus some preceding and following lines as specified by the before=
 #' and after= arguments.
 #' The list of matched lines will typically come from a call to searchSpeeches().
-#' @section Proxy Function:
-#' speechFragments(speeches, matches, before =, after =, filler =) [Python]
+#' @section Python Functions:
+#' speechFragments(speeches, matches, before =, after =, filler =)
 #' @export
 speechFragments <- function(..., .ev = XR::getInterface(), .get = NA)
     NULL
@@ -409,8 +409,8 @@ speechFragments <- new("PythonFunction"
 #' [Python Documentation]
 #' Given a list of objects, all of which have a string-valued field specified by what,
 #' returns a list of the distinct strings found in all the elements of objects.
-#' @section Proxy Function:
-#' allFieldStrings(objects, what) [Python]
+#' @section Python Functions:
+#' allFieldStrings(objects, what)
 #' @export
 allFieldStrings <- function(..., .ev = XR::getInterface(), .get = NA)
     NULL

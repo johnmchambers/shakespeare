@@ -8,4 +8,36 @@
 \description{
 Proxy for Python Class ElementTree in Module xml.etree.ElementTree
 }
+\section{Methods}{
+
+\describe{
+\item{\code{find(..., .ev = XRPython::RPython(), .get = NA)}}{Python Method
+Python Arguments: path, namespaces =}
+
+\item{\code{findall(..., .ev = XRPython::RPython(), .get = NA)}}{Python Method
+Python Arguments: path, namespaces =}
+
+\item{\code{findtext(..., .ev = XRPython::RPython(), .get = NA)}}{Python Method
+Python Arguments: path, default =, namespaces =}
+
+\item{\code{getiterator(..., .ev = XRPython::RPython(), .get = NA)}}{Python Method
+Python Arguments: tag =}
+
+\item{\code{getroot(..., .ev = XRPython::RPython(), .get = NA)}}{Python Method}
+
+\item{\code{iter(..., .ev = XRPython::RPython(), .get = NA)}}{Python Method
+Python Arguments: tag =}
+
+\item{\code{iterfind(..., .ev = XRPython::RPython(), .get = NA)}}{Python Method
+Python Arguments: path, namespaces =}
+
+\item{\code{parse(..., .ev = XRPython::RPython(), .get = NA)}}{Python Method
+Python Arguments: source, parser =}
+
+\item{\code{write(..., .ev = XRPython::RPython(), .get = NA)}}{Python Method
+Python Arguments: file_or_filename, encoding =, xml_declaration =, default_namespace =, method =}
+
+\item{\code{write_c14n(..., .ev = XRPython::RPython(), .get = NA)}}{Python Method
+Python Arguments: file}
+}}
 

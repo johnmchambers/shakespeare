@@ -10,6 +10,8 @@ tokens_Python(..., .ev = XRPython::RPython(), .get = NA)
 [Python Documentation]
 A dictionary whose keys are all the names of speakers with speeches in the list.
 The corresponding element is a list of all the tokens spoken by each speaker.
+Special tokens '$' and '/>' are inserted to mark the end of lines and the end of individual
+speeches.
 }
 \details{
 The argument can be from the "speeches" field of a Play object or the result
@@ -17,8 +19,8 @@ of any other computation.
 The argument could also be an Act, Scene or Play:  any object for which getSpeeches()
 returns a list of speeches.
 }
-\section{Proxy Function}{
+\section{Python Functions}{
 
-tokens(speeches) [Python]
+tokens(speeches)
 }
 

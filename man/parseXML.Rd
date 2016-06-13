@@ -9,8 +9,8 @@ parseXML(..., .ev = XRPython::RPython(), .get = NA)
 \description{
 Python Function to Parse XML File
 }
-\section{Proxy Function}{
+\section{Python Functions}{
 
-parse(source, parser =) [Python]
+parse(source, parser =)
 }
 

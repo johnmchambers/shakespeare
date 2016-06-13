@@ -18,8 +18,8 @@ of any other computation.
 The argument could also be an Act, Scene or Play:  any object for which getSpeeches()
 returns a list of speeches.
 }
-\section{Proxy Function}{
+\section{Python Functions}{
 
-speechTokens(speeches) [Python]
+speechTokens(speeches)
 }
 

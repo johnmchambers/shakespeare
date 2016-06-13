@@ -11,8 +11,8 @@ getActs(..., .ev = XRPython::RPython(), .get = NA)
 Return a list of the acts in the XML object "play".  Each element of the list is
 an object of class "Act" with fields "title" and "data" (the XML element for the act).
 }
-\section{Proxy Function}{
+\section{Python Functions}{
 
-getActs(play) [Python]
+getActs(play)
 }
 

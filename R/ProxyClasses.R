@@ -139,7 +139,7 @@ list(ServerClass = "Scene", ServerModule = "thePlay", language = "Python",
 #' Python Class for a Speech
 #' 
 #' @export
-Speech_Python <- setRefClass("Speech_Python", contains = c("ProxyClassObject"), fields = c("act", "lines", "playTitle", "scene", "speaker"))
+Speech_Python <- setRefClass("Speech_Python", contains = c("ProxyClassObject"), fields = c("act", "lines", "playTitle", "scene", "speaker", "tokens"))
 Speech_Python <- XR::setProxyClass("Speech", module = "thePlay",
     evaluatorClass = "PythonInterface", language = "Python", proxyObjectClass = "PythonObject",
     methods = list(),
@@ -193,6 +193,16 @@ Speech_Python <- XR::setProxyClass("Speech", module = "thePlay",
               .ev$Command("%s.speaker = %s", proxy, value)
               invisible(value)
           }
+      },
+      tokens = function (value) 
+      {
+          proxy <- get(".proxyObject", envir = .self)
+          if (missing(value)) 
+              .ev$Eval("%s.tokens", proxy)
+          else {
+              .ev$Command("%s.tokens = %s", proxy, value)
+              invisible(value)
+          }
       }
       )
     )
@@ -216,24 +226,42 @@ initialize = function (..., evaluator, .serverObject)
 ServerClassInfo = function () 
 list(ServerClass = "Speech", ServerModule = "thePlay", language = "Python", 
     evaluatorClass = "PythonInterface", proxyFields = c("act", 
-    "lines", "playTitle", "scene", "speaker"), proxyMethods = c("initialize", 
-    "ServerClassInfo", "getText", "hasText", "tokenize"), proxyContains = character(0), 
+    "lines", "playTitle", "scene", "speaker", "tokens"), proxyMethods = c("initialize", 
+    "ServerClassInfo", "findText", "getText", "tokenize"), proxyContains = character(0), 
     proxyObjectClass = "PythonObject"),
 
-getText = structure(function (..., .ev = XRPython::RPython(), .get = NA) 
+findText = function (..., .ev = XRPython::RPython(), .get = NA) 
 {
+    "Python Documentation: Searches in the Speech object for occurences of the specified\ntext and returns a list of the lines in which that text appears.\nArgument `tokens' controls whether the search is in the tokens\nfield, in which case `text' must match a token exactly.  Otherwise\nthe search is in the speech text for a matching substring.\nIf `ignoreCase' is true, the text argument is converted\nto lower case.  Tokens are always lower-cased and the speech\ntext will be converted to lower as needed.\nPython Arguments: text, tokens =, ignoreCase ="
+    nPyArgs <- length(substitute(c(...))) - 1
+    if (nPyArgs < 1) 
+        stop("Python function findText() requires at least 1 argument; got ", 
+            nPyArgs)
+    if (nPyArgs > 3) 
+        stop("Python function findText() only allows 3 arguments; got ", 
+            nPyArgs)
+    .ev$MethodCall(.proxyObject, "findText", ..., .get = .get)
+},
+
+getText = function (..., .ev = XRPython::RPython(), .get = NA) 
+{
+    "Python Documentation: Returns the text of the speech, as an object that will be\nan R character vector when converted."
+    nPyArgs <- length(substitute(c(...))) - 1
+    if (nPyArgs > 0) 
+        stop("Python function getText() only allows 0 arguments; got ", 
+            nPyArgs)
     .ev$MethodCall(.proxyObject, "getText", ..., .get = .get)
-}, name = "getText", module = "", evaluatorClass = structure("PythonInterface", package = "XRPython"), serverDoc = character(0), serverArgs = character(0), class = structure("PythonFunction", package = "XRPython")),
+},
 
-hasText = structure(function (..., .ev = XRPython::RPython(), .get = NA) 
+tokenize = function (..., .ev = XRPython::RPython(), .get = NA) 
 {
-    .ev$MethodCall(.proxyObject, "hasText", ..., .get = .get)
-}, name = "hasText", module = "", evaluatorClass = structure("PythonInterface", package = "XRPython"), serverDoc = character(0), serverArgs = character(0), class = structure("PythonFunction", package = "XRPython")),
-
-tokenize = structure(function (..., .ev = XRPython::RPython(), .get = NA) 
-{
+    "Python Documentation: Returns the set of tokens in the speech as a single\nstring, with \"$\" separating lines."
+    nPyArgs <- length(substitute(c(...))) - 1
+    if (nPyArgs > 0) 
+        stop("Python function tokenize() only allows 0 arguments; got ", 
+            nPyArgs)
     .ev$MethodCall(.proxyObject, "tokenize", ..., .get = .get)
-}, name = "tokenize", module = "", evaluatorClass = structure("PythonInterface", package = "XRPython"), serverDoc = character(0), serverArgs = character(0), class = structure("PythonFunction", package = "XRPython")))
+})
 
 
 #' Proxy for Python Class ElementTree in Module xml.etree.ElementTree
@@ -270,55 +298,126 @@ list(ServerClass = "ElementTree", ServerModule = "xml.etree.ElementTree",
     "iter", "iterfind", "parse", "write", "write_c14n"), proxyContains = character(0), 
     proxyObjectClass = "PythonObject"),
 
-find = structure(function (..., .ev = XRPython::RPython(), .get = NA) 
+find = function (..., .ev = XRPython::RPython(), .get = NA) 
 {
+    "Python Method\nPython Arguments: path, namespaces ="
+    nPyArgs <- length(substitute(c(...))) - 1
+    if (nPyArgs < 1) 
+        stop("Python function find() requires at least 1 argument; got ", 
+            nPyArgs)
+    if (nPyArgs > 2) 
+        stop("Python function find() only allows 2 arguments; got ", 
+            nPyArgs)
     .ev$MethodCall(.proxyObject, "find", ..., .get = .get)
-}, name = "find", module = "", evaluatorClass = structure("PythonInterface", package = "XRPython"), serverDoc = character(0), serverArgs = character(0), class = structure("PythonFunction", package = "XRPython")),
+},
 
-findall = structure(function (..., .ev = XRPython::RPython(), .get = NA) 
+findall = function (..., .ev = XRPython::RPython(), .get = NA) 
 {
+    "Python Method\nPython Arguments: path, namespaces ="
+    nPyArgs <- length(substitute(c(...))) - 1
+    if (nPyArgs < 1) 
+        stop("Python function findall() requires at least 1 argument; got ", 
+            nPyArgs)
+    if (nPyArgs > 2) 
+        stop("Python function findall() only allows 2 arguments; got ", 
+            nPyArgs)
     .ev$MethodCall(.proxyObject, "findall", ..., .get = .get)
-}, name = "findall", module = "", evaluatorClass = structure("PythonInterface", package = "XRPython"), serverDoc = character(0), serverArgs = character(0), class = structure("PythonFunction", package = "XRPython")),
+},
 
-findtext = structure(function (..., .ev = XRPython::RPython(), .get = NA) 
+findtext = function (..., .ev = XRPython::RPython(), .get = NA) 
 {
+    "Python Method\nPython Arguments: path, default =, namespaces ="
+    nPyArgs <- length(substitute(c(...))) - 1
+    if (nPyArgs < 1) 
+        stop("Python function findtext() requires at least 1 argument; got ", 
+            nPyArgs)
+    if (nPyArgs > 3) 
+        stop("Python function findtext() only allows 3 arguments; got ", 
+            nPyArgs)
     .ev$MethodCall(.proxyObject, "findtext", ..., .get = .get)
-}, name = "findtext", module = "", evaluatorClass = structure("PythonInterface", package = "XRPython"), serverDoc = character(0), serverArgs = character(0), class = structure("PythonFunction", package = "XRPython")),
+},
 
-getiterator = structure(function (..., .ev = XRPython::RPython(), .get = NA) 
+getiterator = function (..., .ev = XRPython::RPython(), .get = NA) 
 {
+    "Python Method\nPython Arguments: tag ="
+    nPyArgs <- length(substitute(c(...))) - 1
+    if (nPyArgs > 1) 
+        stop("Python function getiterator() only allows 1 argument; got ", 
+            nPyArgs)
     .ev$MethodCall(.proxyObject, "getiterator", ..., .get = .get)
-}, name = "getiterator", module = "", evaluatorClass = structure("PythonInterface", package = "XRPython"), serverDoc = character(0), serverArgs = character(0), class = structure("PythonFunction", package = "XRPython")),
+},
 
-getroot = structure(function (..., .ev = XRPython::RPython(), .get = NA) 
+getroot = function (..., .ev = XRPython::RPython(), .get = NA) 
 {
+    "Python Method"
+    nPyArgs <- length(substitute(c(...))) - 1
+    if (nPyArgs > 0) 
+        stop("Python function getroot() only allows 0 arguments; got ", 
+            nPyArgs)
     .ev$MethodCall(.proxyObject, "getroot", ..., .get = .get)
-}, name = "getroot", module = "", evaluatorClass = structure("PythonInterface", package = "XRPython"), serverDoc = character(0), serverArgs = character(0), class = structure("PythonFunction", package = "XRPython")),
+},
 
-iter = structure(function (..., .ev = XRPython::RPython(), .get = NA) 
+iter = function (..., .ev = XRPython::RPython(), .get = NA) 
 {
+    "Python Method\nPython Arguments: tag ="
+    nPyArgs <- length(substitute(c(...))) - 1
+    if (nPyArgs > 1) 
+        stop("Python function iter() only allows 1 argument; got ", 
+            nPyArgs)
     .ev$MethodCall(.proxyObject, "iter", ..., .get = .get)
-}, name = "iter", module = "", evaluatorClass = structure("PythonInterface", package = "XRPython"), serverDoc = character(0), serverArgs = character(0), class = structure("PythonFunction", package = "XRPython")),
+},
 
-iterfind = structure(function (..., .ev = XRPython::RPython(), .get = NA) 
+iterfind = function (..., .ev = XRPython::RPython(), .get = NA) 
 {
+    "Python Method\nPython Arguments: path, namespaces ="
+    nPyArgs <- length(substitute(c(...))) - 1
+    if (nPyArgs < 1) 
+        stop("Python function iterfind() requires at least 1 argument; got ", 
+            nPyArgs)
+    if (nPyArgs > 2) 
+        stop("Python function iterfind() only allows 2 arguments; got ", 
+            nPyArgs)
     .ev$MethodCall(.proxyObject, "iterfind", ..., .get = .get)
-}, name = "iterfind", module = "", evaluatorClass = structure("PythonInterface", package = "XRPython"), serverDoc = character(0), serverArgs = character(0), class = structure("PythonFunction", package = "XRPython")),
+},
 
-parse = structure(function (..., .ev = XRPython::RPython(), .get = NA) 
+parse = function (..., .ev = XRPython::RPython(), .get = NA) 
 {
+    "Python Method\nPython Arguments: source, parser ="
+    nPyArgs <- length(substitute(c(...))) - 1
+    if (nPyArgs < 1) 
+        stop("Python function parse() requires at least 1 argument; got ", 
+            nPyArgs)
+    if (nPyArgs > 2) 
+        stop("Python function parse() only allows 2 arguments; got ", 
+            nPyArgs)
     .ev$MethodCall(.proxyObject, "parse", ..., .get = .get)
-}, name = "parse", module = "", evaluatorClass = structure("PythonInterface", package = "XRPython"), serverDoc = character(0), serverArgs = character(0), class = structure("PythonFunction", package = "XRPython")),
+},
 
-write = structure(function (..., .ev = XRPython::RPython(), .get = NA) 
+write = function (..., .ev = XRPython::RPython(), .get = NA) 
 {
+    "Python Method\nPython Arguments: file_or_filename, encoding =, xml_declaration =, default_namespace =, method ="
+    nPyArgs <- length(substitute(c(...))) - 1
+    if (nPyArgs < 1) 
+        stop("Python function write() requires at least 1 argument; got ", 
+            nPyArgs)
+    if (nPyArgs > 5) 
+        stop("Python function write() only allows 5 arguments; got ", 
+            nPyArgs)
     .ev$MethodCall(.proxyObject, "write", ..., .get = .get)
-}, name = "write", module = "", evaluatorClass = structure("PythonInterface", package = "XRPython"), serverDoc = character(0), serverArgs = character(0), class = structure("PythonFunction", package = "XRPython")),
+},
 
-write_c14n = structure(function (..., .ev = XRPython::RPython(), .get = NA) 
+write_c14n = function (..., .ev = XRPython::RPython(), .get = NA) 
 {
+    "Python Method\nPython Arguments: file"
+    nPyArgs <- length(substitute(c(...))) - 1
+    if (nPyArgs < 1) 
+        stop("Python function write_c14n() requires at least 1 argument; got ", 
+            nPyArgs)
+    if (nPyArgs > 1) 
+        stop("Python function write_c14n() only allows 1 argument; got ", 
+            nPyArgs)
     .ev$MethodCall(.proxyObject, "write_c14n", ..., .get = .get)
-}, name = "write_c14n", module = "", evaluatorClass = structure("PythonInterface", package = "XRPython"), serverDoc = character(0), serverArgs = character(0), class = structure("PythonFunction", package = "XRPython")))
+})
 
 
 #' Proxy for Python Class Element in Module xml.etree.ElementTree
@@ -399,99 +498,227 @@ list(ServerClass = "Element", ServerModule = "xml.etree.ElementTree",
     "makeelement", "remove", "set"), proxyContains = character(0), 
     proxyObjectClass = "PythonObject"),
 
-append = structure(function (..., .ev = XRPython::RPython(), .get = NA) 
+append = function (..., .ev = XRPython::RPython(), .get = NA) 
 {
+    "Python Method\nPython Arguments: element"
+    nPyArgs <- length(substitute(c(...))) - 1
+    if (nPyArgs < 1) 
+        stop("Python function append() requires at least 1 argument; got ", 
+            nPyArgs)
+    if (nPyArgs > 1) 
+        stop("Python function append() only allows 1 argument; got ", 
+            nPyArgs)
     .ev$MethodCall(.proxyObject, "append", ..., .get = .get)
-}, name = "append", module = "", evaluatorClass = structure("PythonInterface", package = "XRPython"), serverDoc = character(0), serverArgs = character(0), class = structure("PythonFunction", package = "XRPython")),
+},
 
-clear = structure(function (..., .ev = XRPython::RPython(), .get = NA) 
+clear = function (..., .ev = XRPython::RPython(), .get = NA) 
 {
+    "Python Method"
+    nPyArgs <- length(substitute(c(...))) - 1
+    if (nPyArgs > 0) 
+        stop("Python function clear() only allows 0 arguments; got ", 
+            nPyArgs)
     .ev$MethodCall(.proxyObject, "clear", ..., .get = .get)
-}, name = "clear", module = "", evaluatorClass = structure("PythonInterface", package = "XRPython"), serverDoc = character(0), serverArgs = character(0), class = structure("PythonFunction", package = "XRPython")),
+},
 
-copy = structure(function (..., .ev = XRPython::RPython(), .get = NA) 
+copy = function (..., .ev = XRPython::RPython(), .get = NA) 
 {
+    "Python Method"
+    nPyArgs <- length(substitute(c(...))) - 1
+    if (nPyArgs > 0) 
+        stop("Python function copy() only allows 0 arguments; got ", 
+            nPyArgs)
     .ev$MethodCall(.proxyObject, "copy", ..., .get = .get)
-}, name = "copy", module = "", evaluatorClass = structure("PythonInterface", package = "XRPython"), serverDoc = character(0), serverArgs = character(0), class = structure("PythonFunction", package = "XRPython")),
+},
 
-extend = structure(function (..., .ev = XRPython::RPython(), .get = NA) 
+extend = function (..., .ev = XRPython::RPython(), .get = NA) 
 {
+    "Python Method\nPython Arguments: elements"
+    nPyArgs <- length(substitute(c(...))) - 1
+    if (nPyArgs < 1) 
+        stop("Python function extend() requires at least 1 argument; got ", 
+            nPyArgs)
+    if (nPyArgs > 1) 
+        stop("Python function extend() only allows 1 argument; got ", 
+            nPyArgs)
     .ev$MethodCall(.proxyObject, "extend", ..., .get = .get)
-}, name = "extend", module = "", evaluatorClass = structure("PythonInterface", package = "XRPython"), serverDoc = character(0), serverArgs = character(0), class = structure("PythonFunction", package = "XRPython")),
+},
 
-find = structure(function (..., .ev = XRPython::RPython(), .get = NA) 
+find = function (..., .ev = XRPython::RPython(), .get = NA) 
 {
+    "Python Method\nPython Arguments: path, namespaces ="
+    nPyArgs <- length(substitute(c(...))) - 1
+    if (nPyArgs < 1) 
+        stop("Python function find() requires at least 1 argument; got ", 
+            nPyArgs)
+    if (nPyArgs > 2) 
+        stop("Python function find() only allows 2 arguments; got ", 
+            nPyArgs)
     .ev$MethodCall(.proxyObject, "find", ..., .get = .get)
-}, name = "find", module = "", evaluatorClass = structure("PythonInterface", package = "XRPython"), serverDoc = character(0), serverArgs = character(0), class = structure("PythonFunction", package = "XRPython")),
+},
 
-findall = structure(function (..., .ev = XRPython::RPython(), .get = NA) 
+findall = function (..., .ev = XRPython::RPython(), .get = NA) 
 {
+    "Python Method\nPython Arguments: path, namespaces ="
+    nPyArgs <- length(substitute(c(...))) - 1
+    if (nPyArgs < 1) 
+        stop("Python function findall() requires at least 1 argument; got ", 
+            nPyArgs)
+    if (nPyArgs > 2) 
+        stop("Python function findall() only allows 2 arguments; got ", 
+            nPyArgs)
     .ev$MethodCall(.proxyObject, "findall", ..., .get = .get)
-}, name = "findall", module = "", evaluatorClass = structure("PythonInterface", package = "XRPython"), serverDoc = character(0), serverArgs = character(0), class = structure("PythonFunction", package = "XRPython")),
+},
 
-findtext = structure(function (..., .ev = XRPython::RPython(), .get = NA) 
+findtext = function (..., .ev = XRPython::RPython(), .get = NA) 
 {
+    "Python Method\nPython Arguments: path, default =, namespaces ="
+    nPyArgs <- length(substitute(c(...))) - 1
+    if (nPyArgs < 1) 
+        stop("Python function findtext() requires at least 1 argument; got ", 
+            nPyArgs)
+    if (nPyArgs > 3) 
+        stop("Python function findtext() only allows 3 arguments; got ", 
+            nPyArgs)
     .ev$MethodCall(.proxyObject, "findtext", ..., .get = .get)
-}, name = "findtext", module = "", evaluatorClass = structure("PythonInterface", package = "XRPython"), serverDoc = character(0), serverArgs = character(0), class = structure("PythonFunction", package = "XRPython")),
+},
 
-get = structure(function (..., .ev = XRPython::RPython(), .get = NA) 
+get = function (..., .ev = XRPython::RPython(), .get = NA) 
 {
+    "Python Method\nPython Arguments: key, default ="
+    nPyArgs <- length(substitute(c(...))) - 1
+    if (nPyArgs < 1) 
+        stop("Python function get() requires at least 1 argument; got ", 
+            nPyArgs)
+    if (nPyArgs > 2) 
+        stop("Python function get() only allows 2 arguments; got ", 
+            nPyArgs)
     .ev$MethodCall(.proxyObject, "get", ..., .get = .get)
-}, name = "get", module = "", evaluatorClass = structure("PythonInterface", package = "XRPython"), serverDoc = character(0), serverArgs = character(0), class = structure("PythonFunction", package = "XRPython")),
+},
 
-getchildren = structure(function (..., .ev = XRPython::RPython(), .get = NA) 
+getchildren = function (..., .ev = XRPython::RPython(), .get = NA) 
 {
+    "Python Method"
+    nPyArgs <- length(substitute(c(...))) - 1
+    if (nPyArgs > 0) 
+        stop("Python function getchildren() only allows 0 arguments; got ", 
+            nPyArgs)
     .ev$MethodCall(.proxyObject, "getchildren", ..., .get = .get)
-}, name = "getchildren", module = "", evaluatorClass = structure("PythonInterface", package = "XRPython"), serverDoc = character(0), serverArgs = character(0), class = structure("PythonFunction", package = "XRPython")),
+},
 
-getiterator = structure(function (..., .ev = XRPython::RPython(), .get = NA) 
+getiterator = function (..., .ev = XRPython::RPython(), .get = NA) 
 {
+    "Python Method\nPython Arguments: tag ="
+    nPyArgs <- length(substitute(c(...))) - 1
+    if (nPyArgs > 1) 
+        stop("Python function getiterator() only allows 1 argument; got ", 
+            nPyArgs)
     .ev$MethodCall(.proxyObject, "getiterator", ..., .get = .get)
-}, name = "getiterator", module = "", evaluatorClass = structure("PythonInterface", package = "XRPython"), serverDoc = character(0), serverArgs = character(0), class = structure("PythonFunction", package = "XRPython")),
+},
 
-insert = structure(function (..., .ev = XRPython::RPython(), .get = NA) 
+insert = function (..., .ev = XRPython::RPython(), .get = NA) 
 {
+    "Python Method\nPython Arguments: index, element"
+    nPyArgs <- length(substitute(c(...))) - 1
+    if (nPyArgs < 2) 
+        stop("Python function insert() requires at least 2 arguments; got ", 
+            nPyArgs)
+    if (nPyArgs > 2) 
+        stop("Python function insert() only allows 2 arguments; got ", 
+            nPyArgs)
     .ev$MethodCall(.proxyObject, "insert", ..., .get = .get)
-}, name = "insert", module = "", evaluatorClass = structure("PythonInterface", package = "XRPython"), serverDoc = character(0), serverArgs = character(0), class = structure("PythonFunction", package = "XRPython")),
+},
 
-items = structure(function (..., .ev = XRPython::RPython(), .get = NA) 
+items = function (..., .ev = XRPython::RPython(), .get = NA) 
 {
+    "Python Method"
+    nPyArgs <- length(substitute(c(...))) - 1
+    if (nPyArgs > 0) 
+        stop("Python function items() only allows 0 arguments; got ", 
+            nPyArgs)
     .ev$MethodCall(.proxyObject, "items", ..., .get = .get)
-}, name = "items", module = "", evaluatorClass = structure("PythonInterface", package = "XRPython"), serverDoc = character(0), serverArgs = character(0), class = structure("PythonFunction", package = "XRPython")),
+},
 
-iter = structure(function (..., .ev = XRPython::RPython(), .get = NA) 
+iter = function (..., .ev = XRPython::RPython(), .get = NA) 
 {
+    "Python Method\nPython Arguments: tag ="
+    nPyArgs <- length(substitute(c(...))) - 1
+    if (nPyArgs > 1) 
+        stop("Python function iter() only allows 1 argument; got ", 
+            nPyArgs)
     .ev$MethodCall(.proxyObject, "iter", ..., .get = .get)
-}, name = "iter", module = "", evaluatorClass = structure("PythonInterface", package = "XRPython"), serverDoc = character(0), serverArgs = character(0), class = structure("PythonFunction", package = "XRPython")),
+},
 
-iterfind = structure(function (..., .ev = XRPython::RPython(), .get = NA) 
+iterfind = function (..., .ev = XRPython::RPython(), .get = NA) 
 {
+    "Python Method\nPython Arguments: path, namespaces ="
+    nPyArgs <- length(substitute(c(...))) - 1
+    if (nPyArgs < 1) 
+        stop("Python function iterfind() requires at least 1 argument; got ", 
+            nPyArgs)
+    if (nPyArgs > 2) 
+        stop("Python function iterfind() only allows 2 arguments; got ", 
+            nPyArgs)
     .ev$MethodCall(.proxyObject, "iterfind", ..., .get = .get)
-}, name = "iterfind", module = "", evaluatorClass = structure("PythonInterface", package = "XRPython"), serverDoc = character(0), serverArgs = character(0), class = structure("PythonFunction", package = "XRPython")),
+},
 
-itertext = structure(function (..., .ev = XRPython::RPython(), .get = NA) 
+itertext = function (..., .ev = XRPython::RPython(), .get = NA) 
 {
+    "Python Method"
+    nPyArgs <- length(substitute(c(...))) - 1
+    if (nPyArgs > 0) 
+        stop("Python function itertext() only allows 0 arguments; got ", 
+            nPyArgs)
     .ev$MethodCall(.proxyObject, "itertext", ..., .get = .get)
-}, name = "itertext", module = "", evaluatorClass = structure("PythonInterface", package = "XRPython"), serverDoc = character(0), serverArgs = character(0), class = structure("PythonFunction", package = "XRPython")),
+},
 
-keys = structure(function (..., .ev = XRPython::RPython(), .get = NA) 
+keys = function (..., .ev = XRPython::RPython(), .get = NA) 
 {
+    "Python Method"
+    nPyArgs <- length(substitute(c(...))) - 1
+    if (nPyArgs > 0) 
+        stop("Python function keys() only allows 0 arguments; got ", 
+            nPyArgs)
     .ev$MethodCall(.proxyObject, "keys", ..., .get = .get)
-}, name = "keys", module = "", evaluatorClass = structure("PythonInterface", package = "XRPython"), serverDoc = character(0), serverArgs = character(0), class = structure("PythonFunction", package = "XRPython")),
+},
 
-makeelement = structure(function (..., .ev = XRPython::RPython(), .get = NA) 
+makeelement = function (..., .ev = XRPython::RPython(), .get = NA) 
 {
+    "Python Method\nPython Arguments: tag, attrib"
+    nPyArgs <- length(substitute(c(...))) - 1
+    if (nPyArgs < 2) 
+        stop("Python function makeelement() requires at least 2 arguments; got ", 
+            nPyArgs)
+    if (nPyArgs > 2) 
+        stop("Python function makeelement() only allows 2 arguments; got ", 
+            nPyArgs)
     .ev$MethodCall(.proxyObject, "makeelement", ..., .get = .get)
-}, name = "makeelement", module = "", evaluatorClass = structure("PythonInterface", package = "XRPython"), serverDoc = character(0), serverArgs = character(0), class = structure("PythonFunction", package = "XRPython")),
+},
 
-remove = structure(function (..., .ev = XRPython::RPython(), .get = NA) 
+remove = function (..., .ev = XRPython::RPython(), .get = NA) 
 {
+    "Python Method\nPython Arguments: element"
+    nPyArgs <- length(substitute(c(...))) - 1
+    if (nPyArgs < 1) 
+        stop("Python function remove() requires at least 1 argument; got ", 
+            nPyArgs)
+    if (nPyArgs > 1) 
+        stop("Python function remove() only allows 1 argument; got ", 
+            nPyArgs)
     .ev$MethodCall(.proxyObject, "remove", ..., .get = .get)
-}, name = "remove", module = "", evaluatorClass = structure("PythonInterface", package = "XRPython"), serverDoc = character(0), serverArgs = character(0), class = structure("PythonFunction", package = "XRPython")),
+},
 
-set = structure(function (..., .ev = XRPython::RPython(), .get = NA) 
+set = function (..., .ev = XRPython::RPython(), .get = NA) 
 {
+    "Python Method\nPython Arguments: key, value"
+    nPyArgs <- length(substitute(c(...))) - 1
+    if (nPyArgs < 2) 
+        stop("Python function set() requires at least 2 arguments; got ", 
+            nPyArgs)
+    if (nPyArgs > 2) 
+        stop("Python function set() only allows 2 arguments; got ", 
+            nPyArgs)
     .ev$MethodCall(.proxyObject, "set", ..., .get = .get)
-}, name = "set", module = "", evaluatorClass = structure("PythonInterface", package = "XRPython"), serverDoc = character(0), serverArgs = character(0), class = structure("PythonFunction", package = "XRPython")))
+})
 
 
