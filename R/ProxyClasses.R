@@ -232,7 +232,7 @@ list(ServerClass = "Speech", ServerModule = "thePlay", language = "Python",
 
 findText = function (..., .ev = XRPython::RPython(), .get = NA) 
 {
-    "Python Documentation: Searches in the Speech object for occurences of the specified\ntext and returns a list of the lines in which that text appears.\nArgument `tokens' controls whether the search is in the tokens\nfield, in which case `text' must match a token exactly.  Otherwise\nthe search is in the speech text for a matching substring.\nIf `ignoreCase' is true, the text argument is converted\nto lower case.  Tokens are always lower-cased and the speech\ntext will be converted to lower as needed.\nPython Arguments: text, tokens =, ignoreCase ="
+    "Python Method: findText(text, tokens =, ignoreCase =)\nSearches in the Speech object for occurences of the specified\ntext and returns a list of the lines in which that text appears.\nArgument `tokens' controls whether the search is in the tokens\nfield, in which case `text' must match a token exactly.  Otherwise\nthe search is in the speech text for a matching substring.\nIf `ignoreCase' is true, the text argument is converted\nto lower case.  Tokens are always lower-cased and the speech\ntext will be converted to lower as needed."
     nPyArgs <- length(substitute(c(...))) - 1
     if (nPyArgs < 1) 
         stop("Python function findText() requires at least 1 argument; got ", 
@@ -245,7 +245,7 @@ findText = function (..., .ev = XRPython::RPython(), .get = NA)
 
 getText = function (..., .ev = XRPython::RPython(), .get = NA) 
 {
-    "Python Documentation: Returns the text of the speech, as an object that will be\nan R character vector when converted."
+    "Python Method: getText()\nReturns the text of the speech, as an object that will be\nan R character vector when converted."
     nPyArgs <- length(substitute(c(...))) - 1
     if (nPyArgs > 0) 
         stop("Python function getText() only allows 0 arguments; got ", 
@@ -255,7 +255,7 @@ getText = function (..., .ev = XRPython::RPython(), .get = NA)
 
 tokenize = function (..., .ev = XRPython::RPython(), .get = NA) 
 {
-    "Python Documentation: Returns the set of tokens in the speech as a single\nstring, with \"$\" separating lines."
+    "Python Method: tokenize()\nReturns the set of tokens in the speech as a single\nstring, with \"$\" separating lines."
     nPyArgs <- length(substitute(c(...))) - 1
     if (nPyArgs > 0) 
         stop("Python function tokenize() only allows 0 arguments; got ", 
@@ -300,7 +300,7 @@ list(ServerClass = "ElementTree", ServerModule = "xml.etree.ElementTree",
 
 find = function (..., .ev = XRPython::RPython(), .get = NA) 
 {
-    "Python Method\nPython Arguments: path, namespaces ="
+    "Python Method: find(path, namespaces =)\n"
     nPyArgs <- length(substitute(c(...))) - 1
     if (nPyArgs < 1) 
         stop("Python function find() requires at least 1 argument; got ", 
@@ -313,7 +313,7 @@ find = function (..., .ev = XRPython::RPython(), .get = NA)
 
 findall = function (..., .ev = XRPython::RPython(), .get = NA) 
 {
-    "Python Method\nPython Arguments: path, namespaces ="
+    "Python Method: findall(path, namespaces =)\n"
     nPyArgs <- length(substitute(c(...))) - 1
     if (nPyArgs < 1) 
         stop("Python function findall() requires at least 1 argument; got ", 
@@ -326,7 +326,7 @@ findall = function (..., .ev = XRPython::RPython(), .get = NA)
 
 findtext = function (..., .ev = XRPython::RPython(), .get = NA) 
 {
-    "Python Method\nPython Arguments: path, default =, namespaces ="
+    "Python Method: findtext(path, default =, namespaces =)\n"
     nPyArgs <- length(substitute(c(...))) - 1
     if (nPyArgs < 1) 
         stop("Python function findtext() requires at least 1 argument; got ", 
@@ -339,7 +339,7 @@ findtext = function (..., .ev = XRPython::RPython(), .get = NA)
 
 getiterator = function (..., .ev = XRPython::RPython(), .get = NA) 
 {
-    "Python Method\nPython Arguments: tag ="
+    "Python Method: getiterator(tag =)\n"
     nPyArgs <- length(substitute(c(...))) - 1
     if (nPyArgs > 1) 
         stop("Python function getiterator() only allows 1 argument; got ", 
@@ -349,7 +349,7 @@ getiterator = function (..., .ev = XRPython::RPython(), .get = NA)
 
 getroot = function (..., .ev = XRPython::RPython(), .get = NA) 
 {
-    "Python Method"
+    "Python Method: getroot()\n"
     nPyArgs <- length(substitute(c(...))) - 1
     if (nPyArgs > 0) 
         stop("Python function getroot() only allows 0 arguments; got ", 
@@ -359,7 +359,7 @@ getroot = function (..., .ev = XRPython::RPython(), .get = NA)
 
 iter = function (..., .ev = XRPython::RPython(), .get = NA) 
 {
-    "Python Method\nPython Arguments: tag ="
+    "Python Method: iter(tag =)\n"
     nPyArgs <- length(substitute(c(...))) - 1
     if (nPyArgs > 1) 
         stop("Python function iter() only allows 1 argument; got ", 
@@ -369,7 +369,7 @@ iter = function (..., .ev = XRPython::RPython(), .get = NA)
 
 iterfind = function (..., .ev = XRPython::RPython(), .get = NA) 
 {
-    "Python Method\nPython Arguments: path, namespaces ="
+    "Python Method: iterfind(path, namespaces =)\n"
     nPyArgs <- length(substitute(c(...))) - 1
     if (nPyArgs < 1) 
         stop("Python function iterfind() requires at least 1 argument; got ", 
@@ -382,7 +382,7 @@ iterfind = function (..., .ev = XRPython::RPython(), .get = NA)
 
 parse = function (..., .ev = XRPython::RPython(), .get = NA) 
 {
-    "Python Method\nPython Arguments: source, parser ="
+    "Python Method: parse(source, parser =)\n"
     nPyArgs <- length(substitute(c(...))) - 1
     if (nPyArgs < 1) 
         stop("Python function parse() requires at least 1 argument; got ", 
@@ -395,7 +395,7 @@ parse = function (..., .ev = XRPython::RPython(), .get = NA)
 
 write = function (..., .ev = XRPython::RPython(), .get = NA) 
 {
-    "Python Method\nPython Arguments: file_or_filename, encoding =, xml_declaration =, default_namespace =, method ="
+    "Python Method: write(file_or_filename, encoding =, xml_declaration =, default_namespace =, method =)\n"
     nPyArgs <- length(substitute(c(...))) - 1
     if (nPyArgs < 1) 
         stop("Python function write() requires at least 1 argument; got ", 
@@ -408,7 +408,7 @@ write = function (..., .ev = XRPython::RPython(), .get = NA)
 
 write_c14n = function (..., .ev = XRPython::RPython(), .get = NA) 
 {
-    "Python Method\nPython Arguments: file"
+    "Python Method: write_c14n(file)\n"
     nPyArgs <- length(substitute(c(...))) - 1
     if (nPyArgs < 1) 
         stop("Python function write_c14n() requires at least 1 argument; got ", 
@@ -500,7 +500,7 @@ list(ServerClass = "Element", ServerModule = "xml.etree.ElementTree",
 
 append = function (..., .ev = XRPython::RPython(), .get = NA) 
 {
-    "Python Method\nPython Arguments: element"
+    "Python Method: append(element)\n"
     nPyArgs <- length(substitute(c(...))) - 1
     if (nPyArgs < 1) 
         stop("Python function append() requires at least 1 argument; got ", 
@@ -513,7 +513,7 @@ append = function (..., .ev = XRPython::RPython(), .get = NA)
 
 clear = function (..., .ev = XRPython::RPython(), .get = NA) 
 {
-    "Python Method"
+    "Python Method: clear()\n"
     nPyArgs <- length(substitute(c(...))) - 1
     if (nPyArgs > 0) 
         stop("Python function clear() only allows 0 arguments; got ", 
@@ -523,7 +523,7 @@ clear = function (..., .ev = XRPython::RPython(), .get = NA)
 
 copy = function (..., .ev = XRPython::RPython(), .get = NA) 
 {
-    "Python Method"
+    "Python Method: copy()\n"
     nPyArgs <- length(substitute(c(...))) - 1
     if (nPyArgs > 0) 
         stop("Python function copy() only allows 0 arguments; got ", 
@@ -533,7 +533,7 @@ copy = function (..., .ev = XRPython::RPython(), .get = NA)
 
 extend = function (..., .ev = XRPython::RPython(), .get = NA) 
 {
-    "Python Method\nPython Arguments: elements"
+    "Python Method: extend(elements)\n"
     nPyArgs <- length(substitute(c(...))) - 1
     if (nPyArgs < 1) 
         stop("Python function extend() requires at least 1 argument; got ", 
@@ -546,7 +546,7 @@ extend = function (..., .ev = XRPython::RPython(), .get = NA)
 
 find = function (..., .ev = XRPython::RPython(), .get = NA) 
 {
-    "Python Method\nPython Arguments: path, namespaces ="
+    "Python Method: find(path, namespaces =)\n"
     nPyArgs <- length(substitute(c(...))) - 1
     if (nPyArgs < 1) 
         stop("Python function find() requires at least 1 argument; got ", 
@@ -559,7 +559,7 @@ find = function (..., .ev = XRPython::RPython(), .get = NA)
 
 findall = function (..., .ev = XRPython::RPython(), .get = NA) 
 {
-    "Python Method\nPython Arguments: path, namespaces ="
+    "Python Method: findall(path, namespaces =)\n"
     nPyArgs <- length(substitute(c(...))) - 1
     if (nPyArgs < 1) 
         stop("Python function findall() requires at least 1 argument; got ", 
@@ -572,7 +572,7 @@ findall = function (..., .ev = XRPython::RPython(), .get = NA)
 
 findtext = function (..., .ev = XRPython::RPython(), .get = NA) 
 {
-    "Python Method\nPython Arguments: path, default =, namespaces ="
+    "Python Method: findtext(path, default =, namespaces =)\n"
     nPyArgs <- length(substitute(c(...))) - 1
     if (nPyArgs < 1) 
         stop("Python function findtext() requires at least 1 argument; got ", 
@@ -585,7 +585,7 @@ findtext = function (..., .ev = XRPython::RPython(), .get = NA)
 
 get = function (..., .ev = XRPython::RPython(), .get = NA) 
 {
-    "Python Method\nPython Arguments: key, default ="
+    "Python Method: get(key, default =)\n"
     nPyArgs <- length(substitute(c(...))) - 1
     if (nPyArgs < 1) 
         stop("Python function get() requires at least 1 argument; got ", 
@@ -598,7 +598,7 @@ get = function (..., .ev = XRPython::RPython(), .get = NA)
 
 getchildren = function (..., .ev = XRPython::RPython(), .get = NA) 
 {
-    "Python Method"
+    "Python Method: getchildren()\n"
     nPyArgs <- length(substitute(c(...))) - 1
     if (nPyArgs > 0) 
         stop("Python function getchildren() only allows 0 arguments; got ", 
@@ -608,7 +608,7 @@ getchildren = function (..., .ev = XRPython::RPython(), .get = NA)
 
 getiterator = function (..., .ev = XRPython::RPython(), .get = NA) 
 {
-    "Python Method\nPython Arguments: tag ="
+    "Python Method: getiterator(tag =)\n"
     nPyArgs <- length(substitute(c(...))) - 1
     if (nPyArgs > 1) 
         stop("Python function getiterator() only allows 1 argument; got ", 
@@ -618,7 +618,7 @@ getiterator = function (..., .ev = XRPython::RPython(), .get = NA)
 
 insert = function (..., .ev = XRPython::RPython(), .get = NA) 
 {
-    "Python Method\nPython Arguments: index, element"
+    "Python Method: insert(index, element)\n"
     nPyArgs <- length(substitute(c(...))) - 1
     if (nPyArgs < 2) 
         stop("Python function insert() requires at least 2 arguments; got ", 
@@ -631,7 +631,7 @@ insert = function (..., .ev = XRPython::RPython(), .get = NA)
 
 items = function (..., .ev = XRPython::RPython(), .get = NA) 
 {
-    "Python Method"
+    "Python Method: items()\n"
     nPyArgs <- length(substitute(c(...))) - 1
     if (nPyArgs > 0) 
         stop("Python function items() only allows 0 arguments; got ", 
@@ -641,7 +641,7 @@ items = function (..., .ev = XRPython::RPython(), .get = NA)
 
 iter = function (..., .ev = XRPython::RPython(), .get = NA) 
 {
-    "Python Method\nPython Arguments: tag ="
+    "Python Method: iter(tag =)\n"
     nPyArgs <- length(substitute(c(...))) - 1
     if (nPyArgs > 1) 
         stop("Python function iter() only allows 1 argument; got ", 
@@ -651,7 +651,7 @@ iter = function (..., .ev = XRPython::RPython(), .get = NA)
 
 iterfind = function (..., .ev = XRPython::RPython(), .get = NA) 
 {
-    "Python Method\nPython Arguments: path, namespaces ="
+    "Python Method: iterfind(path, namespaces =)\n"
     nPyArgs <- length(substitute(c(...))) - 1
     if (nPyArgs < 1) 
         stop("Python function iterfind() requires at least 1 argument; got ", 
@@ -664,7 +664,7 @@ iterfind = function (..., .ev = XRPython::RPython(), .get = NA)
 
 itertext = function (..., .ev = XRPython::RPython(), .get = NA) 
 {
-    "Python Method"
+    "Python Method: itertext()\n"
     nPyArgs <- length(substitute(c(...))) - 1
     if (nPyArgs > 0) 
         stop("Python function itertext() only allows 0 arguments; got ", 
@@ -674,7 +674,7 @@ itertext = function (..., .ev = XRPython::RPython(), .get = NA)
 
 keys = function (..., .ev = XRPython::RPython(), .get = NA) 
 {
-    "Python Method"
+    "Python Method: keys()\n"
     nPyArgs <- length(substitute(c(...))) - 1
     if (nPyArgs > 0) 
         stop("Python function keys() only allows 0 arguments; got ", 
@@ -684,7 +684,7 @@ keys = function (..., .ev = XRPython::RPython(), .get = NA)
 
 makeelement = function (..., .ev = XRPython::RPython(), .get = NA) 
 {
-    "Python Method\nPython Arguments: tag, attrib"
+    "Python Method: makeelement(tag, attrib)\n"
     nPyArgs <- length(substitute(c(...))) - 1
     if (nPyArgs < 2) 
         stop("Python function makeelement() requires at least 2 arguments; got ", 
@@ -697,7 +697,7 @@ makeelement = function (..., .ev = XRPython::RPython(), .get = NA)
 
 remove = function (..., .ev = XRPython::RPython(), .get = NA) 
 {
-    "Python Method\nPython Arguments: element"
+    "Python Method: remove(element)\n"
     nPyArgs <- length(substitute(c(...))) - 1
     if (nPyArgs < 1) 
         stop("Python function remove() requires at least 1 argument; got ", 
@@ -710,7 +710,7 @@ remove = function (..., .ev = XRPython::RPython(), .get = NA)
 
 set = function (..., .ev = XRPython::RPython(), .get = NA) 
 {
-    "Python Method\nPython Arguments: key, value"
+    "Python Method: set(key, value)\n"
     nPyArgs <- length(substitute(c(...))) - 1
     if (nPyArgs < 2) 
         stop("Python function set() requires at least 2 arguments; got ", 

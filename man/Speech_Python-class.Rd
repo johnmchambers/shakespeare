@@ -11,20 +11,22 @@ Python Class for a Speech
 \section{Methods}{
 
 \describe{
-\item{\code{findText(..., .ev = XRPython::RPython(), .get = NA)}}{Python Documentation: Searches in the Speech object for occurences of the specified
+\item{\code{findText(..., .ev = XRPython::RPython(), .get = NA)}}{Python Method: findText(text, tokens =, ignoreCase =)
+Searches in the Speech object for occurences of the specified
 text and returns a list of the lines in which that text appears.
 Argument `tokens' controls whether the search is in the tokens
 field, in which case `text' must match a token exactly.  Otherwise
 the search is in the speech text for a matching substring.
 If `ignoreCase' is true, the text argument is converted
 to lower case.  Tokens are always lower-cased and the speech
-text will be converted to lower as needed.
-Python Arguments: text, tokens =, ignoreCase =}
+text will be converted to lower as needed.}
 
-\item{\code{getText(..., .ev = XRPython::RPython(), .get = NA)}}{Python Documentation: Returns the text of the speech, as an object that will be
+\item{\code{getText(..., .ev = XRPython::RPython(), .get = NA)}}{Python Method: getText()
+Returns the text of the speech, as an object that will be
 an R character vector when converted.}
 
-\item{\code{tokenize(..., .ev = XRPython::RPython(), .get = NA)}}{Python Documentation: Returns the set of tokens in the speech as a single
+\item{\code{tokenize(..., .ev = XRPython::RPython(), .get = NA)}}{Python Method: tokenize()
+Returns the set of tokens in the speech as a single
 string, with "$" separating lines.}
 }}
 
