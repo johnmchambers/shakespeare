@@ -58,6 +58,8 @@ def getScenes(play):
         acts = getActs(play)
     for act in acts:
         scenes = act.data.findall('.//SCENE')
+        ## epilogue and prologue are like scenes within an act
+        scenes = act.data.findall('.//PROLOGUE') + scenes + act.data.findall('.//EPILOGUE')
         actTitle = act.title
         playTitle = act.playTitle
         for scene in scenes:
