@@ -11,7 +11,7 @@ Description: Tools in R to parse and analyse the XML
     components of the plays (Act, Scene, Speech), allowing analysis beyond simple
     textual tools.
 License: BSD
-Imports:
-    XRPython, methods
+Imports: XRPython, methods, XML
 NeedsCompilation: no
 RoxygenNote: 5.0.1
+Packaged: 2016-06-20 22:50:56 UTC; jmc

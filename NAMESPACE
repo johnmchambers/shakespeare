@@ -28,6 +28,7 @@ export(playWords)
 export(otherWords)
 export(playLength)
 export(printSpeech)
+export(printSpeeches)
 export(allFieldStrings)
 
 import(XRPython)
