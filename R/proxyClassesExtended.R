@@ -128,8 +128,6 @@ printSpeeches <- function(speeches, printSeparator = TRUE) {
         lastAct <- act; lastScene <- scene; play <- FALSE
     }
 }
-
-
 ##TODO:  define a version of the Play class in Python but in native R form
 ## using the XML package to represent the XML form of the play
     ## setMethod("asServerObject",
