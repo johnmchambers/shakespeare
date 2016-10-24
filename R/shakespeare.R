@@ -11,6 +11,7 @@
 #' @param .get The standard option for converting the result to R.  Supplying as
 #' \code{TRUE} converts to R as a named list.
 #' @export
+#' @template reference
 tokens <- function(speeches, .get = NA) {
     table <- tokens_Python(speeches, .get = .get)
     if(identical(.get, TRUE))
@@ -40,6 +41,7 @@ tokens <- function(speeches, .get = NA) {
 #' the lines for each speech are unlisted into a character vector.
 #' @seealso tokens This returns the same information but in one vector for the tokens in all speeches.
 #' @export
+#' @template reference
 speechTokens <- function(speeches, .get = NA) {
     table <- speechTokens_Python(speeches, .get = .get)
     if(identical(.get, TRUE))
