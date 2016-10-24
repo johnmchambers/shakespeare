@@ -128,14 +128,3 @@ printSpeeches <- function(speeches, printSeparator = TRUE) {
         lastAct <- act; lastScene <- scene; play <- FALSE
     }
 }
-##TODO:  define a version of the Play class in Python but in native R form
-## using the XML package to represent the XML form of the play
-    ## setMethod("asServerObject",
-    ## c("Play_R", "PythonObject"),
-    ##       function(object, prototype) {
-    ##           file <- tempfile()
-    ##           XML::saveXML(object, file)
-    ##           gettextf("xml.etree.ElementTree.parse(%s)",
-    ##                    asServerObject(file, prototype))
-    ##       })
-
