@@ -70,12 +70,8 @@ findPlay <- function(name, ask = interactive()) {
     if(which) {
     ## If the play has not been parsed, do it now and save
         key <- keys[which]
-        if(!exists(key, envir = .playsTable)) {
-            file <- system.file("plays", paste0(key, ".xml"),
-                                package = .packageName, mustWork = TRUE)
-            value <- getPlay_Python(file)
-            assign(key, value, envir = .playsTable)
-        }
+        if(!exists(key, envir = .playsTable))
+            .parsePlay(key)
         key
     }
     else { # argument should be a file name
@@ -92,3 +88,23 @@ getPlay <- function(name) {
     key <- findPlay(name)
     get(key, envir = .playsTable)
 }
+
+.parsePlay <- function(key) {
+    file <- system.file("plays", paste0(key, ".xml"),
+                        package = .packageName, mustWork = TRUE)
+    value <- getPlay_Python(file)
+    assign(key, value, envir = .playsTable)
+    value
+}
+
+
+savePlays <- function(keys = .playsTable$keys) {
+    for(play in keys) {
+        obj <- .parsePlay(play)
+        file <- file.path(system.file("pickle",package ="shakespeare"),play)
+        XRPython::pythonSerialize(obj, file)
+    }
+    invisible(keys)
+}
+
+
