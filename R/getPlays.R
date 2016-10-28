@@ -90,6 +90,10 @@ getPlay <- function(name) {
 }
 
 .parsePlay <- function(key) {
+    ## is there a pickle file from a previous parse?
+    file <- playSaveFile(key)
+    if(file.access(file, 4)==0)  # pickle file exists and is readable(stupid unix coding)
+        return(XRPython::pythonUnserialize(file))
     file <- system.file("plays", paste0(key, ".xml"),
                         package = .packageName, mustWork = TRUE)
     value <- getPlay_Python(file)
@@ -101,10 +105,11 @@ getPlay <- function(name) {
 savePlays <- function(keys = .playsTable$keys) {
     for(play in keys) {
         obj <- .parsePlay(play)
-        file <- file.path(system.file("pickle",package ="shakespeare"),play)
+        file <- playSaveFile(play)
         XRPython::pythonSerialize(obj, file)
     }
     invisible(keys)
 }
 
-
+playSaveFile <- function(play)
+    file.path(system.file("pickle",package ="shakespeare"),paste0(play, ".p"))
