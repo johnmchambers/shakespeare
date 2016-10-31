@@ -68,7 +68,7 @@ def getScenes(play):
     return value
 
 class Speech(object):
-    def __init__(self, obj = None, act = '<Unspecified>', scene = '<Unspecified>', playTitle = '<Unspecified>', tokenCase = False):
+    def __init__(self, obj = None, act = '<Unspecified>', scene = '<Unspecified>', playTitle = '<Unspecified>', tokens = True, tokenCase = False):
         '''  A Speech object is normally initialized from within the initialization of a complete play, class Play,
         based on parsing an XML file.  In this case and generally, argument obj will be the XML element containing the speech.
         Text in the speech is usually in the text fields of a number of <LINE> tags, but sometimes also in the  tail field of, e.g.,
@@ -96,9 +96,11 @@ class Speech(object):
                             break
                 if isinstance(text, str):
                     self.lines.append(text)
-                    if not tokenCase:
-                        text = text.lower()
-                    self.tokens.append(nltk.word_tokenize(text))
+                    if tokens:
+                        if not tokenCase:
+                            text = text.lower()
+                        text = nltk.word_tokenize(text)
+                    self.tokens.append(text)
     def getText(self):
         ''' Returns the text of the speech, as an object that will be
         an R character vector when converted.
@@ -146,11 +148,14 @@ def toR_Speech(obj):
 
 RPython.toR_methods["thePlay.Speech"] = toR_Speech           
 
-def getSpeeches(play):
+def getSpeeches(play, tokens = True, tokenCase = False):
     ''' Return a list of the speeches in the XML object "play".  Each element of the list is
     an object of class "Speech" with fields "title", "act", "scene" and "data"
     (the list of lines of text in the speech).  The argument can alternatively be an Act  or Scene
     object to obtain a list of speeches from just that act or scene.
+
+    The argument "tokens" determines whether the original text or a list of tokens is returned; if it is True,
+    the argument "tokenCase" determines whether upper/lower case is distinguished in the tokesn.
     '''
     value = []
     if isinstance(play, Scene):
@@ -163,7 +168,7 @@ def getSpeeches(play):
         sceneTitle = scene.title
         playTitle = scene.playTitle
         for speech in speeches:
-            obj = Speech(speech, sceneAct, sceneTitle, playTitle)
+            obj = Speech(speech, sceneAct, sceneTitle, playTitle, tokens, tokenCase)
             value.append(obj)
     return value
 
