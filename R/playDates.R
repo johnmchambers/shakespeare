@@ -1,10 +1,33 @@
-## this file constructs a matrix of asserted dates for the plays,
+#' Estimated Dates for Specified Plays
+#'
+#' The vector \code{text} specifies one or more plays; used internally these will be the keys identifying the
+#' various plays.  Otherwise they should match the title of the desired play, as for \code{\link{findPlay}()}.
+#'
+#' The dates are taken from those given on opensourceshakespeare.org.  The actual dates of first performance of the plays
+#' is not always known, and some are debated.
+#' Our philosophy is just to regard these as useful calibration when looking for style changes or other
+#' indicators of the changing environment in which the plays appeared.
+#' @param text character vector. Either the key(s) for the plays or some text that uniquely matches the corresponding title.  Call
+#' \code{\link{playTitles}()} to see the table of keys and titles.
+#' @return the years as a character vector.
+playDates <- function(text) {
+    keys <- .playDates[,3] # in the order of the dates
+    which <- match(text, keys)
+    if(any(is.na(which))) {
+        ii <- seq(along = text)
+        for(i in ii)  # find the key; will fail if no match
+            which[[i]] <- match(findPlay(text[[i]], ask = FALSE, get =FALSE), keys) 
+    }
+    .playDates[which,1]
+}
+
+## the rest of the file constructs a matrix of asserted dates for the plays,
 ## following the dates given on opensourceshakespeare.org.
 ## The Titles column is their titles, not the titles in the plays.
 ## The third column gives the corresponding keys; i.e., the codes for the xml files
 ## and subsequent objects created in this package.
 
-playDates <- matrix(c("1589", "Comedy of Errors",
+.playDates <- matrix(c("1589", "Comedy of Errors",
 "1590", "Henry VI, Part II",
 "1590", "Henry VI, Part III",
 "1591", "Henry VI, Part I",
@@ -45,7 +68,7 @@ pk <- rep("", 37)
 pt <- playTitles()
 keys <- as.character(pt[,2])
 for(i in 1:37) {
-    ii <- grep(playDates[i,2], pt[,1], fixed = TRUE)
+    ii <- grep(.playDates[i,2], pt[,1], fixed = TRUE)
     if(length(ii) == 1)
         pk[[i]] <- keys[[ii]]
 }
@@ -65,6 +88,6 @@ pk[[15]] <- "henry_iv_1"
 pk[[16]] <- "henry_iv_2"
 pk[[17]] <- "henry_v"
 pk[[37]] <- "henry_viii"
-playDates <- cbind(playDates, pk)
+.playDates <- cbind(.playDates, pk)
 rm(pk,pt,keys)
-colnames(playDates) <- c("Year", "Title", "Key")
+colnames(.playDates) <- c("Year", "Title", "Key")
