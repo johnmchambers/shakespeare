@@ -102,8 +102,11 @@ getScenes <- new("PythonFunction"
 #' an object of class "Speech" with fields "title", "act", "scene" and "data"
 #' (the list of lines of text in the speech).  The argument can alternatively be an Act  or Scene
 #' object to obtain a list of speeches from just that act or scene.
+#' 
+#' The argument "tokens" determines whether the original text or a list of tokens is returned; if it is True,
+#' the argument "tokenCase" determines whether upper/lower case is distinguished in the tokesn.
 #' @section Python Functions:
-#' getSpeeches(play)
+#' getSpeeches(play, tokens =, tokenCase =)
 #' @export
 getSpeeches <- function(..., .ev = XR::getInterface(), .get = NA)
     NULL
@@ -115,8 +118,8 @@ getSpeeches <- new("PythonFunction"
     if (nPyArgs < 1) 
         stop("Python function getSpeeches() requires at least 1 argument; got ", 
             nPyArgs)
-    if (nPyArgs > 1) 
-        stop("Python function getSpeeches() only allows 1 argument; got ", 
+    if (nPyArgs > 3) 
+        stop("Python function getSpeeches() only allows 3 arguments; got ", 
             nPyArgs)
     .ev$Import("thePlay", "getSpeeches")
     .ev$Call("getSpeeches", ..., .get = .get)
@@ -124,8 +127,8 @@ getSpeeches <- new("PythonFunction"
     , name = "getSpeeches"
     , module = "thePlay"
     , evaluatorClass = structure("PythonInterface", package = "XRPython")
-    , serverDoc = "Return a list of the speeches in the XML object \"play\".  Each element of the list is\nan object of class \"Speech\" with fields \"title\", \"act\", \"scene\" and \"data\"\n(the list of lines of text in the speech).  The argument can alternatively be an Act  or Scene\nobject to obtain a list of speeches from just that act or scene."
-    , serverArgs = "play"
+    , serverDoc = "Return a list of the speeches in the XML object \"play\".  Each element of the list is\nan object of class \"Speech\" with fields \"title\", \"act\", \"scene\" and \"data\"\n(the list of lines of text in the speech).  The argument can alternatively be an Act  or Scene\nobject to obtain a list of speeches from just that act or scene.\n\nThe argument \"tokens\" determines whether the original text or a list of tokens is returned; if it is True,\nthe argument \"tokenCase\" determines whether upper/lower case is distinguished in the tokesn."
+    , serverArgs = c("play", "tokens =", "tokenCase =")
 )
 
 #' Python List of the Persons Listed for the Play

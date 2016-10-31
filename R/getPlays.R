@@ -41,8 +41,9 @@ playTitles <- function() {
 #' @param name a character string identifying the play.  Ideally this is the key under which the play is stored, but it can also be any
 #' string that uniquely matches one of the play titles.  To see keys and titles, call \code{\link{playTitles}()}.
 #' @param ask  if more than  one play matches the name, should the user be asked to choose.  Default \code{TRUE} iff the session is interactive.  No resolution of multiple matches generates an error.
+#' @param get should the play be parsed if it has not been previously? default \code{TRUE}.
 #' @export
-findPlay <- function(name, ask = interactive()) {
+findPlay <- function(name, ask = interactive(), get = TRUE) {
     keys <- .playsTable$keys
     titles <- .playsTable$titles
     which <- match(name, keys, 0L)
@@ -70,15 +71,11 @@ findPlay <- function(name, ask = interactive()) {
     if(which) {
     ## If the play has not been parsed, do it now and save
         key <- keys[which]
-        if(!exists(key, envir = .playsTable)) {
-            file <- system.file("plays", paste0(key, ".xml"),
-                                package = .packageName, mustWork = TRUE)
-            value <- getPlay_Python(file)
-            assign(key, value, envir = .playsTable)
-        }
+        if(get && !exists(key, envir = .playsTable))
+            .parsePlay(key)
         key
     }
-    else { # argument should be a file name
+    else if(get) { # argument should be a file name <FIXME/> This would be better as a method, taking a connection as an argument
         value <- getPlay_Python(name)
         key <- paste0("Play.", length(.playsTable$keys)+1)
         assign(key, value, envir = .playsTable)
@@ -86,9 +83,36 @@ findPlay <- function(name, ask = interactive()) {
         .playsTable$titles <- c(.playsTable$titles, name)
         key
     }
+    else
+        stop(gettextf("No play title or key matches: %s", dQuote(name)))
  }
 
 getPlay <- function(name) {
     key <- findPlay(name)
     get(key, envir = .playsTable)
 }
+
+.parsePlay <- function(key) {
+    ## is there a pickle file from a previous parse?
+    file <- playSaveFile(key)
+    if(file.access(file, 4)==0)  # pickle file exists and is readable(stupid unix coding)
+        return(XRPython::pythonUnserialize(file))
+    file <- system.file("plays", paste0(key, ".xml"),
+                        package = .packageName, mustWork = TRUE)
+    value <- getPlay_Python(file)
+    assign(key, value, envir = .playsTable)
+    value
+}
+
+
+savePlays <- function(keys = .playsTable$keys) {
+    for(play in keys) {
+        obj <- .parsePlay(play)
+        file <- playSaveFile(play)
+        XRPython::pythonSerialize(obj, file)
+    }
+    invisible(keys)
+}
+
+playSaveFile <- function(play)
+    file.path(system.file("pickle",package ="shakespeare"),paste0(play, ".p"))

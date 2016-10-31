@@ -1,5 +1,5 @@
 ## this setup script writes the file proxyFunctions.R in the R/ subdirectory of the package
-## It should be run as XR::packageSetup("proxyFunctions.R")
+## It should be run as XR::packageSetup("inst/tools/proxyFunctions.R")
 
 tmp <- tempfile(fileext=".R")
 con <- file(tmp, "w")
