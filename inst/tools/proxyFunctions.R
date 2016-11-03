@@ -15,7 +15,7 @@ XRPython::PythonFunction("getActs", "thePlay", save = con,
 XRPython::PythonFunction("getScenes", "thePlay", save = con,
                          docText = "Python List of all Scenes of a Play")
 
-XRPython::PythonFunction("getSpeeches", "thePlay", save = con,
+XRPython::PythonFunction("getSpeeches", "thePlay", save = con, objName = "getSpeeches_Python",
                          docText = "Python List of all Speeches of a Play (or Act or Scene)")
 
 XRPython::PythonFunction("speakers", "thePlay", save = con, .get = TRUE,

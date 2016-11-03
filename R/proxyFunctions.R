@@ -108,10 +108,10 @@ getScenes <- new("PythonFunction"
 #' @section Python Functions:
 #' getSpeeches(play, tokens =, tokenCase =)
 #' @export
-getSpeeches <- function(..., .ev = XR::getInterface(), .get = NA)
+getSpeeches_Python <- function(..., .ev = XR::getInterface(), .get = NA)
     NULL
 
-getSpeeches <- new("PythonFunction"
+getSpeeches_Python <- new("PythonFunction"
     , .Data = function (..., .ev = XRPython::RPython(), .get = NA) 
 {
     nPyArgs <- length(substitute(c(...))) - 1

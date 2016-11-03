@@ -30,7 +30,6 @@ export(playLength)
 export(printSpeech)
 export(printSpeeches)
 export(allFieldStrings)
-export(savePlays)
 export(playDates)
 
 import(XRPython)

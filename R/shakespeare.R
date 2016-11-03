@@ -106,3 +106,29 @@ playLength <- function(play) {
     else
         lengths[[findPlay(play)]]
 }
+
+
+getSpeeches <- function(play, tokens = TRUE, tokenCase = FALSE) {
+    if(is.character(play))
+        play <- getPlay(play)
+    if(is(play, "Play")) {
+        key <- play$key
+        ## is there a serialized version?
+        file <- playSaveFile(key, if(tokens) "tokens" else "text", "r")
+        if(nzchar(file))
+            speeches <- play$.ev$Unserialize(play, file)
+        else {
+            speeches <- getSpeeches_Python(play, tokens, tokenCase)
+            ## can we write a serialized version?
+            file <- playSaveFile(key, if(tokens) "tokens" else "text", "w")
+            if(nzchar(file))
+                play$.ev$Serialize(speeches, file)
+        }
+        speeches
+    }
+    else
+        getSpeeches_Python(play, tokens, tokenCase)
+}
+
+
+

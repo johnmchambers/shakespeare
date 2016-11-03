@@ -94,25 +94,34 @@ getPlay <- function(name) {
 
 .parsePlay <- function(key) {
     ## is there a pickle file from a previous parse?
-    file <- playSaveFile(key)
-    if(file.access(file, 4)==0)  # pickle file exists and is readable(stupid unix coding)
-        return(XRPython::pythonUnserialize(file))
-    file <- system.file("plays", paste0(key, ".xml"),
+    file <- playSaveFile(key, open = "r")
+    if(is.connection(file))  { #pickle file exists
+        on.exit(base::close(file))
+        value = XRPython::pythonUnserialize(file)
+    }
+    else {
+        file <- system.file("plays", paste0(key, ".xml"),
                         package = .packageName, mustWork = TRUE)
-    value <- getPlay_Python(file)
+        value <- getPlay_Python(file)
+        saveFile <- playSaveFile(key, open = "w")
+        if(nzchar(saveFile))
+            value$.ev$Serialize(value, saveFile)
+    }
     assign(key, value, envir = .playsTable)
     value
 }
 
-
-savePlays <- function(keys = .playsTable$keys) {
-    for(play in keys) {
-        obj <- .parsePlay(play)
-        file <- playSaveFile(play)
-        XRPython::pythonSerialize(obj, file)
+playSaveFile <- function(key = "", what = "parse", open = "") {
+    if(nzchar(key))
+        path <- file.path(system.file("pickle",package ="shakespeare"),what , paste0(key, ".p"))
+    else
+        path <- file.path(system.file("pickle",package ="shakespeare"),what)
+    if(nzchar(open)) { ## verify that the file could be used; else return ""
+        con <- tryCatch(base::file(path, open), error = function(e) NULL)
+        if(is.connection(con))
+            close(con)
+        else
+            path <- ""
     }
-    invisible(keys)
+    path
 }
-
-playSaveFile <- function(play)
-    file.path(system.file("pickle",package ="shakespeare"),paste0(play, ".p"))

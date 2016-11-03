@@ -9,8 +9,11 @@ a previously parsed tree.  (Should of course check that).
     '''
     if isinstance(what, str):
         return Etree.parse(what)
-    else:
+    elif isinstance(what, Etree):
         return what
+    else:
+        return None #should throw error.
+        
 
 class Act(object):
     def __init__(self, obj = None, playTitle = None):
