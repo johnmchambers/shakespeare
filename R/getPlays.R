@@ -95,7 +95,7 @@ getPlay <- function(name) {
 .parsePlay <- function(key) {
     ## is there a pickle file from a previous parse?
     file <- playSaveFile(key, open = "r")
-    if(is.connection(file))  { #pickle file exists
+    if(nzchar(file))  { #pickle file exists
         on.exit(base::close(file))
         value = XRPython::pythonUnserialize(file)
     }
