@@ -95,10 +95,8 @@ getPlay <- function(name) {
 .parsePlay <- function(key) {
     ## is there a pickle file from a previous parse?
     file <- playSaveFile(key, open = "r")
-    if(nzchar(file))  { #pickle file exists
-        on.exit(base::close(file))
+    if(nzchar(file))  #pickle file exists
         value = XRPython::pythonUnserialize(file)
-    }
     else {
         file <- system.file("plays", paste0(key, ".xml"),
                         package = .packageName, mustWork = TRUE)
@@ -111,17 +109,23 @@ getPlay <- function(name) {
     value
 }
 
-playSaveFile <- function(key = "", what = "parse", open = "") {
+playSaveFile <- function(key = "", what = "parse", open = "r") {
     if(nzchar(key))
         path <- file.path(system.file("pickle",package ="shakespeare"),what , paste0(key, ".p"))
     else
         path <- file.path(system.file("pickle",package ="shakespeare"),what)
     if(nzchar(open)) { ## verify that the file could be used; else return ""
-        con <- tryCatch(base::file(path, open), error = function(e) NULL)
-        if(is.connection(con))
-            close(con)
+        if(open == "w") {
+            con <- tryCatch(base::file(path, open), error = function(e) NULL, warning  = function(e) NULL)
+            if(is.null(con))
+                path <- ""
+            else
+                close(con)
+        }
         else
-            path <- ""
+            if( file.access(path, 4) != 0)
+                path <- ""
+
     }
     path
 }

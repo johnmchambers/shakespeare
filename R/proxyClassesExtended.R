@@ -45,30 +45,34 @@ SpeechList$methods(
 #' comes from the play itself.  The names of speakers usually match one of the personae in the \code{grep()}
 #' sense, but not always.
 #' @field title The character string title, as found in the XML representation.
-#' @field speeches Proxy for a Python listof all the speeches (each an object
+#' @field tokens,text Proxy for Python lists of all the speeches tokenized and plain text (each element an object
 #' of Python class \code{"Speech"}).  This is precomputed when the \code{"Play"} object is initialized;
 #' the speeches list tends to be input to many of the interesting analyses.  If you want to suppress
-#' precomputation, explicitly set this field to a Python list, as in the example below.
+#' precomputation, explicitly set the field to NULL.
 #' @field key The character string identifying the play in the table and also the name of the original XML file.
 #' @export
 Play <- setRefClass("Play",
                     contains = "ElementTree_Python",
                     fields = c(
-                        personae = "character",
-                        speeches = "SpeechList",
-                        title = "character",
-                        key = "character"
-                               ))
+                    personae = "character",
+                    tokens = "SpeechList",
+                    text = "SpeechList",
+                    title = "character",
+                    key = "character"
+                    ))
 
 
 Play$methods(
     initialize = function(name, ...) {
         if(nargs()) {
-            key <<- findPlay(name)
+            key <<- findPlay(name, get = FALSE)
             callSuper(getPlay(key), ...)
             personae <<- unlist(getPersonae(.self))
             title <<- findtext("TITLE")
-            speeches <<- SpeechList(getSpeeches(.self))
+            if(!is.null(tokens))
+                tokens <<- SpeechList(getSpeeches(.self, key = key))
+            if(!is.null(text))
+                text <<- SpeechList(getSpeeches(.self, tokens = FALSE, key = key))
         }
     }
     )

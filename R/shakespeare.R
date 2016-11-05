@@ -107,27 +107,42 @@ playLength <- function(play) {
         lengths[[findPlay(play)]]
 }
 
+.speechTokensTable <- new.env(parent = emptyenv())
+.speechTextTable <- new.env(parent = emptyenv())
 
-getSpeeches <- function(play, tokens = TRUE, tokenCase = FALSE) {
-    if(is.character(play))
-        play <- getPlay(play)
-    if(is(play, "Play")) {
-        key <- play$key
-        ## is there a serialized version?
-        file <- playSaveFile(key, if(tokens) "tokens" else "text", "r")
-        if(nzchar(file))
-            speeches <- play$.ev$Unserialize(play, file)
+getSpeeches <- function(play, tokens = TRUE, tokenCase = FALSE, key = "") {
+    if(is.character(play)) {
+        play <- Play(play)
+        if(nzchar(key))
+            key <- play$key
+    }
+    if(is(play, "ElementTree_Python"))
+    {
+        ## use the proxy object's Python name, if not supplied
+        if(!nzchar(key))
+            key <- XR::proxyName(play)
+        env <- if(tokens) .speechTokensTable else .speechTextTable
+        if(exists(key, envir = env) && !tokenCase)
+            speeches <- get(key, envir = env)
         else {
-            speeches <- getSpeeches_Python(play, tokens, tokenCase)
-            ## can we write a serialized version?
-            file <- playSaveFile(key, if(tokens) "tokens" else "text", "w")
+            ## is there a serialized version?
+            file <- playSaveFile(key, if(tokens) "tokens" else "text", "r")
             if(nzchar(file))
-                play$.ev$Serialize(speeches, file)
+                speeches <- play$.ev$Unserialize(file)
+            else {
+                speeches <- getSpeeches_Python(play, tokens, tokenCase)
+                ## can we write a serialized version?
+                file <- playSaveFile(key, if(tokens) "tokens" else "text", "w")
+                if(nzchar(file))
+                    play$.ev$Serialize(speeches, file)
+            }
+            if(!tokenCase)
+                assign(key, speeches, envir = env)
         }
         speeches
     }
-    else
-        getSpeeches_Python(play, tokens, tokenCase)
+    else ## TODO:  should have some methods for other formats?
+        stop(gettextf("Argument 'play' must be identify one of the 37 plays: got %s", dquote(class(play))))
 }
 
 
