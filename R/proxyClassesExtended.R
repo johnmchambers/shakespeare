@@ -156,6 +156,7 @@ printSpeeches <- function(speeches, printSeparator = TRUE) {
 #' @param what character vector identifying the plays to install.  By default installs all the 37 plays (which can take
 #'  a minute or more, depending on the hardware).
 #' @param report if \code{TRUE} (the default) the function will report its progress.
+#' @return the vector of keys corresponding to the requested plays.
 installPlays <- function(what = .playsTable$keys, report = TRUE) {
     if(!length(what))
         return()
@@ -166,9 +167,17 @@ installPlays <- function(what = .playsTable$keys, report = TRUE) {
             warning("You don't seem to have write permission on the installed package; plays will only be installed for this session")
         else system(paste("rm",file))
     }
-    if(report) cat("Installing "); punct = "; "
-    for(play in what) {
-        if(report) cat(play, punct, sep = "")
-        Play(play)
+    if(report) cat("Installing:"); punct = " "
+    for(i in seq_along(what)) {
+        name <- what[[i]]
+        if(report) cat(punct, name, sep = "")
+        play <- Play(name)
+        if(name != play$key) {
+            if(report) cat(" (as ",play$key,")", sep = "")
+            what[[i]] <- play$key
+        }
+        punct = "; "
     }
+    if(report) cat("\n")
+    what
 }
