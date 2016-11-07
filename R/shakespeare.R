@@ -107,42 +107,38 @@ playLength <- function(play) {
         lengths[[findPlay(play)]]
 }
 
-.speechTokensTable <- new.env(parent = emptyenv())
-.speechTextTable <- new.env(parent = emptyenv())
+.speechesTable <- new.env(parent = emptyenv())
 
 getSpeeches <- function(play, tokens = TRUE, tokenCase = FALSE, key = "") {
     if(is.character(play)) {
-        play <- Play(play)
-        if(nzchar(key))
+        play <- Play(play) # error if not found
+        if(missing(key))
             key <- play$key
+        play <- play$parse
     }
     if(is(play, "ElementTree_Python"))
     {
-        ## use the proxy object's Python name, if not supplied
-        if(!nzchar(key))
+        save <- nzchar(key)
+        if(!save) ## use the proxy object's Python name, but don't serialize
             key <- XR::proxyName(play)
-        env <- if(tokens) .speechTokensTable else .speechTextTable
-        if(exists(key, envir = env) && !tokenCase)
-            speeches <- get(key, envir = env)
+        if(exists(key, envir = .speechesTable) && !tokenCase)
+            speeches <- get(key, envir = .speechesTable)
         else {
             ## is there a serialized version?
-            file <- playSaveFile(key, if(tokens) "tokens" else "text", "r")
-            if(nzchar(file))
+            file <- playSaveFile(key,  "speeches", "r")
+            if(save && nzchar(file))
                 speeches <- play$.ev$Unserialize(file)
-            else {
+            else
                 speeches <- getSpeeches_Python(play, tokens, tokenCase)
-                ## can we write a serialized version?
-                file <- playSaveFile(key, if(tokens) "tokens" else "text", "w")
-                if(nzchar(file))
+                file <- playSaveFile(key, "speeches", "w")
+                if(save && nzchar(file))
                     play$.ev$Serialize(speeches, file)
+            assign(key, speeches, envir = .speechesTable)
             }
-            if(!tokenCase)
-                assign(key, speeches, envir = env)
-        }
         speeches
-    }
+        }
     else ## TODO:  should have some methods for other formats?
-        stop(gettextf("Argument 'play' must be identify one of the 37 plays: got %s", dquote(class(play))))
+        stop(gettextf("Argument 'play' must identify one of the 37 plays: got %s", dQuote(class(play))))
 }
 
 

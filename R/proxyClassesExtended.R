@@ -39,8 +39,8 @@ SpeechList$methods(
 #' The plays are parsed from the set of XML files into Python \code{"ElementTree"} objects.
 #' An R object from class \code{"Play"} has a proxy to the parsed play plus fields for the
 #' names of the personae and a proxy to a Python list of all the speeches.
-#' This class extends the proxy class for \code{"ElementTree"}.
 #'
+#' @field parse The Python parse of the XML file,  proxy class for \code{"ElementTree"}.
 #' @field personae Character vector of the descriptions of the personae in the play.  Note that this
 #' comes from the play itself.  The names of speakers usually match one of the personae in the \code{grep()}
 #' sense, but not always.
@@ -52,11 +52,10 @@ SpeechList$methods(
 #' @field key The character string identifying the play in the table and also the name of the original XML file.
 #' @export
 Play <- setRefClass("Play",
-                    contains = "ElementTree_Python",
                     fields = c(
+                    parse = "ElementTree_Python",
                     personae = "character",
-                    tokens = "SpeechList",
-                    text = "SpeechList",
+                    speeches = "SpeechList",
                     title = "character",
                     key = "character"
                     ))
@@ -66,13 +65,11 @@ Play$methods(
     initialize = function(name, ...) {
         if(nargs()) {
             key <<- findPlay(name, get = FALSE)
-            callSuper(getPlay(key), ...)
-            personae <<- unlist(getPersonae(.self))
-            title <<- findtext("TITLE")
-            if(!is.null(tokens))
-                tokens <<- SpeechList(getSpeeches(.self, key = key))
-            if(!is.null(text))
-                text <<- SpeechList(getSpeeches(.self, tokens = FALSE, key = key))
+            parse <<- getPlay(key)
+            personae <<- unlist(getPersonae(parse))
+            title <<- parse$findtext("TITLE")
+            speeches <<- SpeechList(getSpeeches(parse, key = key))
+            callSuper(...)
         }
     }
     )
@@ -143,3 +140,35 @@ printSpeeches <- function(speeches, printSeparator = TRUE) {
     ##                    asServerObject(file, prototype))
     ##       })
 
+#' Install Parsed Plays and Speeches Lists
+#'
+#' Installs all the plays whose keys, or uniquely identifying strings from their title, are supplied as \code{what}.
+#' Installing means storing the parsed plays and derived speeches lists in tables for the session.  If the user
+#' has write permission on the installed package's directories, serialized versions will be written there, to be used
+#' in later R sessions, rather than recomputing the parse trees and speech lists.
+#'
+#' Use of this function is never required.  If a play is accessed as an object of class \code{\linkS4class{Play}}, the
+#' same information will be stored for the session and written to the package files, if the user has write permission.
+#' It's perhaps less likely to be confusing if the plays are installed initially, as access to the tables is essentially
+#' instantaneous.  Unserializing the saved files may be mildly noticeable as a delay, and the initial parse and computation
+#' is roughly twice as long again.
+#'
+#' @param what character vector identifying the plays to install.  By default installs all the 37 plays (which can take
+#'  a minute or more, depending on the hardware).
+#' @param report if \code{TRUE} (the default) the function will report its progress.
+installPlays <- function(what = .playsTable$keys, report = TRUE) {
+    if(!length(what))
+        return()
+    hasParse <- playSaveFile(what[[1]], "parse", "r")
+    if(!nzchar(hasParse)) {
+        file <- playSaveFile(what[[1]], "parse", "w")
+        if(!nzchar(file))
+            warning("You don't seem to have write permission on the installed package; plays will only be installed for this session")
+        else system(paste("rm",file))
+    }
+    if(report) cat("Installing "); punct = "; "
+    for(play in what) {
+        if(report) cat(play, punct, sep = "")
+        Play(play)
+    }
+}
