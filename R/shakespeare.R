@@ -109,12 +109,31 @@ playLength <- function(play) {
 
 .speechesTable <- new.env(parent = emptyenv())
 
-getSpeeches <- function(play, tokens = TRUE, tokenCase = FALSE, key = "") {
+#' Generate a List of Speeches
+#'
+#' Given the parsed version of a play or portion of one, or a character string to identify one of the plays, returns a proxy
+#' for the list of \code{"Speech"} objects contained in play.  For all the speeches in a play, this function will have been
+#' called when the \code{\linkS4class{Play}} object is initialized, and can be accessed as the \code{"speeches"} field of
+#' the object.  Only for special purposes does \code{getSpeeches()} need to be called explicitly; see \dQuote{Details}.
+#'
+#' This function is only needed explicitly for a specialized speech list.  The standard speech list has lines of text and
+#' a parallel list of the tokenized, case insensitive version of those lines.  Those speech lists are stored in a table
+#' (an environment) according to the key for each play.  They can be obtained without recomputing as the corresponding field
+#' of the \code{"Play"} object or by calling \code{getSpeeches()} with the name of the play as argument.
+#' If one wanted, for example, a case sensitive version of the speech list, that does require computing by a call to
+#' \code{getSpeeches()}.  That result can also be stored for future access by supplying the \code{key} argument (as
+#' a string \emph{different} from the play's key).
+#' @param play the name of the play, or the \quote{"parse"} field of a play object.  Can be omitted to retrieve a special
+#' speech list (see \dQuote{Deatails}).
+#' @param tokens,tokenCase controls whether tokens are computed and if so whether they are case sensitive.  (see \dQuote{Deatails}).
+#' @param key the string under which the computed speech list will be stored for the session.  Omitted unless a special speech list is being computed, in which case can be supplied to retrieve that list later (see \dQuote{Deatails}).
+#' @param asSpeechList should the result be from class SpeechList? (for internal use)
+getSpeeches <- function(play = NULL, tokens = TRUE, tokenCase = FALSE, key = "", asSpeechList = TRUE) {
     if(is.character(play)) {
-        play <- Play(play) # error if not found
-        if(missing(key))
-            key <- play$key
-        play <- play$parse
+        name <- findPlay(play, get = FALSE) # error if not found
+        if(missing(key) && tokens && !tokenCase) # the default, ok to save under play's key
+            key <- name
+        play <- getPlay(name) # the parse tree
     }
     if(is(play, "ElementTree_Python"))
     {
@@ -135,10 +154,15 @@ getSpeeches <- function(play, tokens = TRUE, tokenCase = FALSE, key = "") {
                     play$.ev$Serialize(speeches, file)
             assign(key, speeches, envir = .speechesTable)
             }
-        speeches
-        }
+    }
+    else if(is.null(play) && nzchar(key))
+        speeches <- get(key, envir = .speechesTable)
     else ## TODO:  should have some methods for other formats?
         stop(gettextf("Argument 'play' must identify one of the 37 plays: got %s", dQuote(class(play))))
+    if(asSpeechList)
+        SpeechList(speeches, tokens=tokens, tokenCase=tokenCase)
+    else
+        speeches
 }
 
 

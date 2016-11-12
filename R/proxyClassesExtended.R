@@ -1,10 +1,37 @@
 ## class definitions that depend on the proxies to Python classes
 ## and need to come after proxyClasses.R in collation order
 
-SpeechList <- setRefClass("SpeechList", contains = "list_Python")
+#' Class for Python List of Speech objects
+#'
+#' The R reference class \code{"SpeechList"} extends the proxy class for a Python list.  The assertion (unchecked) is
+#' that the elements of the Python list are of class \code{"Speech"}.
+#' In particular, every object of R class \code{\linkS4class{Play}} has a field containing a list of all the speeches
+#' in the play, computed when the play is installed for this session.
+#' @field tokens should the speech elements inclue token list as well as lines of text? Default \code{TRUE}.
+#' @field tokenCase should the tokens in the list be case sensitive?  Default \code{FALSE}.
+SpeechList <- setRefClass("SpeechList", contains = "list_Python",
+                          fields = c("tokens" = "logical", tokenCase = "logical"))
 
 SpeechList$methods(
+    initialize = function(tree = NULL, ...) {
+        tokens <<- TRUE
+        tokenCase <<- FALSE
+        initFields(...) #MUST call this, not callSuper() which calls the initializer for list_Python
+        if(!is.null(tree)) {
+            ## either a Python list of the speeches:
+            if(is(tree, "list_Python"))
+                pp <- tree
+            ## or something that defines a play or parsed tree from which to find the speeches:
+            else
+                pp <- getSpeeches(tree, tokens, tokenCase, asSpeechList = FALSE) #(to avoid recursion)
+            ## set the proxy part :: should be a SetProxy() method in XR
+            .proxyObject <<- pp$.proxyObject
+            .proxyClass <<- pp$.proxyClass
+            .ev <<- pp$.ev
+        }
+    },
     show = function() {
+        'automatic printing summarizes the Python object; to convert the list to R and print, use $print()'
         plays <- unlist(allFieldStrings(.self, "playTitle", .get=TRUE))
     cat(gettextf("%s object of size %d; speeches from %s\n",
                  class(.self), size(), paste(dQuote(plays), collapse = ", ")))
@@ -45,7 +72,7 @@ SpeechList$methods(
 #' comes from the play itself.  The names of speakers usually match one of the personae in the \code{grep()}
 #' sense, but not always.
 #' @field title The character string title, as found in the XML representation.
-#' @field tokens,text Proxy for Python lists of all the speeches tokenized and plain text (each element an object
+#' @field speeches Proxy for Python list (class \code{"SpeechList"}) of all the speeches (each element an object
 #' of Python class \code{"Speech"}).  This is precomputed when the \code{"Play"} object is initialized;
 #' the speeches list tends to be input to many of the interesting analyses.  If you want to suppress
 #' precomputation, explicitly set the field to NULL.
@@ -68,7 +95,7 @@ Play$methods(
             parse <<- getPlay(key)
             personae <<- unlist(getPersonae(parse))
             title <<- parse$findtext("TITLE")
-            speeches <<- SpeechList(getSpeeches(parse, key = key))
+            speeches <<- getSpeeches(parse, key = key, tokens = TRUE, tokenCase = FALSE)
             callSuper(...)
         }
     }

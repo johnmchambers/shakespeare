@@ -76,8 +76,9 @@ class Speech(object):
         based on parsing an XML file.  In this case and generally, argument obj will be the XML element containing the speech.
         Text in the speech is usually in the text fields of a number of <LINE> tags, but sometimes also in the  tail field of, e.g.,
         a <STAGEDIR> tag.
-        The text is stored as a list of strings for the individual lines.  These lines are also tokenized using nltk.word_tokenizer()
-        with the tokens stored in a list of lists, parallel to the lines.
+        The text is stored as a list of strings for the individual lines.  If argument tokens is True, these lines are also tokenized using nltk.word_tokenizer()
+        with the tokens stored in a list of lists, parallel to the lines and assigned to the field "tokens". Unless argument tokenCase
+        is True, the text in the tokens is lowercased.
         '''
         self.act = act
         self.scene = scene
@@ -103,7 +104,7 @@ class Speech(object):
                         if not tokenCase:
                             text = text.lower()
                         text = nltk.word_tokenize(text)
-                    self.tokens.append(text)
+                        self.tokens.append(text)
     def getText(self):
         ''' Returns the text of the speech, as an object that will be
         an R character vector when converted.
