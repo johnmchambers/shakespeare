@@ -40,19 +40,29 @@ Act_Python <- XR::setProxyClass("Act", module = "thePlay",
     )
 
 Act_Python$methods(
-initialize = function (..., evaluator, .serverObject) 
+initialize = function (..., .evaluator, .serverObject) 
 {
-    if (missing(evaluator)) 
-        evaluator <- XR::getInterface("PythonInterface")
-    if (missing(.serverObject)) {
-        evaluator$Import("thePlay")
-        .serverObject <- evaluator$New("Act", "thePlay", ...)
+    if (missing(.evaluator)) {
+        if (missing(.serverObject)) 
+            .evaluator <- XR::getInterface("PythonInterface", 
+                .makeNew = FALSE)
+        else .evaluator <- XR::proxyEvaluator(.serverObject)
     }
+    if (!nargs() && is.null(.evaluator)) 
+        return()
+    if (missing(.serverObject)) {
+        if (is.null(.evaluator)) 
+            .evaluator <- XR::getInterface("PythonInterface")
+        .evaluator$Import("thePlay")
+        .serverObject <- .evaluator$New("Act", "thePlay", ...)
+    }
+    else if (!missing(...)) 
+        initFields(...)
     if (is(.serverObject, "ProxyClassObject")) 
         proxy <- .serverObject$.proxyObject
     else proxy <- .serverObject
     .proxyObject <<- proxy
-    .ev <<- evaluator
+    .ev <<- .evaluator
 },
 
 ServerClassInfo = function () 
@@ -114,19 +124,29 @@ Scene_Python <- XR::setProxyClass("Scene", module = "thePlay",
     )
 
 Scene_Python$methods(
-initialize = function (..., evaluator, .serverObject) 
+initialize = function (..., .evaluator, .serverObject) 
 {
-    if (missing(evaluator)) 
-        evaluator <- XR::getInterface("PythonInterface")
-    if (missing(.serverObject)) {
-        evaluator$Import("thePlay")
-        .serverObject <- evaluator$New("Scene", "thePlay", ...)
+    if (missing(.evaluator)) {
+        if (missing(.serverObject)) 
+            .evaluator <- XR::getInterface("PythonInterface", 
+                .makeNew = FALSE)
+        else .evaluator <- XR::proxyEvaluator(.serverObject)
     }
+    if (!nargs() && is.null(.evaluator)) 
+        return()
+    if (missing(.serverObject)) {
+        if (is.null(.evaluator)) 
+            .evaluator <- XR::getInterface("PythonInterface")
+        .evaluator$Import("thePlay")
+        .serverObject <- .evaluator$New("Scene", "thePlay", ...)
+    }
+    else if (!missing(...)) 
+        initFields(...)
     if (is(.serverObject, "ProxyClassObject")) 
         proxy <- .serverObject$.proxyObject
     else proxy <- .serverObject
     .proxyObject <<- proxy
-    .ev <<- evaluator
+    .ev <<- .evaluator
 },
 
 ServerClassInfo = function () 
@@ -208,19 +228,30 @@ Speech_Python <- XR::setProxyClass("Speech", module = "thePlay",
     )
 
 Speech_Python$methods(
-initialize = function (..., evaluator, .serverObject) 
+initialize = function (..., .evaluator, .serverObject) 
 {
-    if (missing(evaluator)) 
-        evaluator <- XR::getInterface("PythonInterface")
-    if (missing(.serverObject)) {
-        evaluator$Import("thePlay")
-        .serverObject <- evaluator$New("Speech", "thePlay", ...)
+    if (missing(.evaluator)) {
+        if (missing(.serverObject)) 
+            .evaluator <- XR::getInterface("PythonInterface", 
+                .makeNew = FALSE)
+        else .evaluator <- XR::proxyEvaluator(.serverObject)
     }
+    if (!nargs() && is.null(.evaluator)) 
+        return()
+    if (missing(.serverObject)) {
+        if (is.null(.evaluator)) 
+            .evaluator <- XR::getInterface("PythonInterface")
+        .evaluator$Import("thePlay")
+        .serverObject <- .evaluator$New("Speech", "thePlay", 
+            ...)
+    }
+    else if (!missing(...)) 
+        initFields(...)
     if (is(.serverObject, "ProxyClassObject")) 
         proxy <- .serverObject$.proxyObject
     else proxy <- .serverObject
     .proxyObject <<- proxy
-    .ev <<- evaluator
+    .ev <<- .evaluator
 },
 
 ServerClassInfo = function () 
@@ -274,20 +305,30 @@ ElementTree_Python <- XR::setProxyClass("ElementTree", module = "xml.etree.Eleme
     )
 
 ElementTree_Python$methods(
-initialize = function (..., evaluator, .serverObject) 
+initialize = function (..., .evaluator, .serverObject) 
 {
-    if (missing(evaluator)) 
-        evaluator <- XR::getInterface("PythonInterface")
+    if (missing(.evaluator)) {
+        if (missing(.serverObject)) 
+            .evaluator <- XR::getInterface("PythonInterface", 
+                .makeNew = FALSE)
+        else .evaluator <- XR::proxyEvaluator(.serverObject)
+    }
+    if (!nargs() && is.null(.evaluator)) 
+        return()
     if (missing(.serverObject)) {
-        evaluator$Import("xml.etree.ElementTree")
-        .serverObject <- evaluator$New("ElementTree", "xml.etree.ElementTree", 
+        if (is.null(.evaluator)) 
+            .evaluator <- XR::getInterface("PythonInterface")
+        .evaluator$Import("xml.etree.ElementTree")
+        .serverObject <- .evaluator$New("ElementTree", "xml.etree.ElementTree", 
             ...)
     }
+    else if (!missing(...)) 
+        initFields(...)
     if (is(.serverObject, "ProxyClassObject")) 
         proxy <- .serverObject$.proxyObject
     else proxy <- .serverObject
     .proxyObject <<- proxy
-    .ev <<- evaluator
+    .ev <<- .evaluator
 },
 
 ServerClassInfo = function () 
@@ -472,20 +513,30 @@ Element_Python <- XR::setProxyClass("Element", module = "xml.etree.ElementTree",
     )
 
 Element_Python$methods(
-initialize = function (..., evaluator, .serverObject) 
+initialize = function (..., .evaluator, .serverObject) 
 {
-    if (missing(evaluator)) 
-        evaluator <- XR::getInterface("PythonInterface")
+    if (missing(.evaluator)) {
+        if (missing(.serverObject)) 
+            .evaluator <- XR::getInterface("PythonInterface", 
+                .makeNew = FALSE)
+        else .evaluator <- XR::proxyEvaluator(.serverObject)
+    }
+    if (!nargs() && is.null(.evaluator)) 
+        return()
     if (missing(.serverObject)) {
-        evaluator$Import("xml.etree.ElementTree")
-        .serverObject <- evaluator$New("Element", "xml.etree.ElementTree", 
+        if (is.null(.evaluator)) 
+            .evaluator <- XR::getInterface("PythonInterface")
+        .evaluator$Import("xml.etree.ElementTree")
+        .serverObject <- .evaluator$New("Element", "xml.etree.ElementTree", 
             ...)
     }
+    else if (!missing(...)) 
+        initFields(...)
     if (is(.serverObject, "ProxyClassObject")) 
         proxy <- .serverObject$.proxyObject
     else proxy <- .serverObject
     .proxyObject <<- proxy
-    .ev <<- evaluator
+    .ev <<- .evaluator
 },
 
 ServerClassInfo = function () 

@@ -182,9 +182,13 @@ printSpeeches <- function(speeches, printSeparator = TRUE) {
 #'
 #' @param what character vector identifying the plays to install.  By default installs all the 37 plays (which can take
 #'  a minute or more, depending on the hardware).
-#' @param report if \code{TRUE} (the default) the function will report its progress.
-#' @return the vector of keys corresponding to the requested plays.
-installPlays <- function(what = .playsTable$keys, report = TRUE) {
+#' @param report if \code{TRUE} the function will report its progress.
+#' By default, reports if \code{what} is missing.
+#' @param objects should the return value be the list of objects? If
+#' not, the keys are returned. Default \code{TRUE}
+#' @return either the list of all the objects or the vector of keys,
+#' corresponding to the requested plays, according to \code{objects}.
+installPlays <- function(what = .playsTable$keys, report = missing(whast), objects = TRUE) {
     if(!length(what))
         return()
     hasParse <- playSaveFile(what[[1]], "parse", "r")
