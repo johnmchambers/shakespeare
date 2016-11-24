@@ -438,3 +438,31 @@ allFieldStrings <- new("PythonFunction"
     , serverArgs = c("objects", "what")
 )
 
+#' Apply a Python Search Function to a List of Speeches
+#' 
+#' @section Python Functions:
+#' speechListApply(speeches, f)
+#' @export
+speechListApply <- function(..., .ev = XR::getInterface(), .get = NA)
+    NULL
+
+speechListApply <- new("PythonFunction"
+    , .Data = function (..., .ev = XRPython::RPython(), .get = NA) 
+{
+    nPyArgs <- length(substitute(c(...))) - 1
+    if (nPyArgs < 2) 
+        stop("Python function speechListApply() requires at least 2 arguments; got ", 
+            nPyArgs)
+    if (nPyArgs > 2) 
+        stop("Python function speechListApply() only allows 2 arguments; got ", 
+            nPyArgs)
+    .ev$Import("thePlay", "speechListApply")
+    .ev$Call("speechListApply", ..., .get = .get)
+}
+    , name = "speechListApply"
+    , module = "thePlay"
+    , evaluatorClass = structure("PythonInterface", package = "XRPython")
+    , serverDoc = character(0)
+    , serverArgs = c("speeches", "f")
+)
+

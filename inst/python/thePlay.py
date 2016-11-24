@@ -401,3 +401,22 @@ def allFieldStrings(objects, what):
     return flds.keys()
 
     
+def speechApply(speech, f):
+    value = [ ]
+    lines = speech.lines
+    tokens = speech.tokens
+    n = len(lines)
+    for i in range(n):
+        if f(i, lines[i], tokens[i], value):
+            break
+    return value
+
+def speechListApply(speeches, f):
+    value = [ ]
+    for speech in speeches:
+        matches = speechApply(speech, f)
+        if len(matches):
+            ## TODO:  should promote speech to a subclass
+            speech.select = matches
+            value.append(speech)
+    return value

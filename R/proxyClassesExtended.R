@@ -188,7 +188,7 @@ printSpeeches <- function(speeches, printSeparator = TRUE) {
 #' not, the keys are returned. Default \code{TRUE}
 #' @return either the list of all the objects or the vector of keys,
 #' corresponding to the requested plays, according to \code{objects}.
-installPlays <- function(what = .playsTable$keys, report = missing(whast), objects = TRUE) {
+installPlays <- function(what = .playsTable$keys, report = missing(what), objects = TRUE) {
     if(!length(what))
         return()
     hasParse <- playSaveFile(what[[1]], "parse", "r")

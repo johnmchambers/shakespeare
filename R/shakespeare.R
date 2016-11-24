@@ -165,5 +165,55 @@ getSpeeches <- function(play = NULL, tokens = TRUE, tokenCase = FALSE, key = "",
         speeches
 }
 
+## some templates for python apply functions
+
+## find a token, maybe only the first, maybe all
+.f.token = c(
+"def f_match(i, line, tokens, value):",
+"    for token in tokens:",
+"        if r\"TARGET\" == token:",
+"            value.append(i)",
+"            MAYBE_EXIT",
+"    return False"
+)
+
+## match a string in a line
+.f.string = c(
+"def f_match(i, line, tokens, value):",
+"    if r\"TARGET\" in line:",
+"        value.append(i)",
+"        MAYBE_EXIT",
+"    return False"
+)
+
+##match a regular expression in a line
+.f.regexp = c(
+"def f_match(i, line, tokens, value):",
+"    if re.search(r\"TARGET\", line):",
+"        value.append(i)",
+"        MAYBE_EXIT",
+"    return False"
+)
+
+makeSearchFun <- function(..., first = FALSE) {
+    arg = list(...)
+    if(length(arg) != 1)
+        stop("you should give one named argument; e.g., token = \"....\"")
+    fun <- switch(names(arg),
+           token = .f.token,
+           string =.f.string,
+           regexp = .f.regexp)
+    fun <- gsub("TARGET", arg, fun, fixed = TRUE)
+    gsub("MAYBE_EXIT", if(first) "return value" else "None", fun, fixed = TRUE)
+}
 
 
+applyAll <- function(f, keys = installPlays(report = FALSE)) {
+    value <- list()
+    for(what in keys) {
+        match <- speechListApply(Play(what)$speeches, f)
+        if(match$size() > 0)
+            value[[what]] <- match
+    }
+    value
+}
