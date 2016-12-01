@@ -295,6 +295,166 @@ tokenize = function (..., .ev = XRPython::RPython(), .get = NA)
 })
 
 
+#' Python Class for a Selected Excerpt of a Speech
+#' 
+#' @export
+Excerpt_Python <- setRefClass("Excerpt_Python", contains = c("ProxyClassObject"), fields = c("act", "lines", "playTitle", "scene", "select", "speaker", "tokens"))
+Excerpt_Python <- XR::setProxyClass("Excerpt", module = "thePlay",
+    evaluatorClass = "PythonInterface", language = "Python", proxyObjectClass = "PythonObject",
+    methods = list(),
+    fields = list(
+      act = function (value) 
+      {
+          proxy <- get(".proxyObject", envir = .self)
+          if (missing(value)) 
+              .ev$Eval("%s.act", proxy)
+          else {
+              .ev$Command("%s.act = %s", proxy, value)
+              invisible(value)
+          }
+      },
+      lines = function (value) 
+      {
+          proxy <- get(".proxyObject", envir = .self)
+          if (missing(value)) 
+              .ev$Eval("%s.lines", proxy)
+          else {
+              .ev$Command("%s.lines = %s", proxy, value)
+              invisible(value)
+          }
+      },
+      playTitle = function (value) 
+      {
+          proxy <- get(".proxyObject", envir = .self)
+          if (missing(value)) 
+              .ev$Eval("%s.playTitle", proxy)
+          else {
+              .ev$Command("%s.playTitle = %s", proxy, value)
+              invisible(value)
+          }
+      },
+      scene = function (value) 
+      {
+          proxy <- get(".proxyObject", envir = .self)
+          if (missing(value)) 
+              .ev$Eval("%s.scene", proxy)
+          else {
+              .ev$Command("%s.scene = %s", proxy, value)
+              invisible(value)
+          }
+      },
+      select = function (value) 
+      {
+          proxy <- get(".proxyObject", envir = .self)
+          if (missing(value)) 
+              .ev$Eval("%s.select", proxy)
+          else {
+              .ev$Command("%s.select = %s", proxy, value)
+              invisible(value)
+          }
+      },
+      speaker = function (value) 
+      {
+          proxy <- get(".proxyObject", envir = .self)
+          if (missing(value)) 
+              .ev$Eval("%s.speaker", proxy)
+          else {
+              .ev$Command("%s.speaker = %s", proxy, value)
+              invisible(value)
+          }
+      },
+      tokens = function (value) 
+      {
+          proxy <- get(".proxyObject", envir = .self)
+          if (missing(value)) 
+              .ev$Eval("%s.tokens", proxy)
+          else {
+              .ev$Command("%s.tokens = %s", proxy, value)
+              invisible(value)
+          }
+      }
+      )
+    )
+
+Excerpt_Python$methods(
+initialize = function (..., .evaluator, .serverObject) 
+{
+    if (missing(.evaluator)) {
+        if (missing(.serverObject)) 
+            .evaluator <- XR::getInterface("PythonInterface", 
+                .makeNew = FALSE)
+        else .evaluator <- XR::proxyEvaluator(.serverObject)
+    }
+    if (!nargs() && is.null(.evaluator)) 
+        return()
+    if (missing(.serverObject)) {
+        if (is.null(.evaluator)) 
+            .evaluator <- XR::getInterface("PythonInterface")
+        .evaluator$Import("thePlay")
+        .serverObject <- .evaluator$New("Excerpt", "thePlay", 
+            ...)
+    }
+    else if (!missing(...)) 
+        initFields(...)
+    if (is(.serverObject, "ProxyClassObject")) 
+        proxy <- .serverObject$.proxyObject
+    else proxy <- .serverObject
+    .proxyObject <<- proxy
+    .ev <<- .evaluator
+},
+
+ServerClassInfo = function () 
+list(ServerClass = "Excerpt", ServerModule = "thePlay", language = "Python", 
+    evaluatorClass = "PythonInterface", proxyFields = c("act", 
+    "lines", "playTitle", "scene", "select", "speaker", "tokens"
+    ), proxyMethods = c("initialize", "ServerClassInfo", "findText", 
+    "getText", "highlight", "tokenize"), proxyContains = character(0), 
+    proxyObjectClass = "PythonObject"),
+
+findText = function (..., .ev = XRPython::RPython(), .get = NA) 
+{
+    "Python Method: findText(text, tokens =, ignoreCase =)\nSearches in the Speech object for occurences of the specified\ntext and returns a list of the lines in which that text appears.\nArgument `tokens' controls whether the search is in the tokens\nfield, in which case `text' must match a token exactly.  Otherwise\nthe search is in the speech text for a matching substring.\nIf `ignoreCase' is true, the text argument is converted\nto lower case.  Tokens are always lower-cased and the speech\ntext will be converted to lower as needed."
+    nPyArgs <- length(substitute(c(...))) - 1
+    if (nPyArgs < 1) 
+        stop("Python function findText() requires at least 1 argument; got ", 
+            nPyArgs)
+    if (nPyArgs > 3) 
+        stop("Python function findText() only allows 3 arguments; got ", 
+            nPyArgs)
+    .ev$MethodCall(.proxyObject, "findText", ..., .get = .get)
+},
+
+getText = function (..., .ev = XRPython::RPython(), .get = NA) 
+{
+    "Python Method: getText()\nReturns the text of the speech, as an object that will be\nan R character vector when converted."
+    nPyArgs <- length(substitute(c(...))) - 1
+    if (nPyArgs > 0) 
+        stop("Python function getText() only allows 0 arguments; got ", 
+            nPyArgs)
+    .ev$MethodCall(.proxyObject, "getText", ..., .get = .get)
+},
+
+highlight = function (..., .ev = XRPython::RPython(), .get = NA) 
+{
+    "Python Method: highlight(wrap =, mark =)\n"
+    nPyArgs <- length(substitute(c(...))) - 1
+    if (nPyArgs > 2) 
+        stop("Python function highlight() only allows 2 arguments; got ", 
+            nPyArgs)
+    .ev$MethodCall(.proxyObject, "highlight", ..., .get = .get)
+},
+
+tokenize = function (..., .ev = XRPython::RPython(), .get = NA) 
+{
+    "Python Method: tokenize()\nReturns the set of tokens in the speech as a single\nstring, with \"$\" separating lines."
+    nPyArgs <- length(substitute(c(...))) - 1
+    if (nPyArgs > 0) 
+        stop("Python function tokenize() only allows 0 arguments; got ", 
+            nPyArgs)
+    .ev$MethodCall(.proxyObject, "tokenize", ..., .get = .get)
+})
+
+
 #' Proxy for Python Class ElementTree in Module xml.etree.ElementTree
 #' 
 #' @export

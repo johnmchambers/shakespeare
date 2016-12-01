@@ -4,7 +4,8 @@ require(XRPython)
 con <- file("R/proxyClasses.R", "w")
 setPythonClass(save = con, "Act", "thePlay", docText = "Python Class for an Act")
 setPythonClass(save = con, "Scene", "thePlay", docText = "Python Class for a Scene")
-setPythonClass(save = con, "Speech", "thePlay", docText = "Python Class for a Speech")
+setPythonClass(save = con, "Speech", "thePlay", docText = "Python Class for a Speech") 
+setPythonClass(save = con, "Excerpt", "thePlay", docText = "Python Class for a Selected Excerpt of a Speech")
 
 ev <- XRPython::RPython()
 
