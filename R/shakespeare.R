@@ -169,9 +169,9 @@ getSpeeches <- function(play = NULL, tokens = TRUE, tokenCase = FALSE, key = "",
 
 ## find a token, maybe only the first, maybe all
 .f.token = c(
-"def f_match(i, line, tokens, value):",
+"def NAME(i, line, tokens, value):",
 "    for token in tokens:",
-"        if r\"TARGET\" == token:",
+"        if ALLOW r\"TARGET\" == token:",
 "            value.append(i)",
 "            MAYBE_EXIT",
 "    return False"
@@ -179,8 +179,8 @@ getSpeeches <- function(play = NULL, tokens = TRUE, tokenCase = FALSE, key = "",
 
 ## match a string in a line
 .f.string = c(
-"def f_match(i, line, tokens, value):",
-"    if r\"TARGET\" in line:",
+"def NAME(i, line, tokens, value):",
+"    if ALLOW r\"TARGET\" in line:",
 "        value.append(i)",
 "        MAYBE_EXIT",
 "    return False"
@@ -188,32 +188,42 @@ getSpeeches <- function(play = NULL, tokens = TRUE, tokenCase = FALSE, key = "",
 
 ##match a regular expression in a line
 .f.regexp = c(
-"def f_match(i, line, tokens, value):",
-"    if re.search(r\"TARGET\", line):",
+"def NAME(i, line, tokens, value):",
+"    if ALLOW re.search(r\"TARGET\", line):",
 "        value.append(i)",
 "        MAYBE_EXIT",
 "    return False"
 )
 
-makeSearchFun <- function(..., first = FALSE) {
+SearchFun <- setClass("SearchFun",
+                      slots = c(source = "character", type = "character", text = "character"),
+                      contains = "AssignedProxy")
+
+setMethod("show", "SearchFun",
+          function(object) {
+              cat(gettextf("Python search function of class %s for %s = %s\n",
+                         XR::nameQuote(class(object)), object@type, XR::nameQuote(object@text)))
+              cat("\nPython Function:\n")
+              writeLines(paste(" ", object@source))
+          })
+
+searchFun <- function(..., first = FALSE, exclude = FALSE, fName = .ev$ProxyName(), .ev = XRPython::RPython()) {
     arg = list(...)
     if(length(arg) != 1)
         stop("you should give one named argument; e.g., token = \"....\"")
-    fun <- switch(names(arg),
-           token = .f.token,
-           string =.f.string,
-           regexp = .f.regexp)
-    fun <- gsub("TARGET", arg, fun, fixed = TRUE)
-    gsub("MAYBE_EXIT", if(first) "return value" else "None", fun, fixed = TRUE)
+    type <- names(arg)
+    text <- arg[[1]]
+    fun <- switch(type,
+                  token = .f.token,
+                  string =.f.string,
+                  regexp = .f.regexp,
+                  pattern = f.regexp,
+                  stop(gettextf("Not one of the recognized search types: %s",XR::nameQuote(names(arg)))))
+    fun <- gsub("TARGET", text, fun, fixed = TRUE)
+    fun <- gsub("ALLOW", if(exclude) "not" else "", fun, fixed = TRUE)
+    fun <- gsub("MAYBE_EXIT", if(first) "return value" else "None", fun, fixed = TRUE)
+    fun <- gsub("NAME", fName, fun)
+    .ev$Define(fun)
+    SearchFun(.ev$Eval(fName), source = fun, type = type, text = text)
 }
 
-
-applyAll <- function(f, keys = installPlays(report = FALSE)) {
-    value <- list()
-    for(what in keys) {
-        match <- speechListApply(Play(what)$speeches, f)
-        if(match$size() > 0)
-            value[[what]] <- match
-    }
-    value
-}
