@@ -400,4 +400,29 @@ def allFieldStrings(objects, what):
         raise ValueError("Some fields were not strings")
     return flds.keys()
 
-    
+class SpeechExtract(object):
+    def __init__(self, speech = Speech(), selected = []):
+        self.playTitle = speech.playTitle
+        self.act = speech.act
+        self.scene = speech.scene
+        self.speaker = speech.speaker
+        self.lines = [ ]
+        self.tokens = [ ]
+        for i in range(len(selected)):
+            self.lines.append(speech.lines[selected[i]])
+            self.tokens.append(speech.tokens[selected[i]])
+        self.selected = selected
+
+def speechApply(speeches, f):
+    value = list()
+    for obj in speeches:
+        if not isinstance(obj, Speech):
+            next
+        selected = list()
+        for i in range(len(obj.tokens)):
+            if f(obj.tokens[i]):
+                selected.append(i)
+        if len(selected) > 0:
+            value.append(SpeechExtract(obj, selected))
+    return value
+
