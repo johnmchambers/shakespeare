@@ -165,5 +165,65 @@ getSpeeches <- function(play = NULL, tokens = TRUE, tokenCase = FALSE, key = "",
         speeches
 }
 
+## some templates for python apply functions
 
+## find a token, maybe only the first, maybe all
+.f.token = c(
+"def NAME(i, line, tokens, value):",
+"    for token in tokens:",
+"        if ALLOW r\"TARGET\" == token:",
+"            value.append(i)",
+"            MAYBE_EXIT",
+"    return False"
+)
+
+## match a string in a line
+.f.string = c(
+"def NAME(i, line, tokens, value):",
+"    if ALLOW r\"TARGET\" in line:",
+"        value.append(i)",
+"        MAYBE_EXIT",
+"    return False"
+)
+
+##match a regular expression in a line
+.f.regexp = c(
+"def NAME(i, line, tokens, value):",
+"    if ALLOW re.search(r\"TARGET\", line):",
+"        value.append(i)",
+"        MAYBE_EXIT",
+"    return False"
+)
+
+SearchFun <- setClass("SearchFun",
+                      slots = c(source = "character", type = "character", text = "character"),
+                      contains = "AssignedProxy")
+
+setMethod("show", "SearchFun",
+          function(object) {
+              cat(gettextf("Python search function of class %s for %s = %s\n",
+                         XR::nameQuote(class(object)), object@type, XR::nameQuote(object@text)))
+              cat("\nPython Function:\n")
+              writeLines(paste(" ", object@source))
+          })
+
+searchFun <- function(..., first = FALSE, exclude = FALSE, fName = .ev$ProxyName(), .ev = XRPython::RPython()) {
+    arg = list(...)
+    if(length(arg) != 1)
+        stop("you should give one named argument; e.g., token = \"....\"")
+    type <- names(arg)
+    text <- arg[[1]]
+    fun <- switch(type,
+                  token = .f.token,
+                  string =.f.string,
+                  regexp = .f.regexp,
+                  pattern = f.regexp,
+                  stop(gettextf("Not one of the recognized search types: %s",XR::nameQuote(names(arg)))))
+    fun <- gsub("TARGET", text, fun, fixed = TRUE)
+    fun <- gsub("ALLOW", if(exclude) "not" else "", fun, fixed = TRUE)
+    fun <- gsub("MAYBE_EXIT", if(first) "return value" else "None", fun, fixed = TRUE)
+    fun <- gsub("NAME", fName, fun)
+    .ev$Define(fun)
+    SearchFun(.ev$Eval(fName), source = fun, type = type, text = text)
+}
 

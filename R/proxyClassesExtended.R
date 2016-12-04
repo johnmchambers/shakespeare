@@ -186,9 +186,14 @@ printSpeeches <- function(speeches, printSeparator = TRUE) {
 #' By default, reports if \code{what} is missing.
 #' @param objects should the return value be the list of objects? If
 #' not, the keys are returned. Default \code{TRUE}
+#' @param saveSpeeches the merged list of the speeches will be saved under this key, unless it is \code{""}.
+#' If argument \code{what} is missing and so is \code{saveSpeeches},
+#' the speech list will be saved with key "all"; otherwise the default is not to save the speeches (but
+#' \code{\link{installSpeeches}} can be called explicitly).
 #' @return either the list of all the objects or the vector of keys,
 #' corresponding to the requested plays, according to \code{objects}.
-installPlays <- function(what = .playsTable$keys, report = missing(whast), objects = TRUE) {
+installPlays <- function(what = .playsTable$keys, report = missing(what), objects = TRUE,
+                         saveSpeeches = if(missing(what)) "all" else "") {
     if(!length(what))
         return()
     hasParse <- playSaveFile(what[[1]], "parse", "r")
@@ -210,5 +215,18 @@ installPlays <- function(what = .playsTable$keys, report = missing(whast), objec
         punct = "; "
     }
     if(report) cat("\n")
+    if(nzchar(saveSpeeches)) {
+        if(report) cat("Saving list of all speeches as \"",saveSpeeches, "\"\n", sep = "")
+        installSpeeches(what, saveSpeeches)
+    }
     what
 }
+
+installSpeeches <- function(keys, newKey, .ev = XRPython::RPython()) {
+    for(i in seq_along(keys))
+        keys[[i]] <- .ev$ProxyName(Play(keys[[i]])$speeches)
+    pyExpr <- paste(keys, collapse = " + ")
+    allSpeeches <- .ev$Eval(pyExpr)
+    assign(newKey, allSpeeches, envir = .playsTable)
+}
+    

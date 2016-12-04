@@ -144,6 +144,42 @@ class Speech(object):
             if text in thisLine: # matches either a token or a substring
                 value.append(i)
         return value
+
+class Excerpt(Speech):
+    def __init__(self, obj = Speech(), select = None):
+        '''An Excerpt is a Speech object with an additional array `select' array, containing the indices for the lines selected.
+        It should be initialized with those two arguments.  Note that an empty array, `[ ]' selects nothing.  To indicate that a selection
+        has not been defined (so all lines are active), `select' should be `None'.  The new object does a shallow copy of `obj', so and Excerpt
+        object can be used to initialize another one, without overwriting its `select'.
+        '''
+        RPython.inherits(self, obj)
+        self.select = select
+    def highlight(self, wrap = 2, mark = "**", separator = "......"):
+        value = [ ]
+        if self.select is None:
+            for i in range(len(self.lines)):
+                value.append(mark + lines[i] + mark)
+            return value
+        white = " " * len(mark)
+        icur = 0
+        for j in range(len(self.select)):
+            jstar = self.select[j]
+            if j > 0:
+                i1 = min(jstar, icur + wrap)
+                for i in range(icur, i1): # trailing from previous highlight
+                    value.append(white + self.lines[i])
+                    icur = i + 1
+            i0 = max(icur, jstar - wrap)
+            if i0 > icur and j > 0: #print the separator
+                value.append(white + separator)
+            for i in range(i0,jstar):
+                value.append(white + self.lines[i])
+            value.append(mark + self.lines[jstar])
+            icur = jstar+1
+        i1 = min(len(self.lines), icur+wrap)
+        for i in range(icur, i1):
+            value.append(white + self.lines[i])
+        return value
             
 def toR_Speech(obj):
     obj = copy(obj)
@@ -399,30 +435,29 @@ def allFieldStrings(objects, what):
     if nbad:
         raise ValueError("Some fields were not strings")
     return flds.keys()
+    
 
-class SpeechExtract(object):
-    def __init__(self, speech = Speech(), selected = []):
-        self.playTitle = speech.playTitle
-        self.act = speech.act
-        self.scene = speech.scene
-        self.speaker = speech.speaker
-        self.lines = [ ]
-        self.tokens = [ ]
-        for i in range(len(selected)):
-            self.lines.append(speech.lines[selected[i]])
-            self.tokens.append(speech.tokens[selected[i]])
-        self.selected = selected
-
-def speechApply(speeches, f):
-    value = list()
-    for obj in speeches:
-        if not isinstance(obj, Speech):
-            next
-        selected = list()
-        for i in range(len(obj.tokens)):
-            if f(obj.tokens[i]):
-                selected.append(i)
-        if len(selected) > 0:
-            value.append(SpeechExtract(obj, selected))
+def speechApply(speech, f):
+    value = [ ]
+    lines = speech.lines
+    tokens = speech.tokens
+    if hasattr(speech, 'select'):
+        iter = speech.select
+    else:
+        iter = range(len(speech.lines))
+    for i in iter:
+        if f(i, lines[i], tokens[i], value):
+            break
     return value
 
+def speechListApply(speeches, f):
+    '''Apply the search function `f' to the list of speeches.  The value returned
+    is a list of speeches for which one or more matches were found; each such speech
+    is promoted to class "Excerpt" with the matched lines in field "select".
+    '''
+    value = [ ]
+    for speech in speeches:
+        matches = speechApply(speech, f)
+        if len(matches):
+            value.append(Excerpt(speech, matches))
+    return value

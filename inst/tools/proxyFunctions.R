@@ -45,6 +45,9 @@ XRPython::PythonFunction("speechFragments", "thePlay", save = con,
 XRPython::PythonFunction("allFieldStrings", "thePlay", save = con,
                          docText = "List of the Distinct String Values for a Specified Python Field")
 
+XRPython::PythonFunction("speechListApply", "thePlay", save = con,
+                         docText = "Apply a Python Search Function to a List of Speeches")
+
 close(con)
 
 message("Copying temp file to shakespeare/R/proxyFunctions.R")
