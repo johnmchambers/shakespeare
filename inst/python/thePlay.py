@@ -436,8 +436,8 @@ def allFieldStrings(objects, what):
     if nbad:
         raise ValueError("Some fields were not strings")
     return flds.keys()
-
     
+
 def speechApply(speech, f):
     value = [ ]
     lines = speech.lines
