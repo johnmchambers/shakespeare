@@ -87,6 +87,8 @@ class Speech(object):
         self.tokens = [ ]
         if obj is None:
             self.speaker = '<Unspecified>'
+        elif isinstance(obj, Speech): # e.g., reducing an Excerpt to a Speech
+            RPython.inherits(self, obj)
         else:
             self.speaker = obj.findtext('SPEAKER')
             lines = obj.findall('.//LINE')
@@ -149,8 +151,7 @@ class Excerpt(Speech):
     def __init__(self, obj = Speech(), select = None):
         '''An Excerpt is a Speech object with an additional array `select' array, containing the indices for the lines selected.
         It should be initialized with those two arguments.  Note that an empty array, `[ ]' selects nothing.  To indicate that a selection
-        has not been defined (so all lines are active), `select' should be `None'.  The new object does a shallow copy of `obj', so and Excerpt
-        object can be used to initialize another one, without overwriting its `select'.
+        has not been defined (so all lines are active), `select' should be `None'.
         '''
         RPython.inherits(self, obj)
         self.select = select
@@ -450,14 +451,20 @@ def speechApply(speech, f):
             break
     return value
 
-def speechListApply(speeches, f):
-    '''Apply the search function `f' to the list of speeches.  The value returned
-    is a list of speeches for which one or more matches were found; each such speech
-    is promoted to class "Excerpt" with the matched lines in field "select".
+def speechListMatch(speeches, f):
+    '''Apply the search function `f' to the list of Speech or Excerpt objects.
+    The value returned is made from a shallow copy of `speeches`.
+    Each  element that has one or more matches is promoted to class "Excerpt",
+    with the matched lines in field "select".  Note that for elements that are
+    Excerpt objects, the new match is only applied to the selected elements.
+    Thus, calling `speechListMatch()` on the value of a previous call defines
+    elements that match by both criteria.
     '''
-    value = [ ]
-    for speech in speeches:
-        matches = speechApply(speech, f)
+    value = copy.copy(speeches)
+    for i in range(len(speeches)):
+        matches = speechApply(speeches[i], f)
         if len(matches):
-            value.append(Excerpt(speech, matches))
+            value[i] = Excerpt(speech, matches)
+        elif isinstance(value[i], Excerpt):
+            value[i] = Speech(value[i]) # reduce to class Speech
     return value
