@@ -85,11 +85,10 @@ class Speech(object):
         self.playTitle = playTitle
         self.lines = [ ]
         self.tokens = [ ]
-        if obj is None:
-            self.speaker = '<Unspecified>'
-        elif isinstance(obj, Speech): # e.g., reducing an Excerpt to a Speech
-            RPython.inherits(self, obj)
-        else:
+        self.speaker = '<Unspecified>'
+        if isinstance(obj, Speech): # presumably from a subclass, such as Excerpt; only copy the known attributes
+            RPython.inherit(self, obj, FALSE)
+        elif not obj is None:
             self.speaker = obj.findtext('SPEAKER')
             lines = obj.findall('.//LINE')
             for line in lines:

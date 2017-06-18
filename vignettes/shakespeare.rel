@@ -1,0 +1,39 @@
+;; RefTeX parse info file
+;; File: /Users/jmc/localGit/shakespeare/vignettes/shakespeare.tex
+;; User: jmc (John M Chambers)
+
+(set reftex-docstruct-symbol '(
+
+
+(xr nil "\\\\\\\\\\\\")
+
+(index-tags)
+
+(is-multi nil)
+
+(bibview-cache)
+
+(master-dir . "/Users/jmc/localGit/shakespeare/vignettes/")
+
+(label-numbers)
+
+(bof "/Users/jmc/localGit/shakespeare/vignettes/out.tex")
+
+(toc "toc" "    1 Introduction" "/Users/jmc/localGit/shakespeare/vignettes/out.tex" nil 2 "1" "\\section{Introduction}" 246)
+
+("sec:introduction" "s" nil "/Users/jmc/localGit/shakespeare/vignettes/out.tex" nil "")
+
+(toc "toc" "    1 Introduction" "/Users/jmc/localGit/shakespeare/vignettes/out.tex" nil 2 "1" "\\section{Introduction}" 246)
+
+(toc "toc" "    2 Interfaces and Extensions" "/Users/jmc/localGit/shakespeare/vignettes/out.tex" nil 2 "2" "\\section{Interfaces and Extensions}" 1260)
+
+("interfaces-and-extensions" "s" "Using an interface from one programming language or environment to another is a winning strategy for" "/Users/jmc/localGit/shakespeare/vignettes/out.tex" nil)
+
+(toc "toc" "    3 Shakespeare Meets R, and XML, and Python" "/Users/jmc/localGit/shakespeare/vignettes/out.tex" nil 2 "3" "\\section{Shakespeare Meets R, and XML, and
+Python}" 2573)
+
+("shakespeare-meets-r-and-xml-and-python" "s" "For over four centuries, Shakespeare's plays have been the focus of a sea of studies and debates, in" "/Users/jmc/localGit/shakespeare/vignettes/out.tex" nil)
+
+(eof "/Users/jmc/localGit/shakespeare/vignettes/out.tex")
+))
+
